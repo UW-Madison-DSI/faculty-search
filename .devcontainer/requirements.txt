@@ -1,1 +1,8 @@
 langchain
+ipykernel
+altair
+python-dotenv
+openai
+tiktoken
+annoy
+scikit-learn
