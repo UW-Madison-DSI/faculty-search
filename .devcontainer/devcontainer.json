@@ -6,6 +6,6 @@
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {}
 	},
-	"postCreateCommand": "pip3 install -r .devcontainer/requirements.txt",
+	"postCreateCommand": "bash .devcontainer/post_create.sh",
 	"remoteUser": "root"
 }
