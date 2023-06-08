@@ -1,7 +1,20 @@
+import json
 import os
 from dataclasses import dataclass
 from functools import cache
+from time import sleep
+
 import requests
+
+
+def timeout(func, duration=1.2):
+    """Delay the execution of a function to prevent blockage."""
+
+    def wrapper(*args, **kwargs):
+        sleep(duration)
+        return func(*args, **kwargs)
+
+    return wrapper
 
 
 @dataclass
@@ -11,6 +24,19 @@ class Article:
     title: str
     url: str
     publication_year: int
+
+    def to_json(self):
+        return {
+            "orcid_path": self.orcid_path,
+            "doi": self.doi,
+            "title": self.title,
+            "url": self.url,
+            "publication_year": self.publication_year,
+        }
+
+    def write_json(self, path: str):
+        with open(path, "w") as f:
+            json.dump(self.to_json(), f, indent=4)
 
 
 def get_oauth_token() -> str:
@@ -105,6 +131,7 @@ class WorkParser:
 
 
 @cache
+@timeout
 def get_works(orcid: str, as_articles: bool = True) -> dict | list[Article]:
     """Get works from ORCID.
 
