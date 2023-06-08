@@ -7,4 +7,3 @@ tiktoken
 annoy
 scikit-learn
 fastparquet
-orcid
