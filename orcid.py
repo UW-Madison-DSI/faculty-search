@@ -1,11 +1,11 @@
-import pickle
 import os
+import pickle
 import re
 from dataclasses import dataclass
 from functools import cache
-from crossref import get_abstract, to_plain_text
-from tqdm import tqdm
 import requests
+from tqdm import tqdm
+from crossref import get_abstract, to_plain_text
 from utils import timeout
 
 
@@ -34,9 +34,13 @@ class Author:
         self.last_name = last_name
         self.biography = biography
         self.articles = []
+        self.email: None
 
     def add_articles(self, articles: list[Article]) -> None:
         self.articles.extend(articles)
+
+    def add_email(self, email: str) -> None:
+        self.email = email
 
     def save(self, path: str) -> None:
         with open(path, "wb") as f:
