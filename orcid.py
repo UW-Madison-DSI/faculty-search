@@ -1,20 +1,12 @@
-import json
+import pickle
 import os
+import re
 from dataclasses import dataclass
 from functools import cache
-from time import sleep
-
+from crossref import get_abstract, to_plain_text
+from tqdm import tqdm
 import requests
-
-
-def timeout(func, duration=1.2):
-    """Delay the execution of a function to prevent blockage."""
-
-    def wrapper(*args, **kwargs):
-        sleep(duration)
-        return func(*args, **kwargs)
-
-    return wrapper
+from utils import timeout
 
 
 @dataclass
@@ -24,19 +16,39 @@ class Article:
     title: str
     url: str
     publication_year: int
+    # Below are fields that are added later when the abstract is pulled from Crossref
+    pulled_abstract: bool = False
+    raw_abstract: str = None
+    abstract: str = None
 
-    def to_json(self):
-        return {
-            "orcid_path": self.orcid_path,
-            "doi": self.doi,
-            "title": self.title,
-            "url": self.url,
-            "publication_year": self.publication_year,
-        }
 
-    def write_json(self, path: str):
-        with open(path, "w") as f:
-            json.dump(self.to_json(), f, indent=4)
+@dataclass
+class Author:
+    """An author object."""
+
+    def __init__(
+        self, orcid: str, first_name: str, last_name: str, biography: str = None
+    ) -> None:
+        self.orcid = orcid
+        self.first_name = first_name
+        self.last_name = last_name
+        self.biography = biography
+        self.articles = []
+
+    def add_articles(self, articles: list[Article]) -> None:
+        self.articles.extend(articles)
+
+    def save(self, path: str) -> None:
+        with open(path, "wb") as f:
+            pickle.dump(self, f)
+
+    @classmethod
+    def load(cls, path: str) -> "Author":
+        with open(path, "rb") as f:
+            return pickle.load(f)
+
+    def __str__(self) -> str:
+        return f"{self.first_name} {self.last_name} ({self.orcid})"
 
 
 def get_oauth_token() -> str:
@@ -62,17 +74,39 @@ def get_oauth_token() -> str:
     return response.json()["access_token"]
 
 
-class WorkParser:
+class ORCIDAuthorParser:
+    """Parse the raw JSON from ORCID into an Author details."""
+
+    @staticmethod
+    def _to_orcid(path: str) -> str:
+        return re.findall(r"\d{4}-\d{4}-\d{4}-\d{4}", path)[0]
+
+    def parse(self, personal_details: dict) -> Author:
+        if personal_details["biography"]:
+            biography = personal_details["biography"]["content"]
+        else:
+            biography = None
+
+        return Author(
+            orcid=self._to_orcid(personal_details["path"]),
+            first_name=personal_details["name"]["given-names"]["value"],
+            last_name=personal_details["name"]["family-name"]["value"],
+            biography=biography,
+        )
+
+
+class ORCIDWorkParser:
     """Parse the raw JSON from ORCID into a list of Article objects."""
 
-    def parse(self, works) -> Article:
-        work_summaries = self._get_summaries(works)
+    def parse(self, works: dict) -> list[Article]:
+        work_summaries = [w["work-summary"][0] for w in works["group"]]
 
-        output = []
+        outputs = []
         for work_summary in work_summaries:
             if work_summary["type"] == "journal-article":
-                output.append(self.parse_summary(work_summary))
-        return output
+                article = self.parse_summary(work_summary)
+                outputs.append(article)
+        return outputs
 
     def parse_summary(self, work_summary: dict) -> Article:
         return Article(
@@ -82,10 +116,6 @@ class WorkParser:
             url=self._get_url(work_summary),
             publication_year=self._get_publication_year(work_summary),
         )
-
-    @staticmethod
-    def _get_summaries(works: dict) -> list:
-        return [w["work-summary"][0] for w in works["group"]]
 
     @staticmethod
     def _get_orcid_path(work_summary):
@@ -132,28 +162,48 @@ class WorkParser:
 
 @cache
 @timeout
-def get_works(orcid: str, as_articles: bool = True) -> dict | list[Article]:
-    """Get works from ORCID.
-
-    Args:
-        orcid: The ORCID ID of the researcher.
-        as_articles: If True, return a list of Article objects. If False, return raw data from ORCID.
-    """
+def pull(path: str) -> dict:
+    """Pull data from ORCID."""
 
     token = get_oauth_token()
-
     response = requests.get(
-        f"https://pub.orcid.org/v3.0/{orcid}/works",
+        f"https://pub.orcid.org/v3.0/{path}",
         headers={
             "Accept": "application/json",
             "Authorization": f"Bearer {token}",
         },
     )
-
     if response.status_code != 200:
-        raise Exception("Unable to get works from ORCID.")
+        raise Exception(f"Unable to get {path} from ORCID.")
+    return response.json()
 
-    if not as_articles:
-        return response.json()
 
-    return WorkParser().parse(response.json())
+def download_author(orcid: str) -> Author:
+    """Get author info and works from ORCID and abstracts from CrossRef."""
+
+    # Get personal details
+    personal_details = pull(f"{orcid}/person")
+    author = ORCIDAuthorParser().parse(personal_details)
+
+    # Get works
+    works = pull(f"{orcid}/works")
+    parsed_articles = ORCIDWorkParser().parse(works=works)
+    author.add_articles(parsed_articles)
+
+    # Get abstracts
+    for article in tqdm(author.articles):
+        # Avoid pulling the same abstract twice
+        if article.pulled_abstract:
+            continue
+        article.pulled_abstract = True
+
+        if article.doi is None:
+            continue
+        abstract = get_abstract(article.doi)
+
+        if abstract is None:
+            continue
+        article.raw_abstract = abstract
+        article.abstract = to_plain_text(abstract)
+
+    return author
