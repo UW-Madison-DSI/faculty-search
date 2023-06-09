@@ -83,7 +83,8 @@ class ORCIDAuthorParser:
 
     @staticmethod
     def _to_orcid(path: str) -> str:
-        return re.findall(r"\d{4}-\d{4}-\d{4}-\d{4}", path)[0]
+        orcid_patterns = re.findall(r"\d{4}-\d{4}-\d{4}-\d{3}[0-9X]", path)
+        return orcid_patterns[0]
 
     def parse(self, personal_details: dict) -> Author:
         if personal_details["biography"]:
