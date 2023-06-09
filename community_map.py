@@ -10,17 +10,32 @@ def download_datafile() -> pd.DataFrame:
     return pd.read_csv(url)
 
 
-def parse(df) -> tuple[list, list[dict]]:
+def parse(df: pd.DataFrame) -> tuple[list, list[dict]]:
     """Parse dataframe to get texts for embeddings and its metadatas."""
 
-    data = df[["First name", "Last name", "Email address", "Research summary"]].dropna()
-    data["name"] = data["First name"] + " " + data["Last name"]
-    data["text"] = data["name"] + "; " + data["Research summary"]
-    data.drop(["First name", "Last name", "Research summary"], axis=1, inplace=True)
-    data.rename(columns={"Email address": "email"}, inplace=True)
+    # Rename columns
+    name_mapping = {
+        "Orchid id": "orcid",
+        "First name": "first_name",
+        "Last name": "last_name",
+        "Email address": "email",
+        "Research summary": "summary",
+    }
+    data = df.rename(columns=name_mapping)
+    selected_columns = list(name_mapping.values())
 
-    texts = data["text"].tolist()
-    metadatas = data[["email", "name"]].to_dict(orient="records")
+    data = data[selected_columns]
+    data = data.dropna(subset=[c for c in selected_columns if c != "orcid"])
+
+    texts = data["summary"].tolist()
+    metadatas = data[["orcid", "first_name", "last_name", "email"]].to_dict(
+        orient="records"
+    )
+
+    # Append `user` type to metadata
+    for metadata in metadatas:
+        metadata["type"] = "user"
+
     return texts, metadatas
 
 
