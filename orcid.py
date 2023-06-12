@@ -127,7 +127,10 @@ class ORCIDWorkParser:
         return work_summary["path"]
 
     @staticmethod
-    def _get_doi(work_summary):
+    def _get_doi(work_summary) -> str:
+        if work_summary["external-ids"] is None:
+            return None
+
         external_ids = work_summary["external-ids"]["external-id"]
         ext_doi = [
             external_id
