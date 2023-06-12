@@ -21,6 +21,32 @@ class Article:
     raw_abstract: str = None
     abstract: str = None
 
+    @property
+    def text(self) -> str:
+        """Text to embed."""
+
+        text = self.title
+        if self.abstract:
+            text += " "  # OpenAI embedding suggests using space as separator
+            text += self.abstract
+        return text
+
+    @property
+    def metadata(self) -> dict:
+        """Metadata for the article."""
+
+        return {
+            "type": "article",
+            "orcid_path": self.orcid_path,
+            "doi": self.doi,
+            "title": self.title,
+            "url": self.url,
+            "publication_year": self.publication_year,
+            "pulled_abstract": self.pulled_abstract,
+            "raw_abstract": self.raw_abstract,
+            "abstract": self.abstract,
+        }
+
 
 @dataclass
 class Author:
@@ -35,6 +61,12 @@ class Author:
         self.biography = biography
         self.articles = []
         self.email: None
+        self.articles_embeddings = None
+
+    @property
+    def texts(self) -> list[str]:
+        """Texts to be embed."""
+        return [article.text for article in self.articles]
 
     def add_articles(self, articles: list[Article]) -> None:
         self.articles.extend(articles)
