@@ -26,9 +26,13 @@ def main():
     orcids = [orcid for orcid in orcids if orcid not in downloaded]
 
     for i, orcid in enumerate(orcids):
-        print(f"Downloading {i+1}/{len(orcids)}: {orcid}")
-        author = download_author(orcid)
-        author.save(AUTHORS_DIR / f"{author.orcid}.pickle")
+        try:
+            print(f"Downloading {i+1}/{len(orcids)}: {orcid}")
+            author = download_author(orcid)
+            author.save(AUTHORS_DIR / f"{author.orcid}.pickle")
+        except Exception as e:
+            print(f"Error downloading {orcid}: {e}")
+            continue
 
 
 if __name__ == "__main__":
