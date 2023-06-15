@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 import json
+import pickle
+from embedding_search.utils import extract_orcid
 
 
 @dataclass
@@ -39,6 +41,10 @@ class Article:
             "raw_abstract": self.raw_abstract,
             "abstract": self.abstract,
         }
+
+    @property
+    def author_orcid(self) -> str:
+        return extract_orcid(self.orcid_path)
 
     def to_dict(self) -> dict:
         return {

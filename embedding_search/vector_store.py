@@ -1,8 +1,16 @@
 from langchain.embeddings import OpenAIEmbeddings
 from pathlib import Path
-from embedding_search.data_model import Author
+from embedding_search.data_model import Author, Article
 from scipy.spatial.distance import cdist
 import numpy as np
+from embedding_search.utils import sort_key_by_value
+import logging
+
+
+def get_author(orcid: str) -> Author:
+    """Get author from orcid."""
+
+    return Author.load(Path("./authors") / f"{orcid}.json")
 
 
 class MiniStore:
@@ -37,7 +45,7 @@ class MiniStore:
             author = Author.load(json_file)
             self.add_author(author)
 
-    def search(self, query: str, top_k: int = 10) -> list[dict]:
+    def search_articles(self, query: str, top_k: int = 10) -> list[Article]:
         """Search for similar articles."""
 
         query_embedding = self.embeddings.embed_query(query)
@@ -45,9 +53,27 @@ class MiniStore:
         top_k_idx = np.argsort(distances)[:top_k]
 
         # Package results
-        results = []
+        articles = []
         for i in top_k_idx:
             metadata = self.metadata[i]
-            metadata["distance"] = distances[i]
-            results.append(metadata)
-        return results
+            metadata.pop("type")
+            article = Article(**metadata)
+            article.distance = distances[i]
+            articles.append(article)
+        return articles
+
+    def search_people(self, query: str, top_k: int = 3) -> list[Author]:
+        """Search for community user with similar interests."""
+
+        articles = self.search_articles(query, top_k=30)
+
+        author_counts = {}
+        for article in articles:
+            author_counts[article.author_orcid] = (
+                author_counts.get(article.author_orcid, 0) + 1
+            )
+
+        logging.info(author_counts)
+
+        sorted_authors = sort_key_by_value(author_counts, reversed=True)
+        return [get_author(orcid) for orcid in sorted_authors[:top_k]]
