@@ -1,12 +1,11 @@
 import os
-import re
 from functools import cache
 import requests
 from tqdm import tqdm
 from embedding_search.crossref import get_abstract, to_plain_text
 from embedding_search.utils import timeout
-from dataclasses import dataclass
 from embedding_search.data_model import Author, Article
+from embedding_search.utils import extract_orcid
 
 
 def get_oauth_token() -> str:
@@ -35,11 +34,6 @@ def get_oauth_token() -> str:
 class ORCIDAuthorParser:
     """Parse the raw JSON from ORCID into an Author details."""
 
-    @staticmethod
-    def _to_orcid(path: str) -> str:
-        orcid_patterns = re.findall(r"\d{4}-\d{4}-\d{4}-\d{3}[0-9X]", path)
-        return orcid_patterns[0]
-
     def parse(self, personal_details: dict) -> Author:
         if personal_details["biography"]:
             biography = personal_details["biography"]["content"]
@@ -47,7 +41,7 @@ class ORCIDAuthorParser:
             biography = None
 
         return Author(
-            orcid=self._to_orcid(personal_details["path"]),
+            orcid=extract_orcid(personal_details["path"]),
             first_name=personal_details["name"]["given-names"]["value"],
             last_name=personal_details["name"]["family-name"]["value"],
             biography=biography,
