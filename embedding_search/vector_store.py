@@ -1,4 +1,3 @@
-import pickle
 from langchain.embeddings import OpenAIEmbeddings
 from pathlib import Path
 from embedding_search.data_model import Author
@@ -19,13 +18,12 @@ class MiniStore:
         self.vectors.extend(author.articles_embeddings)
         self.metadata.extend([article.metadata for article in author.articles])
 
-    @classmethod
-    def from_pickles(cls, author_dir: Path) -> "MiniStore":
-        """Load from pickles."""
+    def build(self, author_dir: Path = None) -> None:
+        """Build entire store from jsons."""
 
-        store = cls()
-        for pickle_path in author_dir.glob("*.pickle"):
-            with open(pickle_path, "rb") as f:
-                author = pickle.load(f)
-                store.add_author(author)
-        return store
+        if author_dir is None:
+            author_dir = Path("./authors")
+
+        for json_file in author_dir.glob("*.json"):
+            author = Author.load(json_file)
+            self.add_author(author)
