@@ -1,6 +1,6 @@
 import re
 import requests
-from utils import timeout
+from embedding_search.utils import timeout
 
 
 @timeout

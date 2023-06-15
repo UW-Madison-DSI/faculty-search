@@ -1,90 +1,12 @@
 import os
-import pickle
 import re
-from dataclasses import dataclass
 from functools import cache
 import requests
 from tqdm import tqdm
-from crossref import get_abstract, to_plain_text
-from utils import timeout
-
-
-@dataclass
-class Article:
-    orcid_path: str
-    doi: str
-    title: str
-    url: str
-    publication_year: int
-    # Below are fields that are added later when the abstract is pulled from Crossref
-    pulled_abstract: bool = False
-    raw_abstract: str = None
-    abstract: str = None
-
-    @property
-    def text(self) -> str:
-        """Text to embed."""
-
-        text = self.title
-        if self.abstract:
-            text += " "  # OpenAI embedding suggests using space as separator
-            text += self.abstract
-        return text
-
-    @property
-    def metadata(self) -> dict:
-        """Metadata for the article."""
-
-        return {
-            "type": "article",
-            "orcid_path": self.orcid_path,
-            "doi": self.doi,
-            "title": self.title,
-            "url": self.url,
-            "publication_year": self.publication_year,
-            "pulled_abstract": self.pulled_abstract,
-            "raw_abstract": self.raw_abstract,
-            "abstract": self.abstract,
-        }
-
-
-@dataclass
-class Author:
-    """An author object."""
-
-    def __init__(
-        self, orcid: str, first_name: str, last_name: str, biography: str = None
-    ) -> None:
-        self.orcid = orcid
-        self.first_name = first_name
-        self.last_name = last_name
-        self.biography = biography
-        self.articles = []
-        self.email: None
-        self.articles_embeddings = None
-
-    @property
-    def texts(self) -> list[str]:
-        """Texts to be embed."""
-        return [article.text for article in self.articles]
-
-    def add_articles(self, articles: list[Article]) -> None:
-        self.articles.extend(articles)
-
-    def add_email(self, email: str) -> None:
-        self.email = email
-
-    def save(self, path: str) -> None:
-        with open(path, "wb") as f:
-            pickle.dump(self, f)
-
-    @classmethod
-    def load(cls, path: str) -> "Author":
-        with open(path, "rb") as f:
-            return pickle.load(f)
-
-    def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name} ({self.orcid})"
+from embedding_search.crossref import get_abstract, to_plain_text
+from embedding_search.utils import timeout
+from dataclasses import dataclass
+from embedding_search.data_model import Author, Article
 
 
 def get_oauth_token() -> str:
