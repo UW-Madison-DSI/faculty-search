@@ -1,0 +1,18 @@
+[project]
+name = "embedding-search"
+description = "experimental user search and visualization using embedding"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+version = "0.0.1"
+authors = [
+    { name = "Jason Lo", email = "jason.lo@wisc.edu" }
+]
+dependencies = [
+    "langchain",
+    "openai",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

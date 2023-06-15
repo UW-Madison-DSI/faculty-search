@@ -1,11 +1,11 @@
-from dotenv import load_dotenv
-from orcid import download_author
 from pathlib import Path
+
 import pandas as pd
-from pathlib import Path
-from orcid import Author
-from tqdm import tqdm
+from dotenv import load_dotenv
 from langchain.embeddings import OpenAIEmbeddings
+from tqdm import tqdm
+
+from embedding_search.orcid import Author, download_author
 
 load_dotenv()
 
@@ -39,8 +39,8 @@ def download_authors() -> None:
             continue
 
 
-def main() -> None:
-    """Main function."""
+def get_embeddings() -> None:
+    """Get embeddings for authors' articles."""
 
     embeddings = OpenAIEmbeddings()
     authors = AUTHORS_DIR.glob("*.pickle")
@@ -52,6 +52,11 @@ def main() -> None:
         except Exception as e:
             print(f"Error embedding {author.orcid}: {e}")
             pass
+
+
+def main() -> None:
+    """Main function."""
+    pass
 
 
 if __name__ == "__main__":
