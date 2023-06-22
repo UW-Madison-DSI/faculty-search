@@ -3,9 +3,8 @@ from functools import cache
 import requests
 from tqdm import tqdm
 from embedding_search.crossref import get_abstract, to_plain_text
-from embedding_search.utils import timeout
-from embedding_search.data_model import Author, Article
-from embedding_search.utils import extract_orcid
+from embedding_search.data_model import Article, Author
+from embedding_search.utils import extract_orcid, timeout
 
 
 def get_oauth_token() -> str:
