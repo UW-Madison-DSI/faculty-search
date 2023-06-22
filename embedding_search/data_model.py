@@ -1,6 +1,6 @@
-from dataclasses import dataclass
 import json
 import pickle
+from dataclasses import dataclass
 from embedding_search.utils import extract_orcid
 
 

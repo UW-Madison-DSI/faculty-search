@@ -1,11 +1,13 @@
-from langchain.embeddings import OpenAIEmbeddings
-from pathlib import Path
-from embedding_search.data_model import Author, Article
-from scipy.spatial.distance import cdist
-import numpy as np
-from embedding_search.utils import sort_key_by_value
 import logging
+from pathlib import Path
+
+import numpy as np
+from langchain.embeddings import OpenAIEmbeddings
+from scipy.spatial.distance import cdist
 from tqdm import tqdm
+
+from embedding_search.data_model import Article, Author
+from embedding_search.utils import sort_key_by_value
 
 
 def get_author(orcid: str) -> Author:
