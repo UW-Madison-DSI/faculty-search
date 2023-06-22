@@ -21,6 +21,8 @@ An experiment on embeddings.
 - Search for authors and articles based on research relevancy. For searching authors, there is an option to weigh the results based on the number of relevant articles they have published.
 - Visualize a search `query`, `authors`, and `articles` in the same 2d space.
 
+## [Demo](https://mbialo-community-search.hf.space/)
+
 ## Detail steps
 
 Creating a vector store:
