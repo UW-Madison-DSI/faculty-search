@@ -1,4 +1,11 @@
-# Community search
+---
+title: Community Search
+emoji: 📉
+colorFrom: yellow
+colorTo: yellow
+sdk: docker
+pinned: false
+---
 
 An experiment on embeddings.
 
