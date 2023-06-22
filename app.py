@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import urllib.parse
 
 load_dotenv()
 import streamlit as st
@@ -12,14 +13,14 @@ st.set_page_config(
 
 
 @st.cache_resource
-def build_vector_store():
+def build_vector_store() -> MiniStore:
     store = MiniStore()
     store.build()
     return store
 
 
 @st.cache_resource
-def get_plotter(_vector_store):
+def get_plotter(_vector_store: MiniStore) -> QueryPlotter:
     processor = EmbeddingsProcessor(_vector_store)
     return QueryPlotter(processor)
 
@@ -28,21 +29,37 @@ VECTOR_STORE = build_vector_store()
 PLOTTER = get_plotter(VECTOR_STORE)
 
 
-def results_formatter(results: list[Article, Author]) -> None:
+def get_community_map_url(first_name: str, last_name: str) -> str:
+    """Generate a URL to the community map for a given author."""
+    url = "https://maps.datascience.wisc.edu/?query="
+    return url + urllib.parse.quote(f"{first_name} {last_name}")
+
+
+def results_formatter(results: list, type: str) -> None:
     """Format results for display in streamlit."""
 
-    if isinstance(results[0], Article):
+    if type == "article":
+        # Format articles
         st.write(f"Found {len(results)} articles.")
         for result in results:
             _author = get_author(result.author_orcid)
             _citation = f"{_author.first_name} {_author.last_name} ({result.publication_year}). {result.title}"
             with st.expander(_citation):
-                st.write(result)
-    else:
-        st.write(f"Found {len(results)} authors.")
+                st.json(result.to_dict())
+    elif type == "author":
+        # Format authors
+        markdown = f"Found {len(results)} authors: "
+        authors = []
         for result in results:
-            with st.expander(f"{str(result)}"):
-                st.write(result)
+            url = get_community_map_url(result.first_name, result.last_name)
+            authors.append(f"[{result.first_name} {result.last_name}]({url})")
+        st.markdown(markdown + ", ".join(authors) + ".")
+    else:
+        raise ValueError(f"Unknown type: {type}")
+
+        # with st.expander("Show debug details"):
+        #     for result in results:
+        #         st.write(result)
 
 
 # Sidebar
@@ -54,7 +71,7 @@ with st.sidebar:
 
     if search_type == "Authors":
         weighted = st.checkbox(
-            "Weighted results by no. of relevant publications?", value=True
+            "Weight results by no. of relevant publications?", value=True
         )
 
     submit_button_pressed = st.button("Submit")
@@ -74,7 +91,9 @@ if submit_button_pressed:
         _results = VECTOR_STORE.search(query, type="article", top_k=top_k)
 
     st.header("Results")
-    results_formatter(_results)
+
+    type_mapper = {"Authors": "author", "Articles": "article"}
+    results_formatter(_results, type=type_mapper[search_type])
 
     st.header("Visualization")
     with st.spinner("Loading visualization..."):
