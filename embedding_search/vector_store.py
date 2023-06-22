@@ -62,27 +62,65 @@ class MiniStore:
             author = Author.load(json_file)
             self.add_author(author)
 
-    def search_articles(self, query: str, top_k: int = 10) -> list[Article]:
-        """Search for similar articles."""
+    @property
+    def authors_idx(self) -> list[int]:
+        """Get indices of authors."""
 
+        return [i for i, meta in enumerate(self.metadata) if meta["type"] == "author"]
+
+    @property
+    def articles_idx(self) -> list[int]:
+        """Get indices of articles."""
+
+        return [i for i, meta in enumerate(self.metadata) if meta["type"] == "article"]
+
+    def _search(
+        self, query: str, top_k: int, ignore_idx: list[int], constructor_fn: callable
+    ) -> list[Article | Author]:
+        """Internal search function."""
+
+        # Compute distances over entire vector store
         query_embedding = self.embeddings.embed_query(query)
         distances = cdist([query_embedding], self.vectors, metric=self.metric).squeeze()
+
+        # Filter out embeddings that is not of the same type
+        distances[ignore_idx] = np.inf
+
         top_k_idx = np.argsort(distances)[:top_k]
 
         # Package results
-        articles = []
+        outputs = []
         for i in top_k_idx:
             metadata = self.metadata[i]
             logging.info(metadata)
-            article = Article(**{k: v for k, v in metadata.items() if k != "type"})
-            article.distance = distances[i]
-            articles.append(article)
-        return articles
+            output = constructor_fn(
+                **{k: v for k, v in metadata.items() if k != "type"}
+            )
+            output.distance = distances[i]
+            outputs.append(output)
+        return outputs
 
-    def search_people(self, query: str, top_k: int = 3) -> list[Author]:
+    def search(self, query: str, type: str, top_k: int = 10) -> list[Article | Author]:
+        """Search for similar articles or author."""
+
+        assert type in ["article", "author"]
+
+        if type == "article":
+            ignore_idx = self.authors_idx
+            constructor_fn = Article
+        else:
+            ignore_idx = self.articles_idx
+            constructor_fn = Author
+
+        return self._search(query, top_k, ignore_idx, constructor_fn)
+
+    def weighted_search_author(
+        self, query: str, top_k: int = 3, n_pool: int = 30
+    ) -> list[Author]:
         """Search for community user who published most related articles."""
 
-        articles = self.search_articles(query, top_k=30)
+        # Create a pool of articles
+        articles = self.search(query, type="article", top_k=n_pool)
 
         author_counts = {}
         for article in articles:

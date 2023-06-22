@@ -69,7 +69,7 @@ class Author:
         first_name: str,
         last_name: str,
         biography: str = None,
-        articles: list[Article] = None,
+        articles: list[Article] | None = None,
         email: str = None,
         articles_embeddings: list[list[float]] = None,
     ) -> None:
@@ -80,7 +80,9 @@ class Author:
         self.email = email
         self.articles_embeddings = articles_embeddings
 
-        if isinstance(articles[0], Article):
+        if articles is None:
+            self.articles = []
+        elif isinstance(articles[0], Article):
             self.articles = articles
         else:
             self.articles = [Article(**article) for article in articles]
