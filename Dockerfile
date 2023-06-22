@@ -10,7 +10,6 @@ COPY . .
 RUN pip install .
 
 COPY app.py .
-COPY .env .
 
 EXPOSE 8501
 ENTRYPOINT ["streamlit", "run", "app.py"]
