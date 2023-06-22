@@ -1,0 +1,7 @@
+.streamlit/
+.vscode/
+notebooks/
+plots/
+tmp/
+.gitignore
+Dockerfile
