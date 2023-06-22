@@ -1,5 +1,4 @@
 .streamlit/secrets.toml
-authors/
 tmp/
 authors-bak/
 authors.bak/
