@@ -1,11 +1,10 @@
-from dotenv import load_dotenv
 import urllib.parse
-
-load_dotenv()
 import streamlit as st
-from embedding_search.data_model import Article, Author
+from dotenv import load_dotenv
 from embedding_search.vector_store import MiniStore, get_author
 from embedding_search.visualize import EmbeddingsProcessor, QueryPlotter
+
+load_dotenv()
 
 st.set_page_config(
     page_title="Data Science @ UW Community search.", page_icon="🔎", layout="wide"
