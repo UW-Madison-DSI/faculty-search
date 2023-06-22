@@ -5,6 +5,7 @@ colorFrom: yellow
 colorTo: yellow
 sdk: docker
 pinned: false
+app_port: 8501
 ---
 
 An experiment on embeddings.
