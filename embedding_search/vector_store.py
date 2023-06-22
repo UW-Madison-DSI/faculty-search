@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-
+from functools import cache
 import numpy as np
 from langchain.embeddings import OpenAIEmbeddings
 from scipy.spatial.distance import cdist
@@ -10,9 +10,9 @@ from embedding_search.data_model import Article, Author
 from embedding_search.utils import sort_key_by_value
 
 
+@cache
 def get_author(orcid: str) -> Author:
     """Get author from orcid."""
-
     return Author.load(Path("./authors") / f"{orcid}.json")
 
 

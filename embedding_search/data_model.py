@@ -58,6 +58,9 @@ class Article:
             "abstract": self.abstract,
         }
 
+    def __str__(self) -> str:
+        return f"{self.title} ({self.publication_year})"
+
 
 @dataclass
 class Author:
@@ -116,4 +119,4 @@ class Author:
             return cls(**json.load(f))
 
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name} ({self.orcid})"
+        return f"{self.first_name} {self.last_name} (ORCID: {self.orcid})"
