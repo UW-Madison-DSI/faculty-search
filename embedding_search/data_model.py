@@ -15,6 +15,7 @@ class Article:
     pulled_abstract: bool = False
     raw_abstract: str = None
     abstract: str = None
+    cited_by: int = None
 
     @property
     def text(self) -> str:
@@ -40,6 +41,7 @@ class Article:
             "pulled_abstract": self.pulled_abstract,
             "raw_abstract": self.raw_abstract,
             "abstract": self.abstract,
+            "cited_by": self.cited_by,
         }
 
     @property
@@ -56,6 +58,7 @@ class Article:
             "pulled_abstract": self.pulled_abstract,
             "raw_abstract": self.raw_abstract,
             "abstract": self.abstract,
+            "cited_by": self.cited_by,
         }
 
     def __str__(self) -> str:
