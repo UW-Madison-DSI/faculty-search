@@ -2,7 +2,7 @@ import os
 from functools import cache
 import requests
 from tqdm import tqdm
-from embedding_search.crossref import get_abstract, to_plain_text
+from embedding_search.crossref import query_crossref, to_plain_text
 from embedding_search.data_model import Article, Author
 from embedding_search.utils import extract_orcid, timeout
 
@@ -154,11 +154,14 @@ def download_author(orcid: str) -> Author:
 
         if article.doi is None:
             continue
-        abstract = get_abstract(article.doi)
 
-        if abstract is None:
-            continue
-        article.raw_abstract = abstract
-        article.abstract = to_plain_text(abstract)
+        abstract, cited_by = query_crossref(article.doi)
+
+        if abstract is not None:
+            article.raw_abstract = abstract
+            article.abstract = to_plain_text(abstract)
+
+        if cited_by is not None:
+            article.cited_by = cited_by
 
     return author
