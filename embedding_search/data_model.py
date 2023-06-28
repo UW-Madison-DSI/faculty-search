@@ -17,6 +17,9 @@ class Article:
     abstract: str = None
     cited_by: int = None
 
+    def __post_init__(self) -> None:
+        self.author_orcid = extract_orcid(self.orcid_path)
+
     @property
     def text(self) -> str:
         """Text to embed."""
@@ -34,6 +37,7 @@ class Article:
         return {
             "type": "article",
             "orcid_path": self.orcid_path,
+            "author_orcid": self.author_orcid,
             "doi": self.doi,
             "title": self.title,
             "url": self.url,
@@ -44,13 +48,10 @@ class Article:
             "cited_by": self.cited_by,
         }
 
-    @property
-    def author_orcid(self) -> str:
-        return extract_orcid(self.orcid_path)
-
     def to_dict(self) -> dict:
         return {
             "orcid_path": self.orcid_path,
+            "author_orcid": self.author_orcid,
             "doi": self.doi,
             "title": self.title,
             "url": self.url,
