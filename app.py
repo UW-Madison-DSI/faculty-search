@@ -28,10 +28,14 @@ VECTOR_STORE = build_vector_store()
 PLOTTER = get_plotter(VECTOR_STORE)
 
 
-def get_community_map_url(first_name: str, last_name: str) -> str:
+def get_community_map_url(community_name: str) -> str:
     """Generate a URL to the community map for a given author."""
     url = "https://maps.datascience.wisc.edu/?query="
-    return url + urllib.parse.quote(f"{first_name} {last_name}")
+
+    if community_name is None:
+        return None
+
+    return url + urllib.parse.quote(community_name)
 
 
 def results_formatter(results: list, type: str) -> None:
@@ -50,7 +54,7 @@ def results_formatter(results: list, type: str) -> None:
         markdown = f"Found {len(results)} authors: "
         authors = []
         for result in results:
-            url = get_community_map_url(result.first_name, result.last_name)
+            url = get_community_map_url(result.community_name)
             authors.append(f"[{result.first_name} {result.last_name}]({url})")
         st.markdown(markdown + ", ".join(authors) + ".")
     else:
