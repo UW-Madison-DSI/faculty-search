@@ -74,14 +74,16 @@ class Author:
         orcid: str,
         first_name: str,
         last_name: str,
-        biography: str = None,
+        community_name: str | None = None,
+        biography: str | None = None,
         articles: list[Article] | None = None,
-        email: str = None,
-        articles_embeddings: list[list[float]] = None,
+        email: str | None = None,
+        articles_embeddings: list[list[float]] | None = None,
     ) -> None:
         self.orcid = orcid
         self.first_name = first_name
         self.last_name = last_name
+        self.community_name = community_name
         self.biography = biography
         self.email = email
         self.articles_embeddings = articles_embeddings

@@ -1,16 +1,9 @@
+from functools import cache
 import os
 import pandas as pd
 
 
-def download_datafile() -> pd.DataFrame:
-    """Download raw data file from community map API."""
-
-    api_key = os.getenv("COMMUNITY_MAP_KEY")
-    url = f"https://maps.datascience.wisc.edu/apis/authentication/public/api/contact-info?password={api_key}&format=csv"
-    return pd.read_csv(url)
-
-
-def parse(df: pd.DataFrame) -> tuple[list, list[dict]]:
+def parse_df(df: pd.DataFrame) -> pd.DataFrame:
     """Parse dataframe to get texts for embeddings and its metadatas."""
 
     # Rename columns
@@ -19,30 +12,24 @@ def parse(df: pd.DataFrame) -> tuple[list, list[dict]]:
         "First name": "first_name",
         "Last name": "last_name",
         "Email address": "email",
-        "Research summary": "summary",
     }
-    data = df.rename(columns=name_mapping)
+    df = df.rename(columns=name_mapping)
     selected_columns = list(name_mapping.values())
 
-    data = data[selected_columns]
-    data = data.dropna(subset=[c for c in selected_columns if c != "orcid"])
+    df = df[selected_columns]
+    df = df.dropna()
 
-    texts = data["summary"].tolist()
-    metadatas = data[["orcid", "first_name", "last_name", "email"]].to_dict(
-        orient="records"
-    )
-
-    # Append `user` type to metadata
-    for metadata in metadatas:
-        metadata["type"] = "user"
-
-    return texts, metadatas
+    df["community_name"] = df["first_name"] + " " + df["last_name"]
+    return df
 
 
-def extract_metadata(metadatas: list[dict], key: str) -> list:
-    """Extract metadata values."""
+@cache
+def download_datafile(parse: bool = True) -> pd.DataFrame:
+    """Download raw data file from community map API."""
 
-    values = []
-    for metadata in metadatas:
-        values.append(metadata[key])
-    return values
+    api_key = os.getenv("COMMUNITY_MAP_KEY")
+    url = f"https://maps.datascience.wisc.edu/apis/authentication/public/api/contact-info?password={api_key}&format=csv"
+    df = pd.read_csv(url)
+    if not parse:
+        return df
+    return parse_df(df)
