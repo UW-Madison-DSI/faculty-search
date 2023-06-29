@@ -155,13 +155,15 @@ def download_author(orcid: str) -> Author:
         if article.doi is None:
             continue
 
-        abstract, cited_by = query_crossref(article.doi)
+        crossref_data = query_crossref(
+            article.doi, fields=["abstract", "is-referenced-by-count"]
+        )
 
-        if abstract is not None:
-            article.raw_abstract = abstract
-            article.abstract = to_plain_text(abstract)
+        if crossref_data["abstract"] is not None:
+            article.raw_abstract = crossref_data["abstract"]
+            article.abstract = to_plain_text(crossref_data["abstract"])
 
-        if cited_by is not None:
-            article.cited_by = cited_by
+        if crossref_data["is-referenced-by-count"] is not None:
+            article.cited_by = crossref_data["is-referenced-by-count"]
 
     return author

@@ -3,6 +3,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from embedding_search.vector_store import MiniStore, get_author
 from embedding_search.visualize import EmbeddingsProcessor, QueryPlotter
+from embedding_search.crossref import query_crossref
 
 load_dotenv()
 
@@ -28,7 +29,7 @@ VECTOR_STORE = build_vector_store()
 PLOTTER = get_plotter(VECTOR_STORE)
 
 
-def get_community_map_url(community_name: str) -> str:
+def get_community_map_url(community_name: str) -> str | None:
     """Generate a URL to the community map for a given author."""
     url = "https://maps.datascience.wisc.edu/?query="
 
@@ -49,6 +50,7 @@ def results_formatter(results: list, type: str) -> None:
             _citation = f"{_author.first_name} {_author.last_name} ({result.publication_year}). {result.title}"
             with st.expander(_citation):
                 st.json(result.to_dict())
+
     elif type == "author":
         # Format authors
         markdown = f"Found {len(results)} authors: "
@@ -60,15 +62,20 @@ def results_formatter(results: list, type: str) -> None:
     else:
         raise ValueError(f"Unknown type: {type}")
 
-        # with st.expander("Show debug details"):
-        #     for result in results:
-        #         st.write(result)
-
 
 # Sidebar
 with st.sidebar:
     st.title("Search options")
-    query = st.text_input("Search", value="")
+    search_with = st.radio("Search with", ("Text", "DOI"), index=0)
+
+    if search_with == "DOI":
+        doi = st.text_input("DOI", value="")
+        data = query_crossref(doi, ["title", "abstract"])
+        print(f"{data=}")
+        query = " ".join([v for v in data.values() if v is not None])
+    else:
+        query = st.text_input("Text", value="")
+
     search_type = st.radio("Authors or articles?", ("Authors", "Articles"), index=0)
     top_k = st.number_input("How many results?", value=3, min_value=1)
 
