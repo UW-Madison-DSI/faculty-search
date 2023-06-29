@@ -6,3 +6,4 @@ openai
 tiktoken
 scikit-learn
 streamlit
+beautifulsoup4
