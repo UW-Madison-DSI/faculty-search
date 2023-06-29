@@ -3,7 +3,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from embedding_search.vector_store import MiniStore, get_author
 from embedding_search.visualize import EmbeddingsProcessor, QueryPlotter
-from embedding_search.crossref import query_crossref
+from embedding_search.preprocess import preprocess_search_input, SEARCH_INPUT_TYPES
 
 load_dotenv()
 
@@ -66,16 +66,8 @@ def results_formatter(results: list, type: str) -> None:
 # Sidebar
 with st.sidebar:
     st.title("Search options")
-    search_with = st.radio("Search with", ("Text", "DOI"), index=0)
-
-    if search_with == "DOI":
-        doi = st.text_input("DOI", value="")
-        data = query_crossref(doi, ["title", "abstract"])
-        print(f"{data=}")
-        query = " ".join([v for v in data.values() if v is not None])
-    else:
-        query = st.text_input("Text", value="")
-
+    search_with = st.radio("Search with", SEARCH_INPUT_TYPES, index=0)
+    input = st.text_input(search_with, value="")
     search_type = st.radio("Authors or articles?", ("Authors", "Articles"), index=0)
     top_k = st.number_input("How many results?", value=3, min_value=1)
 
@@ -92,6 +84,12 @@ st.title("Data Science @ UW Community search.")
 st.write("Search for authors or articles related to data science at UW-Madison.")
 
 if submit_button_pressed:
+    query = preprocess_search_input(search_with, input)
+
+    if not query:
+        st.error("Not found.")
+        st.stop()
+
     if search_type == "Authors":
         if weighted:
             _results = VECTOR_STORE.weighted_search_author(query, top_k=top_k)
