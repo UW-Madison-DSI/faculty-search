@@ -7,6 +7,11 @@
             "label": "run app",
             "type": "shell",
             "command": "streamlit run app.py --logger.level debug"
+        },
+        {
+            "label": "push to HF Space",
+            "type": "shell",
+            "command": "git push hf"
         }
     ]
 }
