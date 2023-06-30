@@ -178,7 +178,7 @@ class MiniStore:
         authors = []
         for orcid in top_orcids:
             author = get_author(orcid)
-            author.weighted_score = author_scores[orcid]
+            author.similarity = author_scores[orcid]
             authors.append(author)
 
         return authors

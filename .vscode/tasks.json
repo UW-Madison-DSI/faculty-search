@@ -12,6 +12,11 @@
             "label": "push to HF Space",
             "type": "shell",
             "command": "git push hf"
+        },
+        {
+            "label": "serve api",
+            "type": "shell",
+            "command": "uvicorn embedding_search.api:app --reload"
         }
     ]
 }
