@@ -1,6 +1,7 @@
 from functools import cache
 import os
 import pandas as pd
+import urllib.parse
 
 
 def parse_df(df: pd.DataFrame) -> pd.DataFrame:
@@ -33,3 +34,13 @@ def download_datafile(parse: bool = True) -> pd.DataFrame:
     if not parse:
         return df
     return parse_df(df)
+
+
+def get_community_map_url(name: str) -> str | None:
+    """Generate a URL to the community map for a given author."""
+    url = "https://maps.datascience.wisc.edu/?query="
+
+    if name is None:
+        return None
+
+    return url + urllib.parse.quote(name)
