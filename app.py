@@ -1,9 +1,9 @@
-import urllib.parse
 import streamlit as st
 from dotenv import load_dotenv
 from embedding_search.vector_store import MiniStore, get_author
 from embedding_search.visualize import EmbeddingsProcessor, QueryPlotter
 from embedding_search.preprocess import preprocess_search_input, SEARCH_INPUT_TYPES
+from embedding_search.community_map import get_community_map_url
 
 load_dotenv()
 
@@ -27,16 +27,6 @@ def get_plotter(_vector_store: MiniStore) -> QueryPlotter:
 
 VECTOR_STORE = build_vector_store()
 PLOTTER = get_plotter(VECTOR_STORE)
-
-
-def get_community_map_url(community_name: str) -> str | None:
-    """Generate a URL to the community map for a given author."""
-    url = "https://maps.datascience.wisc.edu/?query="
-
-    if community_name is None:
-        return None
-
-    return url + urllib.parse.quote(community_name)
 
 
 def results_formatter(results: list, type: str) -> None:
