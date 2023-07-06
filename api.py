@@ -55,8 +55,8 @@ class APIAuthor(BaseModel):
 
     first_name: str
     last_name: str
-    community_name: str
-    similarity: float  # relatedness weighted sum of articles cosine similarity
+    community_name: str | None = None
+    similarity: float | None = None
 
 
 def to_api_author(author: Author) -> APIAuthor:

@@ -6,7 +6,7 @@
         {
             "label": "run app",
             "type": "shell",
-            "command": "streamlit run app.py --logger.level debug"
+            "command": "streamlit run demo.py --logger.level debug"
         },
         {
             "label": "push to HF Space",
@@ -16,7 +16,7 @@
         {
             "label": "serve api",
             "type": "shell",
-            "command": "uvicorn embedding_search.api:app --reload"
+            "command": "uvicorn api:app --reload"
         }
     ]
 }

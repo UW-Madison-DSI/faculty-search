@@ -17,7 +17,7 @@ def query_crossref(doi: str, fields: list[str]) -> dict | None:
         return None
 
     def _flatten(x: list) -> any:
-        if len(x) == 1:
+        if isinstance(x, list) and len(x) == 1:
             return x[0]
         else:
             return x

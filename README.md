@@ -18,8 +18,9 @@ An experiment on embeddings.
 
 ## Features
 
-- Search for authors and articles based on research relevancy. For searching authors, there is an option to weigh the results based on the number of relevant articles they have published.
+- Search for authors and articles based on research relevancy. For searching authors, there is an option to weight the results based on the number of relevant articles they have published.
 - Visualize a search `query`, `authors`, and `articles` in the same 2d space.
+- A REST API end-point to access the search function programmatically.
 
 ## [Demo](https://mbialo-community-search.hf.space/)
 
