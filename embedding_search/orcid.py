@@ -148,9 +148,6 @@ def download_author(orcid: str) -> Author:
     # Get abstracts
     for article in tqdm(author.articles):
         # Avoid pulling the same abstract twice
-        if article.pulled_abstract:
-            continue
-        article.pulled_abstract = True
 
         if article.doi is None:
             continue
@@ -160,7 +157,6 @@ def download_author(orcid: str) -> Author:
         )
 
         if crossref_data["abstract"] is not None:
-            article.raw_abstract = crossref_data["abstract"]
             article.abstract = to_plain_text(crossref_data["abstract"])
 
         if crossref_data["is-referenced-by-count"] is not None:

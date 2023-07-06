@@ -1,3 +1,4 @@
+import os
 import logging
 from pathlib import Path
 from functools import cache
@@ -5,15 +6,19 @@ import numpy as np
 from langchain.embeddings import OpenAIEmbeddings
 from scipy.spatial.distance import cdist
 from tqdm import tqdm
-
+from dotenv import load_dotenv
 from embedding_search.data_model import Article, Author
 from embedding_search.utils import sort_key_by_value
 
+load_dotenv()
+AUTHOR_DIR = Path(os.getenv("AUTHOR_DIR"))
+DEBUG = int(os.getenv("DEBUG", 0))
+
 
 @cache
-def get_author(orcid: str) -> Author:
-    """Get author from orcid."""
-    return Author.load(Path("./authors") / f"{orcid}.json")
+def get_author(id: str) -> Author:
+    """Get author from id."""
+    return Author.load(AUTHOR_DIR / f"{id}.json")
 
 
 class MiniStore:
@@ -38,29 +43,34 @@ class MiniStore:
 
         # process articles
         self.vectors.extend(author.articles_embeddings)
-        self.metadata.extend([article.metadata for article in author.articles])
+        metadata = [article.dict() for article in author.articles]
+        for meta in metadata:
+            meta["type"] = "article"
+            meta["author_id"] = author.id  # For easier access during search
+        self.metadata.extend(metadata)
 
-        # process author (centroid of articles)
+        # process author embedding (centroid of articles)
+        logging.debug(
+            f"Author {author.id} has {len(author.articles_embeddings)} articles"
+        )
+        logging.debug(np.array(author.articles_embeddings).shape)
         author_embedding = np.mean(author.articles_embeddings, axis=0)
         self.vectors.append(author_embedding.tolist())
         self.metadata.append(
             {
                 "type": "author",
-                "orcid": author.orcid,
+                "id": author.id,
                 "first_name": author.first_name,
                 "last_name": author.last_name,
-                "biography": author.biography,
-                "email": author.email,
             }
         )
 
-    def build(self, author_dir: Path = None) -> None:
+    def build(self) -> None:
         """Build entire store from jsons."""
 
-        if author_dir is None:
-            author_dir = Path("./authors")
-
-        for json_file in tqdm(author_dir.glob("*.json")):
+        for i, json_file in tqdm(enumerate(AUTHOR_DIR.glob("*.json"))):
+            if DEBUG and i > 10:
+                break
             author = Author.load(json_file)
             self.add_author(author)
 
@@ -166,19 +176,19 @@ class MiniStore:
             # Skip author level distance to avoid double counting
             if metadata["type"] != "article":
                 continue
-            orcid = metadata["author_orcid"]
-            author_scores[orcid] = author_scores.get(orcid, 0) + weight
+            id = metadata["author_id"]
+            author_scores[id] = author_scores.get(id, 0) + weight
 
         logging.debug(author_scores)
 
         # Sort by score
-        top_orcids = sort_key_by_value(author_scores, reversed=True)[:top_k]
+        top_ids = sort_key_by_value(author_scores, reversed=True)[:top_k]
 
         # Return authors with scores
         authors = []
-        for orcid in top_orcids:
-            author = get_author(orcid)
-            author.similarity = author_scores[orcid]
+        for id in top_ids:
+            author = get_author(id)
+            author.similarity = author_scores[id]
             authors.append(author)
 
         return authors
