@@ -1,0 +1,1 @@
+rsconnect deploy fastapi -n wisc --entrypoint api:app .
