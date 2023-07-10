@@ -9,6 +9,8 @@ from tqdm import tqdm
 from dotenv import load_dotenv
 from embedding_search.data_model import Article, Author
 from embedding_search.utils import sort_key_by_value
+from pymilvus import CollectionSchema, FieldSchema, DataType, Collection
+
 
 load_dotenv()
 AUTHOR_DIR = Path(os.getenv("AUTHOR_DIR"))
@@ -192,3 +194,87 @@ class MiniStore:
             authors.append(author)
 
         return authors
+
+
+############################################ Milvus ############################################
+
+
+def create_articles_collection() -> None:
+    """Create a collection named articles in Milvus."""
+
+    schema = CollectionSchema(
+        fields=[
+            FieldSchema(
+                name="doi", dtype=DataType.VARCHAR, is_primary=True, max_length=128
+            ),
+            FieldSchema(name="author_id", dtype=DataType.INT32),
+            FieldSchema(name="publication_year", dtype=DataType.INT16),
+            FieldSchema(name="title", dtype=DataType.VARCHAR, max_length=2048),
+            FieldSchema(name="abstract", dtype=DataType.VARCHAR, max_length=65535),
+            FieldSchema(name="cited_by", dtype=DataType.INT32),
+            FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=1536),
+        ],
+        description="Articles",
+        enable_dynamic_field=True,
+    )
+
+    Collection(name="articles", schema=schema, using="default")
+
+
+def create_authors_collection() -> None:
+    """Create a collection named authors in Milvus."""
+
+    schema = CollectionSchema(
+        fields=[
+            FieldSchema(name="id", dtype=DataType.INT64, is_primary=True),
+            FieldSchema(name="unit_id", dtype=DataType.INT32),
+            FieldSchema(name="first_name", dtype=DataType.VARCHAR, max_length=128),
+            FieldSchema(name="last_name", dtype=DataType.VARCHAR, max_length=128),
+            FieldSchema(name="community_name", dtype=DataType.VARCHAR, max_length=256),
+            FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=1536),
+        ],
+        description="Authors",
+        enable_dynamic_field=True,
+    )
+
+    Collection(name="authors", schema=schema, using="default")
+
+
+def make_author_data_package(author_id: str) -> None:
+    """Convert into data package that fits Milvus schema."""
+
+    author = get_author(author_id)
+    data = author.dict(
+        include={"id", "unit_id", "first_name", "last_name", "community_name"}
+    ).copy()
+
+    # Patch None values to fit Milvus schema
+    if data["community_name"] is None:
+        data["community_name"] = ""
+
+    data["embedding"] = author.embedding  # this is property
+    return data
+
+
+def make_articles_data_packages(author_id: str) -> list[dict]:
+    """Convert into data package that fits Milvus schema."""
+
+    author = get_author(author_id)
+
+    data_packages = []
+    for article, embedding in zip(author.articles, author.articles_embeddings):
+        if len(embedding) != 1536 or article.doi is None:
+            continue
+
+        data = article.dict().copy()
+        data["author_id"] = author.id
+        if data["abstract"] is None:
+            data["abstract"] = ""
+        if data["publication_year"] is None:
+            data["publication_year"] = 0
+        if data["cited_by"] is None:
+            data["cited_by"] = 0
+        data["embedding"] = embedding
+        data_packages.append(data)
+
+    return data_packages

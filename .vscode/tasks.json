@@ -4,6 +4,17 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "conda activate",
+            "type": "shell",
+            "command": "conda activate community_search",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
             "label": "run app",
             "type": "shell",
             "command": "streamlit run demo.py --logger.level debug"

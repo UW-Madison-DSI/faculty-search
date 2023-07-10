@@ -6,6 +6,9 @@
     "cSpell.words": [
         "cdist",
         "dois",
-        "keepdims"
+        "keepdims",
+        "nlist",
+        "nprobe",
+        "pymilvus"
     ]
 }

@@ -8,5 +8,8 @@
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
 	"postCreateCommand": "bash .devcontainer/post_create.sh",
-	"remoteUser": "root"
+	"remoteUser": "root",
+	"runArgs": [
+		"--network=cs-network"
+	]
 }
