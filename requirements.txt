@@ -10,4 +10,3 @@ beautifulsoup4
 fastapi
 uvicorn
 pymilvus
-rsconnect-python
