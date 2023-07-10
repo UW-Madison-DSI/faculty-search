@@ -9,3 +9,4 @@ streamlit
 beautifulsoup4
 fastapi
 uvicorn
+pymilvus
