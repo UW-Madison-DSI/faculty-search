@@ -1,3 +1,5 @@
+data/raw/
+data/milvus/
 milvus-backup
 volumes/
 authors/
