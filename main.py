@@ -1,4 +1,5 @@
 import logging
+import os
 from pathlib import Path
 from dotenv import load_dotenv
 from langchain.embeddings import OpenAIEmbeddings
@@ -6,12 +7,14 @@ from embedding_search.community_map import download_datafile
 from embedding_search.crossref import query_crossref
 from embedding_search.academic_analytics import get_units, get_faculties, get_articles
 from embedding_search.data_model import Article, Author
+from embedding_search.vector_store import init_milvus
 from tqdm import tqdm
 
 load_dotenv()
 
 AUTHORS_DIR = Path("authors/")
 COMMUNITY_DF = download_datafile()
+DEBUG = int(os.getenv("DEBUG", 0))
 
 
 def list_downloaded_authors() -> list[int]:
@@ -19,18 +22,6 @@ def list_downloaded_authors() -> list[int]:
 
     downloaded = AUTHORS_DIR.glob("*.json")
     return [int(author.stem) for author in downloaded]
-
-
-# def append_community_info(author: Author) -> Author:
-#     """Add email address and community name to author."""
-
-#     id_to_community_name = {
-#         row.orcid: row.community_name for row in COMMUNITY_DF.itertuples()
-#     }
-#     id_to_email = {row.orcid: row.email for row in COMMUNITY_DF.itertuples()}
-#     author.email = id_to_email[author.orcid]
-#     author.community_name = id_to_community_name[author.orcid]
-#     return author
 
 
 def append_embeddings(author: Author) -> Author:
@@ -120,7 +111,12 @@ def download_authors(overwrite: bool = False) -> None:
 
 def main() -> None:
     """Main function."""
-    download_authors(overwrite=False)
+
+    # download_authors(overwrite=False)
+    if DEBUG:
+        init_milvus(n=100)
+    else:
+        init_milvus()
 
 
 if __name__ == "__main__":
