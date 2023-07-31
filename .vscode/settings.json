@@ -4,11 +4,13 @@
     },
     "python.formatting.provider": "none",
     "cSpell.words": [
+        "anns",
         "cdist",
         "dois",
         "keepdims",
         "nlist",
         "nprobe",
         "pymilvus"
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "off"
 }
