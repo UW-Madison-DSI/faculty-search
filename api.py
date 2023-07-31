@@ -1,28 +1,40 @@
+import os
+import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from pydantic import BaseModel, validator
-from embedding_search.vector_store import MiniStore
-from embedding_search.data_model import Author
 from dotenv import load_dotenv
+from langchain.embeddings import OpenAIEmbeddings
+from pymilvus import connections, Collection
 
 load_dotenv()
+
 cached_resources = {}
-
-
-def get_vector_store():
-    """Get the vector store."""
-    store = MiniStore()
-    store.build()
-    return store
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Cached resources management."""
-    cached_resources["vector_store"] = get_vector_store()
+
+    connections.connect(
+        alias=os.getenv("MILVUS_ALIAS", "default"),
+        host=os.getenv("MILVUS_HOST", "localhost"),
+        port=os.getenv("MILVUS_PORT", "19530"),
+    )
+
+    cached_resources["articles_collection"] = Collection(name="articles")
+    cached_resources["articles_collection"].load()
+
+    # cached_resources["authors_collection"] = Collection(name="authors")
+    # cached_resources["authors_collection"].load()
+
+    cached_resources["embeddings"] = OpenAIEmbeddings()
     yield
     # Release resources when app stops
-    cached_resources["vector_store"] = None
+    # cached_resources["authors_collection"].release()
+    cached_resources["articles_collection"].release()
+    cached_resources.clear()
+    connections.disconnect(alias=os.getenv("MILVUS_ALIAS", "default"))
 
 
 app = FastAPI(lifespan=lifespan)
@@ -59,19 +71,34 @@ class APIAuthor(BaseModel):
     similarity: float | None = None
 
 
-def to_api_author(author: Author) -> APIAuthor:
-    """Convert an author to APIAuthor."""
-    return APIAuthor(
-        first_name=author.first_name,
-        last_name=author.last_name,
-        community_name=author.community_name,
-        similarity=author.similarity,
+def search(
+    query: str, top_k: int = 3, distance_threshold: float = 0.2, pow: float = 3.0
+) -> list:
+    """Search for articles by query."""
+
+    search_vector = cached_resources["embeddings"].embed_query(query)
+    logging.debug(search_vector)
+
+    search_params = {"metric_type": "IP", "params": {"nprobe": 16}}
+    results = cached_resources["articles_collection"].search(
+        data=[search_vector],
+        anns_field="embedding",
+        param=search_params,
+        limit=top_k,
+        output_fields=["title", "author_id"],
     )
 
+    return [result.__dict__ for result in results[0]]
 
-@app.post("/search_author")
-def search_author(query: APIQuery) -> list[APIAuthor]:
+
+@app.get("/")
+def root():
+    """Root endpoint."""
+    return {"message": "is running."}
+
+
+@app.post("/search_paper/")
+def search_author(query: APIQuery) -> list[dict]:
     """Search an author."""
 
-    authors = cached_resources["vector_store"].weighted_search_author(**query.dict())
-    return [to_api_author(author) for author in authors]
+    return search(query.query, query.top_k)
