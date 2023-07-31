@@ -119,35 +119,29 @@ def init_milvus(n: int | None = None) -> None:
     create_articles_collection()
     create_authors_collection()
 
-    author_ids = [path.stem for path in AUTHOR_DIR.glob("*.json")]
-    if n is not None:
-        logging.info(f"Debug mode: Limiting to {n} authors...")
-        author_ids = author_ids[:n]
-
-    # Ingest authors
-    logging.info("Ingesting authors...")
-    author_collection = Collection("authors")
-    with Pool(8) as p:
-        data_packages = p.map(make_author_data_package, author_ids)
-
-    author_collection.insert(data_packages)
-    author_collection.flush()  # Finish
-
-    # Ingest articles (can be quite large)
-    logging.info("Ingesting articles...")
-    article_collection = Collection("articles")
-    for author_id in tqdm(author_ids):
-        data_packages = make_articles_data_packages(author_id)
-        article_collection.insert(data_packages)
-
-    article_collection.flush()
-
-    # Create index
-
+    # Create index setting
     index_params = {
-        "metric_type": "IP",  # inner product
+        "metric_type": "IP",  # inner-product
         "index_type": "IVF_FLAT",
         "params": {"nlist": 1024},
     }
+
     article_collection.create_index("embedding", index_params)
-    utility.index_building_progress("articles")
+    author_collection.create_index("embedding", index_params)
+
+
+def push_data(author_id: str) -> None:
+    """Push author data to Milvus.
+
+    Note. Remember to call collection.flush() after ingestion session.
+    """
+
+    # Ingest authors
+    logging.info("Ingesting authors...")
+    author_data_package = make_author_data_package(author_id)
+    Collection("authors", using=MILVUS_ALIAS).insert([author_data_package])
+
+    # Ingest articles (can be quite large)
+    logging.info("Ingesting articles...")
+    articles_data_package = make_articles_data_packages(author_id)
+    Collection("articles", using=MILVUS_ALIAS).insert(articles_data_package)
