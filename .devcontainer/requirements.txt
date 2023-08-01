@@ -11,3 +11,4 @@ fastapi
 uvicorn
 pymilvus
 rsconnect-python
+pytest
