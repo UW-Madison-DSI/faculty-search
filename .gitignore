@@ -1,6 +1,4 @@
-data/raw/
-data/milvus/
-milvus-backup
+data/
 volumes/
 authors/
 .streamlit/secrets.toml
