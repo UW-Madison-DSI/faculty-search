@@ -28,7 +28,7 @@ services:
       timeout: 20s
       retries: 3
 
-  standalone:
+  milvus:
     container_name: milvus-standalone
     image: milvusdb/milvus:v2.2.11
     command: ["milvus", "run", "standalone"]
@@ -44,7 +44,21 @@ services:
       - "etcd"
       - "minio"
 
-networks:
-  default:
-    name: cs-network
-    external: true
+  fastapi:
+    container_name: fastapi
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    command: ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      OPENAI_API_KEY: '${OPENAI_API_KEY}'
+      OPENAI_ORGANIZATION: '${OPENAI_ORGANIZATION}'
+      AUTHOR_DIR: ./data/raw/campus_users
+      MILVUS_ALIAS: default
+      MILVUS_HOST: milvus-standalone
+      MILVUS_PORT: 19530
+      DEBUG: 1
+    ports:
+      - "8000:8000"
+    depends_on:
+      - "milvus"
