@@ -5,3 +5,5 @@ plots/
 tmp/
 .gitignore
 Dockerfile
+.mypy_cache/
+__pycache__/
