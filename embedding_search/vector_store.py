@@ -10,14 +10,11 @@ from pymilvus import (
     DataType,
     Collection,
     connections,
-    utility,
 )
-from multiprocessing import Pool
-from tqdm import tqdm
 
 load_dotenv()
 
-AUTHOR_DIR = Path(os.getenv("AUTHOR_DIR"))
+AUTHORS_DIR = Path(os.getenv("AUTHORS_DIR"))
 DEBUG = int(os.getenv("DEBUG", 0))
 MILVUS_ALIAS = os.getenv("MILVUS_ALIAS", "default")
 MILVUS_HOST = os.getenv("MILVUS_HOST", "localhost")
@@ -27,10 +24,10 @@ MILVUS_PORT = os.getenv("MILVUS_PORT", "19530")
 @cache
 def get_author(id: str) -> Author:
     """Get author from id."""
-    return Author.load(AUTHOR_DIR / f"{id}.json")
+    return Author.load(AUTHORS_DIR / f"{id}.json")
 
 
-def create_articles_collection() -> None:
+def create_article_collection() -> None:
     """Create a collection named articles in Milvus."""
 
     schema = CollectionSchema(
@@ -51,7 +48,7 @@ def create_articles_collection() -> None:
     Collection(name="articles", schema=schema, using="default")
 
 
-def create_authors_collection() -> None:
+def create_author_collection() -> None:
     """Create a collection named authors in Milvus."""
 
     schema = CollectionSchema(
@@ -109,15 +106,18 @@ def make_articles_data_packages(author_id: str) -> list[dict]:
     return data_packages
 
 
-def init_milvus(n: int | None = None) -> None:
+def init_milvus() -> None:
     """Initialize Milvus (assume connection exist)."""
 
     connections.connect(MILVUS_ALIAS, host=MILVUS_HOST, port=MILVUS_PORT)
     # Create collections
 
     logging.info("Creating collections...")
-    create_articles_collection()
-    create_authors_collection()
+    create_article_collection()
+    create_author_collection()
+
+    author_collection = Collection("authors")
+    article_collection = Collection("articles")
 
     # Create index setting
     index_params = {
