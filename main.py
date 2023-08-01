@@ -7,12 +7,16 @@ from embedding_search.community_map import download_datafile
 from embedding_search.crossref import query_crossref
 from embedding_search.academic_analytics import get_units, get_faculties, get_articles
 from embedding_search.data_model import Article, Author
-from embedding_search.vector_store import init_milvus
+from embedding_search.vector_store import init_milvus, push_data
 from tqdm import tqdm
 
 load_dotenv()
 
-AUTHORS_DIR = Path("authors/")
+AUTHORS_DIR = Path(os.getenv("AUTHOR_DIR"))
+
+if not AUTHORS_DIR:
+    raise ValueError("AUTHORS_DIR must be set in .env")
+
 COMMUNITY_DF = download_datafile()
 DEBUG = int(os.getenv("DEBUG", 0))
 
@@ -112,11 +116,15 @@ def download_authors(overwrite: bool = False) -> None:
 def main() -> None:
     """Main function."""
 
-    # download_authors(overwrite=False)
+    # Build Milvus collections
+    init_milvus()
+
+    author_ids = [file.stem for file in AUTHORS_DIR.glob("*.json")]
+
     if DEBUG:
-        init_milvus(n=100)
-    else:
-        init_milvus()
+        author_ids = author_ids[:100]
+
+    [push_data(author_id) for author_id in tqdm(author_ids)]
 
 
 if __name__ == "__main__":
