@@ -5,12 +5,24 @@
     "python.formatting.provider": "none",
     "cSpell.words": [
         "anns",
+        "autouse",
         "cdist",
+        "devcontainer",
+        "devcontainers",
         "dois",
+        "dotenv",
+        "dtype",
+        "fastapi",
+        "Higgs",
         "keepdims",
+        "langchain",
+        "milvus",
         "nlist",
         "nprobe",
-        "pymilvus"
+        "ORCID",
+        "pydantic",
+        "pymilvus",
+        "rangav"
     ],
     "python.analysis.typeCheckingMode": "off"
 }
