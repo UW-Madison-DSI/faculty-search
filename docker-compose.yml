@@ -23,7 +23,13 @@ services:
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/minio:/minio_data
     command: minio server /minio_data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:9000/minio/health/live"
+        ]
       interval: 30s
       timeout: 20s
       retries: 3
@@ -31,7 +37,7 @@ services:
   milvus:
     container_name: milvus-standalone
     image: milvusdb/milvus:v2.2.11
-    command: ["milvus", "run", "standalone"]
+    command: [ "milvus", "run", "standalone" ]
     environment:
       ETCD_ENDPOINTS: etcd:2379
       MINIO_ADDRESS: minio:9000
@@ -49,7 +55,15 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
-    command: ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+    command:
+      [
+        "uvicorn",
+        "api:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8765"
+      ]
     environment:
       OPENAI_API_KEY: '${OPENAI_API_KEY}'
       OPENAI_ORGANIZATION: '${OPENAI_ORGANIZATION}'
@@ -59,6 +73,6 @@ services:
       MILVUS_PORT: 19530
       DEBUG: 1
     ports:
-      - "8000:8000"
+      - "8765:8765"
     depends_on:
       - "milvus"

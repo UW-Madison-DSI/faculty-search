@@ -12,7 +12,11 @@ from tqdm import tqdm
 
 load_dotenv()
 
-AUTHORS_DIR = Path(os.getenv("AUTHOR_DIR"))
+AUTHORS_DIR = os.getenv("AUTHORS_DIR")
+print(AUTHORS_DIR)
+AUTHORS_DIR = Path(AUTHORS_DIR)
+
+logging.basicConfig(filename="main.log", level=logging.INFO)
 
 if not AUTHORS_DIR:
     raise ValueError("AUTHORS_DIR must be set in .env")
@@ -124,7 +128,11 @@ def main() -> None:
     if DEBUG:
         author_ids = author_ids[:100]
 
-    [push_data(author_id) for author_id in tqdm(author_ids)]
+    for author_id in tqdm(author_ids):
+        try:
+            push_data(author_id)
+        except Exception as e:
+            logging.error(f"Error pushing {author_id}: {e}")
 
 
 if __name__ == "__main__":

@@ -4,3 +4,4 @@ openai
 langchain
 uvicorn
 fastapi
+tiktoken
