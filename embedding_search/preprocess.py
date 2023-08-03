@@ -1,13 +1,15 @@
+from pathlib import Path
 import requests
 import logging
 import re
 from bs4 import BeautifulSoup
 from embedding_search.crossref import query_crossref
+from langchain.document_loaders import PyPDFLoader
 
 SEARCH_INPUT_TYPES = ["Text", "DOI", "URL"]
 
 
-def to_text(url: str) -> str:
+def url_to_text(url: str) -> str:
     """Convert a URL to plain text with minimal parsing."""
 
     headers = {
@@ -32,6 +34,21 @@ def to_text(url: str) -> str:
     return plain_text.strip()
 
 
+def pdf_to_text(pdf_path: Path, target_n: int = 1000) -> str:
+    """Convert first page of a PDF to plain text with minimal parsing."""
+
+    loader = PyPDFLoader(pdf_path)
+    pages = loader.load_and_split()
+
+    n = 0
+    output = ""
+    for page in pages:
+        if n < target_n:
+            output += page.page_content
+        n += len(page.page_content.split(" "))
+    return output
+
+
 def preprocess_search_input(search_with: str, input: str) -> str:
     """Pre-process search input based on search type."""
 
@@ -40,6 +57,7 @@ def preprocess_search_input(search_with: str, input: str) -> str:
     if search_with == "Text":
         return input
 
+    # Options with extra preprocessing:
     if search_with == "DOI":
         data = query_crossref(input, ["title", "abstract"])
         if data is None:
@@ -47,10 +65,12 @@ def preprocess_search_input(search_with: str, input: str) -> str:
         logging.debug(f"Crossref data: {data}")
 
         output = " ".join([v for v in data.values() if v is not None])
-        logging.info(f"Preprocessed text: {output}")
-        return output
 
     if search_with == "URL":
-        output = to_text(input)
-        logging.info(f"Preprocessed text: {output}")
-        return output
+        output = url_to_text(input)
+
+    if search_with == "PDF":
+        output = pdf_to_text(input)
+
+    logging.info(f"Preprocessed text: {output}")
+    return output

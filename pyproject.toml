@@ -11,6 +11,8 @@ authors = [
 dependencies = [
     "langchain",
     "openai",
+    "pypdf",
+    "tiktoken"
 ]
 
 [build-system]

@@ -12,3 +12,4 @@ uvicorn
 pymilvus
 rsconnect-python
 pytest
+pypdf
