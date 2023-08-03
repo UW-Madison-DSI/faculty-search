@@ -52,7 +52,7 @@ class Engine:
         return authors[0]
 
     def search_articles(
-        self, query: str, top_k: int = 500, distance_threshold: float = 0.2
+        self, query: str, top_k: int, distance_threshold: float = 0.2
     ) -> list[dict]:
         """Search for articles by a query."""
 

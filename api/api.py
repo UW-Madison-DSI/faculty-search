@@ -9,6 +9,7 @@ from pymilvus import connections, Collection
 from core import Engine
 
 load_dotenv()
+
 cached_resources = {}
 
 
@@ -34,7 +35,7 @@ async def lifespan(app: FastAPI):
     connections.disconnect(alias=os.getenv("MILVUS_ALIAS", "default"))
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(title="Scholar Search API", lifespan=lifespan)
 
 
 # IO Models
@@ -69,9 +70,18 @@ class APIAuthor(BaseModel):
     score: float | None = None
 
 
+class APIArticle(BaseModel):
+    """Article output data model."""
+
+    doi: str
+    title: str
+    author_id: str
+    distance: float | None = None
+
+
 @app.get("/")
 def root():
-    """Root endpoint."""
+    """Root endpoint (for health check)."""
     return {"api": "is running."}
 
 
@@ -91,3 +101,13 @@ def search_author(query: APIQuery) -> list[APIAuthor]:
         output.append(APIAuthor(**author_details))
 
     return output
+
+
+@app.post("/search_article/")
+def search_article(query: APIQuery) -> list[APIArticle]:
+    """Search an article."""
+
+    results = cached_resources["engine"].search_articles(
+        query=query.query, top_k=query.top_k
+    )
+    return [APIArticle(**result) for result in results]
