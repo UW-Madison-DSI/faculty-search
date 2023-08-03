@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from embedding_search.crossref import query_crossref
 from langchain.document_loaders import PyPDFLoader
 
-SEARCH_INPUT_TYPES = ["Text", "DOI", "URL"]
+SEARCH_INPUT_TYPES = ["Text", "DOI", "URL", "PDF"]
 
 
 def url_to_text(url: str) -> str:
