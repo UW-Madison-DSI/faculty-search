@@ -22,6 +22,7 @@
         "ORCID",
         "pydantic",
         "pymilvus",
+        "pypdf",
         "rangav"
     ],
     "python.analysis.typeCheckingMode": "off"
