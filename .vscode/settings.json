@@ -23,7 +23,9 @@
         "pydantic",
         "pymilvus",
         "pypdf",
-        "rangav"
+        "rangav",
+        "sklearn",
+        "tsne"
     ],
     "python.analysis.typeCheckingMode": "off"
 }

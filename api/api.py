@@ -6,7 +6,7 @@ from pydantic import BaseModel, validator
 from dotenv import load_dotenv
 from langchain.embeddings import OpenAIEmbeddings
 from pymilvus import connections, Collection
-from core import Engine
+from core import Engine, get_author
 
 load_dotenv()
 
@@ -96,7 +96,9 @@ def search_author(query: APIQuery) -> list[APIAuthor]:
 
     output = []
     for author_id, score in zip(author_ids, scores):
-        author_details = cached_resources["engine"].get_author(author_id)
+        author_details = get_author(
+            author_id, cached_resources["engine"].author_collection
+        )
         author_details["score"] = score  # inject score to author details
         output.append(APIAuthor(**author_details))
 
