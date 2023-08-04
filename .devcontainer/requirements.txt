@@ -12,4 +12,5 @@ uvicorn
 pymilvus
 rsconnect-python
 pytest
+pytest-cov
 pypdf
