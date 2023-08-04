@@ -4,19 +4,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "run app",
+            "label": "compose reload api",
             "type": "shell",
-            "command": "streamlit run demo.py --logger.level debug"
+            "command": "docker compose stop fastapi && docker compose up --build -d fastapi && docker compose logs -f fastapi",
         },
         {
-            "label": "push to HF Space",
+            "label": "pytest",
             "type": "shell",
-            "command": "git push hf"
-        },
-        {
-            "label": "serve api",
-            "type": "shell",
-            "command": "uvicorn api:app --reload"
+            "command": "pytest --cov=api --cov-report=term-missing tests/",
         }
     ]
 }
