@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from langchain.embeddings import OpenAIEmbeddings
 from pymilvus import connections, Collection
 from core import Engine, get_author
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
@@ -36,6 +37,14 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Scholar Search API", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 
 # IO Models
