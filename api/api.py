@@ -44,6 +44,7 @@ class APIQuery(BaseModel):
 
     query: str
     top_k: int = 3
+    with_plot: bool = False
 
     @validator("query")
     def query_must_not_be_empty(cls, v):
@@ -58,6 +59,16 @@ class APIQuery(BaseModel):
         if v <= 0:
             raise ValueError("top_k must be positive")
         return v
+
+
+class APIPlotData(BaseModel):
+    """Plot data model."""
+
+    x: list[float]
+    y: list[float]
+    id: list[str]
+    label: list[str]
+    type: list[str]
 
 
 class APIAuthor(BaseModel):
@@ -85,31 +96,51 @@ def root():
     return {"api": "is running."}
 
 
-@app.post("/search_author/")
-def search_author(query: APIQuery) -> list[APIAuthor]:
+@app.post("/search_authors/")
+def search_authors(query: APIQuery) -> dict[str, list[APIAuthor] | APIPlotData]:
     """Search an author."""
 
-    author_ids, scores = cached_resources["engine"].search_authors(
-        query=query.query, top_k=query.top_k
+    data = cached_resources["engine"].search_authors(
+        query=query.query, top_k=query.top_k, with_plot=query.with_plot
     )
+
+    # Unpack data
+    author_ids, scores = data["authors"]["author_ids"], data["authors"]["scores"]
     logging.debug(f"{author_ids=}, {scores=}")
 
-    output = []
+    authors = []
     for author_id, score in zip(author_ids, scores):
         author_details = get_author(
             author_id, cached_resources["engine"].author_collection
         )
         author_details["score"] = score  # inject score to author details
-        output.append(APIAuthor(**author_details))
+        authors.append(APIAuthor(**author_details))
 
+    output = {}
+    output["authors"] = authors
+
+    if not query.with_plot:
+        return output
+
+    # Add plot data
+    output["plot_data"] = APIPlotData(**data["plot_data"])
     return output
 
 
-@app.post("/search_article/")
-def search_article(query: APIQuery) -> list[APIArticle]:
+@app.post("/search_articles/")
+def search_articles(query: APIQuery) -> dict[str, list[APIArticle] | APIPlotData]:
     """Search an article."""
 
-    results = cached_resources["engine"].search_articles(
-        query=query.query, top_k=query.top_k
+    data = cached_resources["engine"].search_articles(
+        query=query.query, top_k=query.top_k, with_plot=query.with_plot
     )
-    return [APIArticle(**result) for result in results]
+
+    output = {}
+    output["articles"] = [APIArticle(**result) for result in data["articles"]]
+
+    if not query.with_plot:
+        return output
+
+    # Add plot data
+    output["plot_data"] = APIPlotData(**data["plot_data"])
+    return output

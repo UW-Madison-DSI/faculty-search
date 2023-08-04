@@ -5,6 +5,8 @@ from sklearn.manifold import TSNE
 from pymilvus import Collection
 from langchain.embeddings import OpenAIEmbeddings
 
+VISUALIZATION_MAX_ARTICLES = 1000
+
 
 def sort_dict_by_value(d: dict, reversed: bool = False) -> tuple[list, list]:
     sorted_keys, sorted_values = [], []
@@ -74,22 +76,16 @@ class PlotDataMaker:
             expr=f"doi in {dois}",
             output_fields=["doi", "author_id", "title", "embedding"],
         )
-        logging.debug(f"{articles=}")
 
         # Sort articles by the original order of DOIs
         # TODO: Improve multiple authors handling
         articles = sorted(articles, key=lambda article: dois.index(article["doi"]))
-
-        print(f"A: {len(articles)=}")
         articles_titles = [article["title"] for article in articles]
-
-        print(f"B: {len(articles_titles)=}")
 
         # Unpack article embeddings
         articles_embeddings = np.stack(
             [article["embedding"] for article in articles], axis=0
         )
-        print(f"C: {articles_embeddings.shape=}")
 
         # Calculate author's centroid
         author_embeddings = {}
@@ -130,14 +126,14 @@ class PlotDataMaker:
 
         data = np.concatenate([[query_embedding], article_author_embeddings], axis=0)
 
-        perplexity = min(int(data.shape[0] / 10), 30)
+        perplexity = min(int(data.shape[0] / 10), 30)  # avoid error in small n
         data_2d = TSNE(
             n_components=2, random_state=0, perplexity=perplexity
         ).fit_transform(data)
         return {"x": data_2d[:, 0].tolist(), "y": data_2d[:, 1].tolist()}
 
     def make_plot_data(self, query_embedding: np.array, dois: list[str]) -> dict:
-        """Convert data to a dictionary that can be used by Pandas/Altair."""
+        """Convert data to a dictionary that can be consumed by Pandas."""
 
         ids, label, types, article_author_embeddings = self.get_embeddings(dois)
         output = self.get_2d_projection(query_embedding, article_author_embeddings)
@@ -175,33 +171,39 @@ class Engine:
         query: str,
         top_k: int,
         distance_threshold: float = 0.2,
-        plot_data: bool = False,
+        with_plot: bool = False,
     ) -> dict:
         """Search for articles by a query."""
 
         query_embedding = self.embed(query)
 
-        results = self.article_collection.search(
-            data=[query_embedding],
-            anns_field="embedding",
-            param={"metric_type": "IP", "params": {"nprobe": 16}},
-            limit=top_k,
-            output_fields=["doi", "title", "author_id"],
-        )[0]
+        def _search(limit: int) -> list:
+            raws = self.article_collection.search(
+                data=[query_embedding],
+                anns_field="embedding",
+                param={"metric_type": "IP", "params": {"nprobe": 16}},
+                limit=limit,
+                output_fields=["doi", "title", "author_id"],
+            )[0]
 
-        logging.debug(f"result before filtering: {results}")
-        results = [convert_article_result(result) for result in results]
-        results = [
-            result for result in results if result["distance"] < distance_threshold
-        ]
+            return [convert_article_result(raw) for raw in raws]
 
-        if not plot_data:
-            return {"results": results}
+        results = _search(limit=top_k)
+        results = [r for r in results if r["distance"] < distance_threshold]
+
+        if not with_plot:
+            return {"articles": results}
 
         # Add plot data
-        dois = [result["doi"] for result in results]
+        more_results = _search(limit=VISUALIZATION_MAX_ARTICLES)
+        print(more_results)
+
+        dois = [result["doi"] for result in more_results]
         plot_data = self.plot_maker.make_plot_data(query_embedding, dois)
-        return {"results": results, "plot_data": plot_data}
+
+        # Inject the query back into the label in plot data
+        plot_data["label"][0] = query
+        return {"articles": results, "plot_data": plot_data}
 
     def search_authors(
         self,
@@ -210,6 +212,7 @@ class Engine:
         n: int = 500,
         distance_threshold: float = 0.2,
         pow: float = 3.0,
+        with_plot: bool = False,
     ) -> tuple[list[int], list[float]]:
         """Search for author by a query.
         
@@ -239,11 +242,12 @@ class Engine:
         """
 
         author_scores: dict[str, float] = {}
-        articles = self.search_articles(
-            query, top_k=n, distance_threshold=distance_threshold
+        results = self.search_articles(
+            query, top_k=n, distance_threshold=distance_threshold, with_plot=with_plot
         )
 
-        for article in articles:
+        # Calculate author scores by their relevant articles
+        for article in results["articles"]:
             author_id = article["author_id"]
             article["weight"] = (1 - article["distance"]) ** pow
             author_scores[author_id] = (
@@ -256,4 +260,15 @@ class Engine:
 
         logging.debug(f"{top_ids=}, {top_scores=}")
 
-        return top_ids, top_scores
+        output = {
+            "authors": {
+                "author_ids": top_ids,
+                "scores": top_scores,
+            }
+        }
+        if not with_plot:
+            return output
+
+        # Add plot data
+        output["plot_data"] = results["plot_data"]
+        return output

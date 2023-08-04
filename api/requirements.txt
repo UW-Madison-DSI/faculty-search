@@ -5,3 +5,5 @@ langchain
 uvicorn
 fastapi
 tiktoken
+scikit-learn
+numpy
