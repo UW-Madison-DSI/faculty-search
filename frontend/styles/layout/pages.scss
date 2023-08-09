@@ -1,0 +1,74 @@
+/******************************************************************************\
+|                                                                              |
+|                                  pages.scss                                  |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+#page {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	line-height: 2em;
+	min-height: 100%;
+	overflow-y: auto;
+
+	.container {
+		padding-top: 50px;
+		padding-bottom: 50px;
+		flex-grow: 1;
+	}
+
+	.figure {
+		max-width: 75%;
+		margin: auto;
+	}
+
+	.buttons {
+		button {
+			margin-top: 10px;
+		}
+	}
+
+	#footer {
+		bottom: 0;
+		width: 100%;
+		color: lightgrey;
+		background: #494949;
+		border-top: 5px solid $brand-primary;
+	
+		.container {
+			text-align: center;
+
+			.logo {
+				height: 100px;
+				margin: 10px;
+			}
+
+			a {
+				color: lightgrey;
+
+				&:hover {
+					color: white;
+				}
+			}
+		}
+	}
+}
+
+//
+// mobile modals
+//
+
+@media (max-width:$screen-md-min) {
+	#page {
+		.container, .section {
+			padding: 20px !important;
+		}
+	}
+}

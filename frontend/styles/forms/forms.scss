@@ -1,0 +1,255 @@
+/******************************************************************************\
+|                                                                              |
+|                                   forms.scss                                 |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+//
+// form inputs
+//
+
+input {
+	outline: none;
+}
+
+textarea {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	padding: 5px;
+	border-color: lightgrey;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	outline: none;
+}
+
+select {
+	-webkit-appearance: none;
+	border-radius: 0;
+	padding: 0 10px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: lightgrey;
+	border-radius: 5px;
+	outline: none;
+}
+
+input[type="file"] {
+	display: inline-block;
+	outline: none !important;
+
+	&::-webkit-file-upload-button {
+		display: none;
+	}
+}
+
+input[type="number"], input[type="text"] {
+	padding: 0 5px;
+	border: 1px solid lightgrey;
+}
+
+// counter Bootstrap
+//
+.input-group .form-control {
+	z-index: 0;
+}
+
+//
+// inputs
+//
+
+.form-control {
+	font-size: 16px;
+}
+
+//
+// input groups
+//
+
+.input-group-addon {
+	i {
+		margin: 0;
+	}
+}
+
+.form-group .checkbox, label {
+	input[type="checkbox"] {
+		margin-top: 10px;
+	}
+}
+
+//
+// form labels
+//
+
+.form-label, .control-label {
+	i {
+		margin-right: 5px;
+	}
+}
+
+.form-horizontal .form-group {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.form-horizontal .control-label {
+	padding-top: 0;
+}
+
+.required label:after,
+label.required:after,
+span.required:after {
+	content: "*";
+	color: #c2002f;
+	margin-left: 5px;
+}
+
+.alert label {
+	margin-right: 10px;
+}
+
+//
+// country selectors
+//
+
+.country-code.input-group {
+	width: 100px;
+}
+
+#country-selector {
+	position: absolute;
+}
+
+#country-selector .dropdown-menu {
+	position: relative;
+	margin: 0;
+	padding: 0;
+}
+
+#country-selector button img {
+	margin-top: -3px;
+	margin-left: 5px;
+}
+
+.country-code.input-group {
+	width: 100px;
+}
+
+/*
+ * validation styles
+ */
+ 
+label.error {
+	font-weight: bold;
+	color: #c2002f;
+	padding-top: 0;
+	background: url(../images/forms/error.png) 5px 0px no-repeat;
+	padding-left: 30px;
+}
+
+label.error:empty {
+	display: none;
+}
+
+label.error.valid {
+	display: none;
+}
+
+.form-group.error input,
+.form-group.error textarea {
+	border: 1px solid #c2002f;
+}
+
+/*
+ * popover styles
+ */
+
+.popover {
+	max-width: 360px;
+	width: auto;
+}
+
+//
+// non-small styles
+//
+
+@media (min-width: $screen-xs-min) {
+	form.form-horizontal {
+		.form-group {
+
+			//
+			// controls
+			//
+
+			> label {
+				width: 25%;
+				float: left;
+				margin-right: 15px;
+			}
+
+			> .controls, > .static-controls, 
+			> .form-control, > .form-control-static {
+				float: left;
+				width: 50%;
+			}
+		}
+	}
+}
+
+//
+// small styles
+//
+
+@media (max-width: $screen-sm-max) {
+	#page form.form-horizontal {
+		.form-group {
+			width: 80%;
+			margin-left: 10%;
+
+			> label {
+				text-align: left;
+				width: 100%;
+			}
+
+			> .controls, > .static-controls, 
+			> .form-control, > .form-control-static {
+				width: 100%;
+			}
+		}
+	}
+}
+
+//
+// extra small styles
+//
+
+@media (max-width: $screen-xs-max) {
+	#page form.form-horizontal, 
+	form.form-horizontal {
+		.form-group {
+			width: 100%;
+			margin-left: 0%;
+		}
+	}
+}
+
+body[device="phone"] {
+	.form-group {
+		> div {
+			padding: 0;
+			overflow: hidden;
+		}
+	}
+}

@@ -1,0 +1,8 @@
+.DS_Store
+.ipynb_checkpoints/
+.jupyter/
+config.py
+log
+__pycache__
+.venv
+*.swp

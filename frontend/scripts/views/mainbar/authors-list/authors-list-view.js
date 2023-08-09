@@ -1,0 +1,29 @@
+/******************************************************************************\
+|                                                                              |
+|                            articles-list-view.js                             |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines a view of a list of journal articles.                    |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2022, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+import CollectionView from '../../../views/collections/collection-view.js';
+import ArticleView from '../../../views/mainbar/authors-list/author-view.js';
+
+export default CollectionView.extend({
+
+	//
+	// attributes
+	//
+
+	tagName: 'ol',
+	childView: ArticleView
+});

@@ -1,0 +1,84 @@
+/******************************************************************************\
+|                                                                              |
+|                                   buttons.scss                               |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+//
+// variables
+//
+
+$border-radius: 15px;
+
+//
+// colors
+//
+
+$btn-color: $light-grey;
+$btn-primary-color: $brand-primary;
+$btn-primary-disabled-color: fade-in($brand-primary, 0.5);
+
+//
+// styles
+//
+
+.btn, .btn:focus {
+	outline: none !important;
+	background: $btn-color;
+	border: none;
+	border-radius: $border-radius;
+	padding: 3px 10px;
+
+	i {
+		margin-right: 5px;
+	}
+
+	&:hover, &:active {
+		background: darken($btn-color, 10%);
+		border-color: darken($btn-color, 10%);
+	}
+}
+
+.btn-primary, .btn-primary:focus {
+	background: $btn-primary-color;
+	border-color: $btn-primary-color;
+
+	&:hover, &:active {
+		background: darken($btn-primary-color, 10%);
+		border-color: darken($btn-primary-color, 10%);
+	}
+}
+
+.btn-primary[disabled], .btn-primary:focus[disabled] {
+	background: $btn-primary-disabled-color;
+	border-color: $btn-primary-disabled-color;
+
+	&:hover, &:active {
+		background: darken($btn-primary-disabled-color, 10%);
+		border-color: darken($btn-primary-disabled-color, 10%);
+	}
+}
+
+//
+// small buttons
+//
+
+.btn.btn-sm {
+	width: 25px;
+	padding: 0;
+
+	i {
+		margin-right: 0;
+	}
+}

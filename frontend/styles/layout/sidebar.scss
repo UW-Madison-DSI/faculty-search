@@ -1,0 +1,181 @@
+/******************************************************************************\
+|                                                                              |
+|                                 sidebar.scss                                 |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+//
+// sidebar colors
+//
+
+$sidebar-background-color: $light-grey;
+$sidebar-text-color: #303030;
+
+//
+// sidebar attributes
+//
+
+$sidebar-panel-padding: 10px;
+$sidebar-panel-min-width: 200px;
+
+
+//
+// sidebar styles
+//
+
+.sidebar {
+	overflow: auto;
+	color: $sidebar-text-color;
+	background-color: $sidebar-background-color;
+	word-break: break-word;
+
+	.panel {
+		margin: 10px;
+		padding: 10px;
+		min-width: $sidebar-panel-min-width;
+
+		.header {
+
+			> label {
+				font-size: 18px;
+
+				> i {
+					margin-right: 5px;
+				}
+			}
+
+			.radio-buttons, input[type="checkbox"] {
+				float: right;
+			}
+			input[type="checkbox"] {
+				margin-right: 15px;
+			}
+		}
+
+		> .radio-buttons {
+			text-align: center;
+		}
+
+		.params {
+			width: 100%;
+
+			.param {
+				padding: 10px;
+				border-radius: 10px;
+				border: 1px solid $medium-grey;
+
+				// limit width
+				//
+				// max-width: 400px;
+				// margin: auto;
+
+				input + input {
+					margin-top: 10px;
+				}
+
+				+ .param {
+					margin-top: 10px;
+				}
+
+				.impact {
+					display: inline-block;
+					width: 30px;
+					padding-left: 3px;
+					font-size: 8px;
+					float: right;
+					border-radius: 3px;
+					background: lighten(lightgrey, 10%);
+					color: $brand-primary;
+
+					i:nth-child(1) {
+						color: limegreen;
+					}
+					i:nth-child(2) {
+						color: orange;
+					}
+					i:nth-child(3) {
+						color: red;
+					}
+				}
+
+				.lock {
+					float: right;
+					margin-left: 5px;
+				}
+
+				//
+				// disable interaction with locked parameters
+				//
+
+				&.locked {
+					input {
+						pointer-events: none;
+					}
+
+					.lock {
+						background: red;
+						color: white;
+					}
+				}
+			}
+		}
+
+		.description + .list {
+			margin-top: 10px;
+		}
+
+		.list {
+			max-height: 200px;
+			overflow: auto;
+			cursor: default;
+
+			table {
+				width: 100%;
+			}
+		}
+
+		.params {
+			// max-height: 300px;
+			overflow: auto;
+		}
+	}
+
+	.buttons {
+		text-align:center;
+		margin-top: 5px;
+		margin-bottom: -10px;
+
+		.btn {
+			width: 150px;
+			margin-bottom: 10px;
+
+			+ .btn {
+				margin-left: 5px;
+			}
+		}
+	}
+}
+
+//
+// small styles
+//
+
+@media (max-width: $screen-xs-min) {
+	.sidebar {
+		.buttons {
+			.btn {
+				width: 125px;
+
+				i {
+					display: none;
+				}
+			}
+		}
+	}
+}

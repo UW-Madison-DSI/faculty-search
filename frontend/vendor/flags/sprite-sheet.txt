@@ -1,0 +1,2 @@
+Sprite sheet conversion from
+http://flag-sprites.com/

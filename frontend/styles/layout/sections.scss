@@ -1,0 +1,130 @@
+/******************************************************************************\
+|                                                                              |
+|                                 sections.scss                                |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+//
+// page sections
+//
+
+#page .section {
+	padding: 30px 50px;
+
+	&:nth-child(odd) {
+		background-color: $light-grey;
+	}
+
+	h2 {
+		i, .icon {
+			float: left;
+			height: 1em !important;
+			margin-right: 10px;
+		}
+	}
+
+	.well {
+		border: none;
+	}
+
+	.items {
+		height: auto;
+	}
+
+	&.colored {
+		color: white;
+
+		h2 {
+			color: white !important;
+			border-color: white !important;
+
+			i {
+				color: white !important;
+			}
+		}
+
+		a {
+			color: white !important;
+			text-decoration: underline;
+
+			&:hover {
+				color: white !important;
+			}
+
+			&:active {
+				color: white !important;
+			}
+		}
+
+		.icon i {
+			color: white !important;
+		}
+	}
+}
+
+//
+// app page sections
+//
+
+.app .page .section {
+	padding: 30px;
+}
+
+//
+// non-small page sections
+//
+
+@media (min-width: $screen-sm-min) {
+	.page .section {
+		> .row {
+			display: flex;
+			flex-direction: row;
+		}
+
+		&:nth-of-type(even) {
+			> .row {
+				flex-direction: row-reverse;
+			}
+		}
+
+		&:last-child {
+			margin-bottom: -50px;
+		}
+	}
+}
+
+//
+// mobile styles
+//
+
+body[device="phone"] {
+	.page .section {
+
+		h2 {
+			margin-top: 0;
+
+			.icon {
+				margin-top: -3px;
+			}
+		}
+
+		> .row {
+			flex-direction: column;
+
+			> div + div {
+				margin-top: 20px;
+			}
+		}
+	}
+}

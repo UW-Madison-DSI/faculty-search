@@ -1,0 +1,126 @@
+/******************************************************************************\
+|                                                                              |
+|                             colored-sliders.scss                             |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@mixin slider-track($track-color) {
+
+	&::-webkit-slider-runnable-track {
+		background-color: $track-color;
+		border-color: $track-color;
+	}
+
+	&::-moz-range-track {
+		background-color: $track-color;
+		border-color: $track-color;
+	}
+}
+
+@mixin slider-thumb($color, $hover-color) {
+
+	&::-webkit-slider-thumb {
+		background: $color;
+		border-color: $color;
+
+		&:hover {
+			background-color: $hover-color;
+			border-color: $hover-color;
+		}
+	}
+
+	//
+	// Firefox slider thumbs
+	//
+
+	&::-moz-range-thumb {
+		background: $color;
+		border-color: $color;
+
+		&:hover {
+			background-color: $hover-color;
+			border-color: $hover-color;
+		}
+	}
+
+	//
+	// IE slider thumbs
+	//
+
+	&::-ms-thumb {
+		background: $color;
+		border-color: $color;
+
+		&:hover {
+			background-color: $hover-color;
+			border-color: $hover-color;
+		}
+	}
+}
+
+@mixin slider-active-thumb($color, $hover-color) {
+
+	&::-webkit-slider-thumb {
+		background-color: $color;
+		border-color: $color;
+
+		&:hover {
+			background-color: $hover-color;
+			border-color: $hover-color;
+		}
+
+		&:active {
+			background-color: $hover-color;
+			border-color: $hover-color;
+		}
+	}
+
+	//
+	// Firefox slider thumbs
+	//
+
+	&::-moz-range-thumb {
+		background-color: $color;
+		border-color: $color;
+
+		&:hover {
+			background-color: $hover-color;
+			border-color: $hover-color;
+		}
+
+		&:active {
+			background-color: $hover-color;
+			border-color: $hover-color;
+		}
+	}
+
+	//
+	// IE slider thumbs
+	//
+
+	&::-ms-thumb {
+		background-color: $color;
+		border-color: $color;
+
+		&:hover {
+			background-color: $hover-color;
+			border-color: $hover-color;
+		}
+
+		&:active {
+			background-color: $hover-color;
+			border-color: $hover-color;
+		}
+	}
+}

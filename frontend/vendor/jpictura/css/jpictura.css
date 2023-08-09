@@ -1,0 +1,84 @@
+.jpictura:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+.jpictura.jpictura-off-content-flow {
+  position: fixed;
+}
+.jpictura .jpictura-item {
+  display: block;
+  float: left;
+  position: relative;
+  overflow: hidden;
+  /*background: #333333;*/
+}
+.jpictura .jpictura-item.jpictura-invisible {
+  visibility: hidden;
+}
+.jpictura .jpictura-item.jpictura-hidden {
+  display: none;
+}
+.jpictura .jpictura-item .jpictura-image {
+  display: block;
+  position: relative;
+  max-width: none;
+  max-height: 100%;
+}
+.jpictura .jpictura-item.cropped-if-stretched .jpictura-image {
+  max-width: 100%;
+}
+.jpictura.fade-in-items .jpictura-item {
+  animation-name: jpictura-fade-in;
+  animation-duration: 2s;
+}
+.jpictura.fade-in-items .jpictura-item.jpictura-invisible {
+  animation: none;
+}
+.jpictura.fade-in-items .jpictura-item.jpictura-hidden {
+  animation: none;
+}
+.jpictura.stretch-images .jpictura-item.stretch-by-width .jpictura-image {
+  max-height: none;
+  width: 100%;
+}
+.jpictura.stretch-images .jpictura-item.stretch-by-height .jpictura-image {
+  max-width: none;
+  height: 100%;
+}
+.jpictura.stretch-images.disable-cropping-images .jpictura-item.cropped-if-stretched .jpictura-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+.jpictura.center-images .jpictura-item .jpictura-image.horizontal-misfit {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.jpictura.center-images .jpictura-item .jpictura-image.vertical-misfit {
+  top: 50%;
+  transform: translateY(-50%);
+}
+.jpictura.center-images .jpictura-item .jpictura-image.horizontal-misfit.vertical-misfit {
+  transform: translate(-50%, -50%);
+}
+@-webkit-keyframes jpictura-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes jpictura-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

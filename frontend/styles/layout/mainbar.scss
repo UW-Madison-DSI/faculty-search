@@ -1,0 +1,68 @@
+/******************************************************************************\
+|                                                                              |
+|                                 mainbar.scss                                 |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "../colors/colors.scss";
+
+//
+// colors
+//
+
+$message-color: rgba(#808080, 10%);
+
+//
+// styles
+//
+
+.mainbar {
+	ol {
+		margin: 30px;
+
+		li + li {
+			margin-top: 10px;
+		}
+
+		.title, .last {
+			font-weight: bold;
+		}
+
+		a {
+			cursor: default;
+		}
+	}
+
+	.message.overlay {
+		display: flex;
+
+		.content {
+			width: 75%;
+			padding: 30px;
+			border-radius: 20px;
+			margin: auto;
+			background-color: $message-color;
+			margin-top: 10%;
+		}
+	}
+}
+
+//
+// extra small styles
+//
+
+@media (max-width: $screen-xs-max) {
+	.mainbar {
+		.message.overlay {
+			.content {
+				padding: 20px;
+			}
+		}
+	}
+}
