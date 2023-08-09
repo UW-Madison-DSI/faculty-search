@@ -76,3 +76,12 @@ services:
       - "8765:8765"
     depends_on:
       - "milvus"
+
+  flask:
+    container_name: flask
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    command: [ python, ./services/app.py ]
