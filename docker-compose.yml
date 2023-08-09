@@ -83,5 +83,5 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "80:5000"
     command: [ python, ./services/app.py ]

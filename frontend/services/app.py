@@ -13,14 +13,8 @@
 ################################################################################
 
 import os
-from flask import Flask, request, jsonify
-from flask_mail import Mail, Message
+from flask import Flask, request
 from controllers.contact_controller import ContactController
-import config
-import logging
-
-# set logging file
-# logging.basicConfig(filename='log/info.log', level=logging.INFO)
 
 ################################################################################
 #                            app initialization                                #
@@ -28,9 +22,6 @@ import logging
 
 # create new Flask app
 app = Flask(__name__, static_folder="../", static_url_path="/")
-
-# configure app fron config.py
-app.config.from_object(config)
 
 ################################################################################
 #                    request parameter parsing methods                         #
@@ -136,4 +127,4 @@ def post_create():
 ################################################################################
 
 if __name__ == "__main__":
-    app.run(debug=app.config["DEBUG"], host="0.0.0.0", port=int(app.config["PORT"]))
+    app.run(debug=True, host="0.0.0.0", port=5000)
