@@ -106,12 +106,15 @@ def make_articles_data_packages(author_id: str) -> list[dict]:
     return data_packages
 
 
+def connect_milvus() -> None:
+    """Connect to Milvus."""
+    connections.connect(MILVUS_ALIAS, host=MILVUS_HOST, port=MILVUS_PORT)
+
+
 def init_milvus() -> None:
     """Initialize Milvus (assume connection exist)."""
 
-    connections.connect(MILVUS_ALIAS, host=MILVUS_HOST, port=MILVUS_PORT)
     # Create collections
-
     logging.info("Creating collections...")
     create_article_collection()
     create_author_collection()
@@ -130,18 +133,26 @@ def init_milvus() -> None:
     author_collection.create_index("embedding", index_params)
 
 
-def push_data(author_id: str) -> None:
+def push_data(
+    author_id: str, author_collection: Collection, article_collection: Collection
+) -> None:
     """Push author data to Milvus.
 
     Note. Remember to call collection.flush() after ingestion session.
     """
 
+    author = author_collection.query(expr=f"id == {author_id}", limit=1)
+
+    if author:
+        logging.info(f"Author {author_id} already exists in Milvus. Skipping...")
+        return
+
     # Ingest authors
     logging.info("Ingesting authors...")
     author_data_package = make_author_data_package(author_id)
-    Collection("authors", using=MILVUS_ALIAS).insert([author_data_package])
+    author_collection.insert([author_data_package])
 
     # Ingest articles (can be quite large)
     logging.info("Ingesting articles...")
     articles_data_package = make_articles_data_packages(author_id)
-    Collection("articles", using=MILVUS_ALIAS).insert(articles_data_package)
+    article_collection.insert(articles_data_package)

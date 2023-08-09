@@ -7,7 +7,8 @@ from embedding_search.community_map import download_datafile
 from embedding_search.crossref import query_crossref
 from embedding_search.academic_analytics import get_units, get_faculties, get_articles
 from embedding_search.data_model import Article, Author
-from embedding_search.vector_store import init_milvus, push_data
+from embedding_search.vector_store import connect_milvus, init_milvus, push_data
+from pymilvus import Collection
 from tqdm import tqdm
 
 load_dotenv()
@@ -120,17 +121,21 @@ def download_authors(overwrite: bool = False) -> None:
 def main() -> None:
     """Main function."""
 
+    connect_milvus()
     # Build Milvus collections
-    init_milvus()
+    # init_milvus()
 
     author_ids = [file.stem for file in AUTHORS_DIR.glob("*.json")]
+
+    author_collection = Collection("authors")
+    article_collection = Collection("articles")
 
     if DEBUG:
         author_ids = author_ids[:100]
 
     for author_id in tqdm(author_ids):
         try:
-            push_data(author_id)
+            push_data(author_id, author_collection, article_collection)
         except Exception as e:
             logging.error(f"Error pushing {author_id}: {e}")
 
