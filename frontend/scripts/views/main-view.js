@@ -49,37 +49,140 @@ export default BaseView.extend({
 	// getting methods
 	//
 
+	getSearchQuery: function() {
+		return this.getChildView('toolbar').getQuery();
+	},
+
 	getSearchKind: function() {
 		return this.getChildView('contents sidebar search').getValue('kind');
 	},
 
-	getLimit: function() {
+	getSearchTarget: function() {
+		return this.getChildView('contents sidebar search').getValue('target');
+	},
+
+	getSearchLimit: function() {
 		return this.getChildView('contents sidebar search').getValue('limit');
+	},
+
+	//
+	// setting methods
+	//
+
+	setToolbarSearchKind: function(kind) {
+		switch (kind) {
+			case 'text':
+			case 'doi':
+			case 'url':
+				this.getChildView('toolbar').showInput();
+				break;
+			case 'pdf':
+				this.getChildView('toolbar').hideInput();
+				break;
+		}
+	},
+
+	setSearchKind: function(kind) {
+		this.getChildView('contents mainbar').setSearchKind(kind);
+		this.setToolbarSearchKind(kind);
 	},
 
 	//
 	// searching methods
 	//
 
-	searchFor: function(query) {
+	search: function() {
 		switch (this.getSearchKind()) {
-			case 'authors':
-				this.searchAuthors(query);
+			case 'pdf':
+				this.getChildView('contents mainbar').readFile((filename, data) => {
+					// this.searchByFile(data);
+					this.readPdf(data, {
+
+						// callbacks
+						//
+						success: (text) => {
+							this.searchByText(text);
+						},
+						error: () => {
+							application.error({
+								message: "Could not read PDF file."
+							});
+						}
+					});
+				});
 				break;
-			case 'articles':
-				this.searchArticles(query);
+			default:
+				this.searchByText(this.getSearchQuery());
 				break;
 		}
 	},
 
-	searchAuthors: function(query) {
+	searchByText: function(query) {
+		switch (this.getSearchTarget()) {
+			case 'authors':
+				this.searchAuthors({
+					query: query,
+					top_k: this.getSearchLimit()
+				});
+				break;
+			case 'articles':
+				this.searchArticles({
+					query: query,
+					top_k: this.getSearchLimit()
+				});
+				break;
+		}
+	},
+
+	searchByFile: function(file) {
+		switch (this.getSearchTarget()) {
+			case 'authors':
+				this.searchAuthors({
+					file: file,
+					top_k: this.getSearchLimit()
+				});
+				break;
+			case 'articles':
+				this.searchArticles({
+					file: file,
+					top_k: this.getSearchLimit()
+				});
+				break;
+		}
+	},
+
+	//
+	// ajax methods
+	//
+
+	readPdf: function(data, options) {
+		$.ajax({
+			url: '/api/pdf',
+			type: 'POST',
+			data: data,
+			contentType: 'application/pdf',
+			processData: false,
+
+			// callbacks
+			//
+			success: (data) => {
+				if (options && options.success) {
+					options.success(data);
+				}
+			},
+			error: (response, textStatus, errorThrown) => {
+				if (options && options.error) {
+					options.error(response, textStatus, errorThrown);
+				}
+			}
+		});
+	},
+
+	searchAuthors: function(options) {
 		$.ajax({
 			url: config.server + '/search_authors',
 			type: 'POST',
-			data: JSON.stringify({
-				'query': query,
-				'top-k': this.getLimit()
-			}),
+			data: JSON.stringify(options),
 			contentType: 'application/json',
 			processData: false,
 
@@ -94,17 +197,14 @@ export default BaseView.extend({
 					message: response.responseText || 'Could not connect to server.'
 				});
 			}
-		})
+		});
 	},
 
-	searchArticles: function(query) {
+	searchArticles: function(options) {
 		$.ajax({
 			url: config.server + '/search_articles',
 			type: 'POST',
-			data: JSON.stringify({
-				'query': query,
-				'top-k': this.getLimit()
-			}),
+			data: JSON.stringify(options),
 			contentType: 'application/json',
 			processData: false,
 
@@ -119,7 +219,7 @@ export default BaseView.extend({
 					message: response.responseText || 'Could not connect to server.'
 				});
 			}
-		})
+		});
 	},
 
 	clear: function() {

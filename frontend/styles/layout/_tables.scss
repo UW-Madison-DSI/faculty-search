@@ -1,0 +1,156 @@
+/******************************************************************************\
+|                                                                              |
+|                                 _tables.scss                                 |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "../colors/colors";
+
+//
+// variables
+//
+
+$table-head-border-width: 2px;
+$table-border-width: 1px;
+$rounded-table-border-radius: 5px;
+$round-table-border-radius: 10px;
+
+//
+// colors
+//
+
+$head-color: colors.$light-grey;
+$border-color: colors.$medium-grey;
+$select-color: colors.$select-color;
+
+//
+// styles
+//
+
+table {
+	display: table;
+	width: 100%;
+	border-collapse: collapse;
+
+	//
+	// table headers
+	//		
+
+	th {
+		padding: 5px;
+		font-weight: normal;
+		outline: none;
+		white-space: nowrap;
+		text-align: center;
+		background: $head-color;
+
+		// borders
+		//
+		border-width: 1px;
+		border-style: solid;
+		border-color: $border-color;
+
+		&:not(:last-child) {
+			border-right-width: 0;
+		}
+
+		//
+		// table header checkboxes, radio buttons
+		//
+
+		input[type="radio"], input[type="checkbox"] {
+			margin: 5px;
+			float: right;
+		}
+
+		label {
+			font-weight: normal;
+		}
+	}
+
+	//
+	// table rows
+	//
+
+	tbody {
+
+		//
+		// table rows
+		//
+
+		tr {
+
+			//
+			// table row selection
+			//
+
+			&.selected {
+				background: $select-color;
+				color: white;
+			}
+
+			//
+			// table row highlighting
+			//
+
+			&.highlighted {
+				color: red !important;
+			}
+
+			//
+			// reorderable table rows
+			//
+
+			&.grabbable {
+				cursor: default;
+			}
+
+			//
+			// table cells
+			//
+
+			td {
+				padding: 0 10px;
+
+				// borders
+				//
+				border-width: 1px;
+				border-style: solid;
+				border-color: lightgrey;
+
+				&:not(:last-child) {
+					border-right-width: 0;
+				}
+
+				//
+				// disable default highlighting
+				//
+
+				&.highlighted::after {
+					border: none;
+				}
+
+				//
+				// table cell checkboxes, radio buttons
+				//
+
+				input[type="radio"], input[type="checkbox"] {
+					margin: 5px;
+					float: right;
+				}
+			}
+
+			&:not(.first) {
+				td.duplicate {
+					opacity: 0 !important;
+				}
+			}
+		}
+	}
+}

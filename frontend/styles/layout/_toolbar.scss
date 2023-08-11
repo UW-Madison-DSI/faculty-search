@@ -1,0 +1,79 @@
+/******************************************************************************\
+|                                                                              |
+|                               _toolbar.scss                                  |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "../bootstrap/variables";
+@use "../colors/colors";
+
+//
+// colors
+//
+
+$toolbar-color: colors.$light-grey;
+
+//
+// styles
+//
+
+#toolbar {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	padding: 2px 10%;
+	margin: auto;
+	background-color: $toolbar-color;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: darken($toolbar-color, 10%);
+
+	.input-group {
+		width: 100%;
+
+		button, input {
+			height: 30px;
+			line-height: 15px;
+		}
+
+		button {
+			min-width: 100px;
+		}
+
+		textarea {
+			padding: 2px 10px;
+			min-height: 30px;
+			resize: vertical;
+		}
+
+		.btn:not(.btn-primary) {
+			background-color: colors.$medium-grey;
+		}
+	}
+
+	&.collapsed {
+		.input-group {
+			width: auto;
+
+			textarea {
+				display: none;
+			}
+		}
+	}
+}
+
+//
+// extra small styles
+//
+
+@media (max-width: variables.$screen-xs-max) {
+	#toolbar {
+		padding: 2px;
+	}
+}

@@ -1,0 +1,60 @@
+/******************************************************************************\
+|                                                                              |
+|                                 _theme.scss                                  |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "colors";
+@use "branding";
+@use "colored-sliders";
+
+//
+// styles
+//
+
+.navbar-inverse .navbar-nav {
+	> li.active {
+		> a, a:hover, a:focus {
+			background-color: darken(branding.$primary-color, 10%);
+		}
+	}
+}
+
+#page {
+	h1, h2 {
+		i {
+			color: branding.$primary-color;
+		}
+	}
+
+	a, a:hover {
+		color: branding.$primary-color;
+	}
+}
+
+.sidebar {
+	.panel {
+		.header > label {
+			color: branding.$primary-color;
+		}
+	}
+}
+
+.form-group .control-label {
+	color: branding.$primary-color;
+}
+
+input[type="range"] {
+	@include colored-sliders.slider-track(colors.$light-grey);
+	@include colored-sliders.slider-thumb(branding.$primary-color, darken(branding.$primary-color, 10%));
+}
+
+.error-icon {
+	color: branding.$primary-color;
+}

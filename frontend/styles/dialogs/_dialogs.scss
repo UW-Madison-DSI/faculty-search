@@ -1,0 +1,339 @@
+/******************************************************************************\
+|                                                                              |
+|                                  dialogs.scss                                |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "../bootstrap/variables";
+@use "../colors/branding";
+
+//
+// variables
+//
+
+$backdrop-color: rgba(black, 0.25);
+$shadow: 10px 10px 50px 10px rgba(black, 0.5);
+
+//
+// colors
+//
+
+$header-icon-color: branding.$primary-color;
+
+//
+// styles
+//
+
+.modal {
+
+	// make modal frame transparent to events
+	//
+	pointer-events: none;
+
+	// slightly offset modals upwards
+	//
+	padding-bottom: 30px;
+
+	.modal-dialog {
+		display: flex;
+		max-width: 100%;
+		margin: auto;
+
+		.modal-content {
+			border-radius: 5px;
+			border-width: 1px;
+			border-style: solid;
+			box-shadow: $shadow;
+			pointer-events: auto;
+			left: 0;
+			top: 0;
+			display: flex;
+			flex-direction: column;
+			// overflow: hidden;
+
+			// size
+			//
+			width: auto;
+			margin: auto;
+			width: 600px;
+			min-width: 300px;
+
+			.modal-header {
+				padding: 10px;
+
+				i {
+					color: $header-icon-color;
+				}
+
+				h1 {
+					font-size: 24px;
+					margin: 0;
+				}
+
+				button.close {
+					margin-top: 3px;
+					margin-right: 5px;
+				}
+			}
+
+			.modal-header.ui-draggable-handle {
+				//.handle {
+					cursor: move;
+				//}	
+			}
+
+			.modal-body {
+				.icon {
+					font-size: 200%;
+					margin-left: 10px; 
+					margin-right: 10px;
+					display: inline-block;
+
+					+ .status-message {
+						display: inline-block;
+					}
+				}
+			}
+
+			.modal-footer {
+				padding: 10px;
+			}
+		}
+	}
+}
+
+.status-dialog {
+	.modal-body {
+		text-align: center;
+	}
+}
+
+//
+// dialog placement for short windows
+//
+
+@media (min-width: variables.$screen-sm-min) {
+	@media (max-height: 550px) {
+
+		.modal {
+			text-align: center;
+		}
+
+		.modal:before {
+			content: "";
+			display: inline-block;
+			// height: 100%;
+			vertical-align: middle;
+		}
+
+		.modal-dialog {
+			display: inline-block;
+			text-align: left;
+			vertical-align: middle;
+		}
+	}
+}
+
+//
+// modal backdrops
+//
+
+.modal.backdrop {
+	pointer-events: all;
+	background-color: $backdrop-color;
+}
+
+.modal-open {
+
+	// don't scroll for offscreen dialogs
+	//
+	.modal {
+		overflow-x: hidden;
+		overflow-y: hidden;
+	}
+}
+
+//
+// modal extents - used for centering variable height modals
+//
+
+.modal-extents {
+	width: 100%;
+	margin: auto;
+}
+
+//
+// non-mobile modals
+//
+
+@media (min-width: variables.$screen-xs-min) {
+	.modal {
+		.modal-dialog {
+			.modal-header {
+				border-top-left-radius: 3px;
+				border-top-right-radius: 3px;
+			}
+
+			.modal-body.flexible {
+				border-bottom-left-radius: 5px;
+				border-bottom-right-radius: 5px;
+			}
+
+			.modal-footer {
+				border-bottom-left-radius: 3px;
+				border-bottom-right-radius: 3px;
+
+				.buttons {
+					float: right;
+					text-align: left;
+					flex-shrink: 0;
+					margin-left: 10px;
+
+					// counter bootstrap
+					//
+					.btn, .btn + .btn {
+						margin-bottom: 5px;
+					}
+				}
+			}
+		}
+
+		//
+		// non resizable modals
+		//
+
+		.modal-dialog:not(.ui-resizable) {
+			.modal-body {
+			
+				// scrollable regions
+				//
+				.vertically.scrollable {
+					max-height: 220px;
+				}
+			}
+
+			.modal-body {
+				overflow: auto;
+			}
+		}
+	}
+}
+
+//
+// desktop styles
+//
+
+body[device="desktop"] {
+	.modal.in {
+		.modal-dialog {
+
+			// use hardware acceleration to speed up rendering
+			//
+			transform: translateZ(0);
+		}
+	}
+}
+
+//
+// mobile modals
+//
+
+@media (max-width: variables.$screen-xs-min) {
+
+	.modal-extents {
+		height: auto !important;
+		margin: 0;
+	}
+
+	.modal {
+
+		// don't slightly offset modals upwards
+		//
+		padding-bottom: 0;
+
+		.modal-dialog {
+			.modal-header {
+				.modal-title {
+					// max-width: calc(~"100% - 60px");
+					margin-right: 0;
+				}
+
+				.buttons {
+					margin-left: 0;
+				}
+			}
+
+			.modal-body {
+
+				// scrollable regions
+				//
+				.vertically.scrollable {
+					max-height: none;
+				}
+			}
+
+			.modal-footer {
+				.notes {
+					float: none;
+					text-align: left;
+				}
+
+				.buttons {
+					margin-bottom: 10px;
+				}
+			}
+		}
+
+		.modal-dialog:not(.maximized) {
+			margin-top: 10px;
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+	}
+
+	.modal-open {
+
+		// scroll vertically
+		//
+		.modal {
+			overflow-x: hidden;
+			overflow-y: auto;
+
+			// always use bounce scrolling
+			//
+			-webkit-overflow-scrolling: touch;
+		}
+	}
+}
+
+//
+// mobile modals
+//
+
+body[device="phone"] {
+	.modal-dialog {
+		width: 100%;
+		margin: 0 !important;
+
+		.modal-content {
+			height: 100%;
+			border-width: 0;
+			border-radius: 0;
+
+			.modal-footer {
+				text-align: center;
+			}
+		}
+	}
+}

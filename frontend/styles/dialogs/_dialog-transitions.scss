@@ -1,0 +1,134 @@
+/******************************************************************************\
+|                                                                              |
+|                            dialog-transitions.scss                           |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "../bootstrap/mixins";
+
+//
+// variables
+//
+
+$transition-duration: 0.5s;
+
+//
+// styles
+//
+
+.modal.opening {
+
+	// set animation duration
+	//
+	-webkit-animation: opening $transition-duration;
+	-moz-animation: opening $transition-duration;
+	-ms-animation: opening $transition-duration;
+	-o-animation: opening $transition-duration;
+	animation: opening $transition-duration;
+
+	@keyframes opening {
+		from { 
+			opacity: 0;
+			@include mixins.translate(0, -50%);
+		}
+		to { 
+			opacity: 1;
+			@include mixins.translate(0, 0);
+		}
+	}
+}
+
+//
+// closing
+//
+
+.modal.closing {
+
+	// set animation duration
+	//
+	-webkit-animation: closing $transition-duration;
+	-moz-animation: closing $transition-duration;
+	-ms-animation: closing $transition-duration;
+	-o-animation: closing $transition-duration;
+	animation: closing $transition-duration;
+
+	@keyframes closing {
+		from { 
+			opacity: 1;
+			@include mixins.translate(0, 0);
+			// transform: scale(1);
+		}
+		to { 
+			opacity: 0;
+			@include mixins.translate(0, -50%);
+			// transform: scale(0);
+		}
+	}
+}
+
+.modal.closed {
+	display: none;
+}
+
+//
+// minimizing
+//
+
+.modal.minimizing {
+
+	// set animation duration
+	//
+	-webkit-animation: minimizing $transition-duration;
+	-moz-animation: minimizing $transition-duration;
+	-ms-animation: minimizing $transition-duration;
+	-o-animation: minimizing $transition-duration;
+	animation: minimizing $transition-duration;
+
+	@keyframes minimizing {
+		from { 
+			opacity: 1;
+			transform: translate(0, 0) scale(1);
+		}
+		to { 
+			opacity: 0;
+			transform:translate(-25%, 50%) scale(0);
+		}
+	}
+}
+
+.modal.unminimizing {
+
+	// set animation duration
+	//
+	-webkit-animation: unminimizing $transition-duration;
+	-moz-animation: unminimizing $transition-duration;
+	-ms-animation: unminimizing $transition-duration;
+	-o-animation: unminimizing $transition-duration;
+	animation: unminimizing $transition-duration;
+
+	@keyframes unminimizing {
+		from { 
+			opacity: 0;
+			transform: translate(-25%, 50%) scale(0);
+		}
+		to { 
+			opacity: 1;
+			transform: translate(0, 0) scale(1);
+		}
+	}
+}
+
+.modal.minimized {
+	display: none;
+}

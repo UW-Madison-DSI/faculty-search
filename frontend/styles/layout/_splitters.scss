@@ -1,0 +1,160 @@
+/******************************************************************************\
+|                                                                              |
+|                              _splitters.scss                                 |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "../colors/colors";
+
+//
+// variables
+//
+
+$mainbar-inset-shadow: inset 0px 0px 10px fade-in(black, 0.5);
+$grip-image: url('../images/splitters/grip.png');
+$grip-horizontal-image: url('../images/splitters/horizontal-grip.png');
+$grip-vertical-image: url('../images/splitters/vertical-grip.png');
+
+//
+// colors
+//
+
+$gutter-color: colors.$light-grey;
+
+//
+// splitter styles
+//
+
+.split-view {
+	display: block;
+	width: 100%;
+	height: 100%;
+
+	&.horizontal {
+		display: flex;
+	}
+
+	> .split {
+		position: relative;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+
+	> .gutter {
+		display: flex;
+		background-repeat: no-repeat;
+		background-position: 50%;
+		border-style: solid;
+		overflow: hidden;
+		background: $gutter-color;
+		border-color: darken($gutter-color, 10%);
+
+		.handle {
+			margin: auto;
+			image-rendering: pixelated;
+		}
+
+		&.gutter-horizontal {
+			border-width: 0 1px;
+			cursor: ew-resize;
+
+			.handle {
+				width: 5px;
+				height: 100px;
+				background-image: $grip-horizontal-image;
+				background-repeat-x: no-repeat;
+			}
+		}
+
+		&.gutter-vertical {
+			border-width: 1px 0;
+			cursor: ns-resize;
+
+			.handle {
+				width: 100px;
+				height: 5px;
+				background-image: $grip-vertical-image;
+				background-repeat-y: no-repeat;
+			}
+		}
+	}
+
+	> .split.split-horizontal, 
+	> .gutter.gutter-horizontal {
+		height: 100%;
+		float: left;
+	}
+}
+
+//
+// mainbar shadows
+//
+
+body:not(.binary) {
+	.contents.split-view {
+		> .split.mainbar {
+
+			// inset shadow
+			//
+			&::after {
+				content: "";
+				box-shadow: $mainbar-inset-shadow;
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				pointer-events: none;
+			}
+		}
+	}
+
+	.desktop.app {
+		.contents.split-view {
+			> .split.mainbar {
+				&::after {
+					box-shadow: none;
+				}
+			}
+		}
+	}
+}
+
+.split .split-view {
+	> .split {
+
+		// no inset shadow for nested splitters
+		//
+		&::after {
+			box-shadow: none;
+		}
+	}
+}
+
+//
+// mobile styles
+//
+
+/*
+body[device="phone"] {
+	.gutter.gutter-vertical {
+		padding: 2px;
+
+		.handle {
+			width: 90%;
+		}
+	}
+}
+*/

@@ -1,0 +1,73 @@
+/******************************************************************************\
+|                                                                              |
+|                                _spinners.scss                                |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "../colors/branding";
+
+//
+// colors
+//
+
+$spinner-color: branding.$primary-color;
+$spinner-background-color: fade-in(#e0e0f0, 0.5);
+
+//
+// styles
+//
+
+.spinner {
+	display: none;
+	position: absolute;
+	border-width: 25px;
+	border-style: solid;
+	border-top-width: 25px;
+	border-radius: 50%;
+	width: 100px;
+	height: 100px;
+	top: 50%;
+	left: 50%;
+	margin-left: -50px;
+	margin-top: -50px;
+	object-fit: cover;
+	box-shadow: none;
+	border-color: $spinner-background-color;
+	border-top-color: $spinner-color;
+}
+
+.loading {
+	max-height: 100%;
+	overflow: hidden;
+
+	&::after {
+		content: ' ';
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background-color: fade-in(white, 0.5);
+	}
+}
+	
+.loading .spinner {
+	display: block !important;
+	z-index: 2;
+
+	// animation
+	//
+	animation: spinning-keyframes 2s linear infinite;
+	-webkit-transform: rotateZ(360deg);
+}

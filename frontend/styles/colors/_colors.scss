@@ -1,0 +1,30 @@
+/******************************************************************************\
+|                                                                              |
+|                                 _colors.scss                                 |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "branding";
+
+// greys
+//
+$medium-grey: #d0d0d7;
+$very-very-dark-grey: darken($medium-grey, 30%);
+$very-dark-grey: darken($medium-grey, 20%);
+$dark-grey: darken($medium-grey, 10%);
+$light-grey: lighten($medium-grey, 10%);
+$very-light-grey: lighten($medium-grey, 20%);
+$very-very-light-grey: lighten($medium-grey, 30%);
+
+// highlighting colors
+//
+$select-color: branding.$light-color;
+$highlight-color: $select-color;
+$select-fill: lighten($select-color, 33%);
+$highlight-fill: lighten($highlight-color, 33%);

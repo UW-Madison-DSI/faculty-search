@@ -1,0 +1,243 @@
+/******************************************************************************\
+|                                                                              |
+|                                _welcome.scss                                 |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "../bootstrap/variables";
+
+//
+// styles
+//
+
+#page.welcome {
+
+	.masthead {
+		display: flex;
+		width: 100%;
+		flex-grow: 1;
+		position: relative;
+		line-height: 2em;
+		margin-bottom: 0;
+		justify-content: center;
+
+		.background {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
+
+		.splash {
+			display: inline-flex;
+			width: 75%;
+			height: 75%;
+			flex-direction: column;
+			justify-content: center;
+			text-align: center;
+			margin: 5% auto;
+			border-radius: 15px;
+			text-align: center;
+
+			//
+			// splash sections margins
+			//
+
+			> div + div {
+				margin-top: 15px;
+			}
+
+			//
+			// splash logo
+			//
+
+			.logo {
+				display: inline-block;
+
+				img {
+					width: 300px;
+					height: 300px;
+					margin-bottom: -75px;
+				}
+
+				// cursor
+				//
+				&.active {
+					cursor: pointer;
+				}
+			}
+
+			> a {
+				text-decoration: none;
+			}
+
+			.brand {
+				display: inline-flex;
+				margin: auto;
+				margin-top: 0;
+				border-bottom: none;
+
+				// allow logo to break
+				//
+				&.multiline {
+					display: inline;
+				}
+
+				// brand components
+				//
+				span {
+					line-height: 1em;
+					white-space: pre;
+				}
+			}
+
+			.buttons {
+				margin-top: 0;
+				text-align: center;
+
+				.btn {
+					margin-top: 15px;
+				}
+			}
+
+			a {
+				color: unset;
+			}
+		}
+
+		.panel {
+			background-color: fade-in(white, 0.5);
+		}
+
+		.links {
+			margin-top: 20px;
+
+			.link {
+				display: inline-block;
+				margin-right: 10px;
+
+				a {
+					display: inline-block;
+					color: white;
+					margin-bottom: 10px;
+
+					img {
+						height: 25px;
+						image-rendering: pixelated;
+					}
+				}
+			}
+		}
+	}
+}
+
+//
+// large 
+//
+
+@media (min-width: variables.$screen-lg-min) {
+	#page.welcome {
+		.masthead {
+			.splash {
+
+				.brand {
+					span {
+						font-size: 5em;
+					}
+				}
+
+				.tagline, .description {
+					font-size: 1.25em;
+				}
+			}
+		}
+	}
+}
+
+//
+// medium 
+//
+
+@media (max-width: variables.$screen-lg-min) {
+	#page.welcome {
+		.masthead {
+			.splash {
+
+				.brand {
+					span {
+						font-size: 4em;
+					}
+				}
+
+				.tagline, .description {
+					font-size: 1.25em;
+				}
+			}
+		}
+	}
+}
+
+//
+// small
+//
+
+@media (max-width: variables.$screen-sm-min) {
+	#page.welcome {
+		.masthead {
+			.splash {
+				width: 100%;
+				padding: 10% 10px;
+				margin: 0;
+				border-radius: 0;
+
+				.logo {
+					img {
+						width: 200px;
+						height: 150px;
+						margin-bottom: 0;
+					}
+				}
+
+				.brand {
+					span {
+						font-size: 3em;
+					}
+				}
+
+				.tagline, .description {
+					font-size: 1.25em;
+				}
+			}
+		}
+	}
+}
+
+//
+// extra small styles
+//
+
+@media (max-width: variables.$screen-xs-min) {
+	#page.welcome {
+		.masthead {
+			.splash {
+				border-radius: 0;
+
+				.brand {
+					span {
+						font-size: 2em;
+					}
+				}
+			}
+		}
+	}
+}

@@ -44,6 +44,9 @@ export default BaseView.extend({
 				<div class="radio-inline">
 					<label><input type="radio" name="search-by" value="url">URL</label>
 				</div>
+				<div class="radio-inline">
+					<label><input type="radio" name="search-by" value="pdf">PDF</label>
+				</div>
 			</div>
 		</div>
 
@@ -82,6 +85,7 @@ export default BaseView.extend({
 	`),
 
 	events: {
+		'change .search-by input': 'onChangeSearchBy',
 		'keydown': 'onKeyDown'
 	},
 
@@ -92,9 +96,19 @@ export default BaseView.extend({
 	getValue: function(key) {
 		switch (key) {
 			case 'kind':
+				return this.$el.find('.search-by input:checked').val();
+			case 'target':
 				return this.$el.find('.search-for input:checked').val();
 			case 'limit':
 				return parseInt(this.$el.find('.limit input').val());
 		}
+	},
+
+	//
+	// mouse event handling methods
+	//
+
+	onChangeSearchBy: function() {
+		this.parent.parent.parent.setSearchKind(this.getValue('kind'));
 	}
 });

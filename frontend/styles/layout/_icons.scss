@@ -1,0 +1,54 @@
+/******************************************************************************\
+|                                                                              |
+|                                 _icons.scss                                  |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "../colors/branding";
+
+//
+// colors
+//
+
+$icon-color: branding.$primary-color;
+
+//
+// styles
+//
+
+.alert-icon {
+	color: $icon-color;
+}
+
+i {
+
+	&.rotated {
+		transform: rotate(90deg);
+	}
+
+	&.derotated {
+		transform: rotate(-90deg);
+	}
+
+	&.reversed {
+		transform: scaleX(-1);
+	}
+
+	&.flipped {
+		transform: scaleY(-1);
+	}
+
+	&.rotated.flipped {
+		transform: scaleY(-1) rotate(90deg);
+	}
+
+	&.rotated.reversed {
+		transform: scaleX(-1) rotate(90deg);
+	}
+}

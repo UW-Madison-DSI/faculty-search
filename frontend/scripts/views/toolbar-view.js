@@ -33,7 +33,7 @@ export default BaseView.extend({
 					<span class="hidden-xs">Search</span>
 				</button>
 			</div>
-			<input type="text" class="form-control" />
+			<textarea class="form-control" rows="1" placeholder="Search terms or text"></textarea>
 			<div class="input-group-btn">
 				<button class="clear btn">
 					<i class="fa fa-xmark"></i>
@@ -54,7 +54,7 @@ export default BaseView.extend({
 	//
 
 	getQuery: function() {
-		return this.$el.find('input').val();
+		return this.$el.find('.form-control').val();
 	},
 
 	//
@@ -65,16 +65,24 @@ export default BaseView.extend({
 		this.$el.find('.btn-primary').focus();
 	},
 
+	showInput: function() {
+		this.$el.removeClass('collapsed');
+	},
+
+	hideInput: function() {
+		this.$el.addClass('collapsed');
+	},
+
 	//
 	// event handling methods
 	//
 
 	onClickSearch: function() {
-		this.parent.searchFor(this.getQuery());
+		this.parent.search();
 	},
 
 	onClickClear: function() {
-		this.$el.find('input').val('');
+		this.$el.find('.form-control').val('');
 		this.parent.clear();
 	},
 
@@ -83,8 +91,9 @@ export default BaseView.extend({
 	//
 
 	onKeyDown: function(event) {
-		if (event.keyCode == 13) {
+		if (event.keyCode == 13 && !event.shiftKey) {
 			this.onClickSearch();
+			event.preventDefault();
 		}
 	}
 });
