@@ -161,8 +161,16 @@ export default BaseView.extend({
 			// callbacks
 			//
 			success: (data) => {
-				if (options && options.success) {
-					options.success(data);
+				if (data && data.length > 0) {
+					if (options && options.success) {
+						options.success(data);
+					}
+				} else {
+					this.getChildView('contents mainbar').showMessage({
+						icon: '<i class="fa fa-file"></i>',
+						title: "PDF Error.",
+						subtitle: "The PDF file '" + file.name + "' could not be parsed."
+					});
 				}
 			},
 			error: (response, textStatus, errorThrown) => {
