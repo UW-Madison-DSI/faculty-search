@@ -1,3 +1,4 @@
+.devcontainer\devcontainer.json
 .streamlit/
 .vscode/
 notebooks/
