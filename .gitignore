@@ -1,5 +1,6 @@
 pdfs/
 .ssh/
+.DS_Store
 data/
 volumes/
 authors/

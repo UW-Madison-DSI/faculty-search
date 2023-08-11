@@ -70,6 +70,14 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	droppable: false,
 
 	//
+	// getting methods
+	//
+
+	getFile: function() {
+		return this.$el.find('#file')[0].files[0];
+	},
+
+	//
 	// setting methods
 	//
 
@@ -77,21 +85,6 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.kind = kind;
 		this.droppable = (kind == 'pdf');
 		this.clear();
-	},
-
-	//
-	// file reading methods
-	//
-
-	readFile: function(done) {
-		let input = this.$el.find('#file')[0];
-		let path = $(input).val();
-		let fReader = new FileReader();
-		fReader.readAsDataURL(input.files[0]);
-		fReader.onloadend = (event) => {
-			let filename = path.replace(/^.*[\\\/]/, '')
-			done(filename, event.target.result);
-		}
 	},
 
 	//

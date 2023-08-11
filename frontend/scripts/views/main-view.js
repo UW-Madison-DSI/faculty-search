@@ -65,6 +65,10 @@ export default BaseView.extend({
 		return this.getChildView('contents sidebar search').getValue('limit');
 	},
 
+	getFile: function() {
+		return this.getChildView('contents mainbar').getFile();
+	},
+
 	//
 	// setting methods
 	//
@@ -94,22 +98,7 @@ export default BaseView.extend({
 	search: function() {
 		switch (this.getSearchKind()) {
 			case 'pdf':
-				this.getChildView('contents mainbar').readFile((filename, data) => {
-					// this.searchByFile(data);
-					this.readPdf(data, {
-
-						// callbacks
-						//
-						success: (text) => {
-							this.searchByText(text);
-						},
-						error: () => {
-							application.error({
-								message: "Could not read PDF file."
-							});
-						}
-					});
-				});
+				this.searchByFile(this.getFile());
 				break;
 			default:
 				this.searchByText(this.getSearchQuery());
@@ -135,33 +124,39 @@ export default BaseView.extend({
 	},
 
 	searchByFile: function(file) {
-		switch (this.getSearchTarget()) {
-			case 'authors':
-				this.searchAuthors({
-					file: file,
-					top_k: this.getSearchLimit()
+		this.readFile(file, {
+
+			// callbacks
+			//
+			success: (text) => {
+				this.searchByText(text);
+			},
+			error: () => {
+				application.error({
+					message: "Could not read PDF file."
 				});
-				break;
-			case 'articles':
-				this.searchArticles({
-					file: file,
-					top_k: this.getSearchLimit()
-				});
-				break;
-		}
+			}
+		});
 	},
 
 	//
 	// ajax methods
 	//
 
-	readPdf: function(data, options) {
+	readFile: function(file, options) {
+
+		// get form data
+		//
+		let formData = new FormData();
+		formData.append('file', file);
+
 		$.ajax({
 			url: '/api/pdf',
 			type: 'POST',
-			data: data,
-			contentType: 'application/pdf',
+			data: formData,
+			contentType: false,
 			processData: false,
+			cache: false,
 
 			// callbacks
 			//
@@ -189,8 +184,16 @@ export default BaseView.extend({
 			// callbacks
 			//
 			success: (data) => {
-				let authors = new Authors(data.authors);
-				this.getChildView('contents mainbar').showAuthors(authors);
+				if (data.authors && data.authors.length > 0) {
+					let authors = new Authors(data.authors);
+					this.getChildView('contents mainbar').showAuthors(authors);
+				} else {
+					this.getChildView('contents mainbar').showMessage({
+						icon: '<i class="fa fa-search"></i>',
+						title: "No Authors Found.",
+						subtitle: "No authors were found that met your search criteria."
+					});
+				}
 			},
 			error: (response, textStatus, errorThrown) => {
 				application.error({
@@ -211,8 +214,16 @@ export default BaseView.extend({
 			// callbacks
 			//
 			success: (data) => {
-				let articles = new Articles(data.articles);
-				this.getChildView('contents mainbar').showArticles(articles);
+				if (data.articles && data.articles.length > 0) {
+					let articles = new Articles(data.articles);
+					this.getChildView('contents mainbar').showArticles(articles);
+				} else {
+					this.getChildView('contents mainbar').showMessage({
+						icon: '<i class="fa fa-search"></i>',
+						title: "No Articles Found.",
+						subtitle: "No articles were found that met your search criteria."
+					});
+				}
 			},
 			error: (response, textStatus, errorThrown) => {
 				application.error({

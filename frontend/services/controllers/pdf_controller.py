@@ -12,45 +12,56 @@
 #     Copyright (C) 2023, Data Science Institute, University of Wisconsin      #
 ################################################################################
 
-import io
+import os
 import flask
 from flask import request
-from flask import jsonify
 from langchain.document_loaders import PyPDFLoader
-from PyPDF2 import PdfReader
-from io import StringIO
-from io import BytesIO
-import PyPDF2
-import base64
+
+app = flask.Flask(__name__)
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 class PDFController:
 
 	@staticmethod
 	def post_read(target_n: int = 1000):
 
-		# parse input data
+		# check for file parameter
+		if 'file' not in request.files:
+			return "No file specified.", 404
 
-		# data = request.get_data()
-		data = request.get_data()
-		# data = request.get_data(parse_form_data=False)
-		# data = request.get_data(parse_form_data=True)
-		# data = request.get_data(parse_form_data=True).encode()
-		# data = base64.encode(request.get_data())
-		# data = base64.b64decode(request.get_data())
-		# data = request.stream
+		# get file parameter
+		file = request.files['file']
 
-		file = open("data2.pdf", "wb")
-		file.write(data)
-		file.close()
+		# check that file parameter is a pdf file
+		if file and file.filename.endswith('.pdf'):
 
-		loader = PyPDFLoader("data.pdf")
-		pages = loader.load_and_split()
+			# save pdf file to uploads folder
+			file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+			file.save(file_path)
 
-		n = 0
-		output = ""
-		for page in pages:
-			if n < target_n:
-				output += page.page_content
-			n += len(page.page_content.split(" "))
+			# read pdf file from uploads folder
+			loader = PyPDFLoader(file_path)
+			pages = loader.load_and_split()
 
-		return output
+			# parse words from pdf file
+			n = 0
+			output = ""
+			for page in pages:
+				words = page.page_content.split(" ")
+				while n < target_n:
+					for word in words:
+						if n > 0:
+							output += ' '
+						output += word
+						n += 1
+						if n > target_n:
+							break
+
+				# if n < target_n:
+				#	output += page.page_content
+				#n += len(page.page_content.split(" "))
+
+			return output
+
+		return "Invalid PDF file."
