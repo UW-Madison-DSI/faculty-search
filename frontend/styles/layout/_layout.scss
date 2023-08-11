@@ -160,10 +160,6 @@ canvas {
 	display: flex;
 	flex-direction: column;
 	pointer-events: none;
-
-	* {
-		pointer-events: auto;
-	}
 }
 
 #index {

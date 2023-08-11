@@ -48,6 +48,7 @@ $message-color: rgba(#808080, 10%);
 
 	.message.overlay {
 		display: flex;
+		pointer-events: none;
 
 		.content {
 			width: 75%;
@@ -62,6 +63,10 @@ $message-color: rgba(#808080, 10%);
 				font-size: 500%;
 				color: $icon-color;
 			}
+		}
+
+		button {
+			pointer-events: auto;
 		}
 	}
 }

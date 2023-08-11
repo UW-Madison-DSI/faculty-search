@@ -1293,9 +1293,6 @@ canvas {
   flex-direction: column;
   pointer-events: none;
 }
-.overlay * {
-  pointer-events: auto;
-}
 
 #index {
   position: absolute;
@@ -1415,6 +1412,7 @@ span.highlighted {
 }
 .mainbar .message.overlay {
   display: flex;
+  pointer-events: none;
 }
 .mainbar .message.overlay .content {
   width: 75%;
@@ -1428,6 +1426,9 @@ span.highlighted {
 .mainbar .message.overlay .content > i {
   font-size: 500%;
   color: #d0d0d7;
+}
+.mainbar .message.overlay button {
+  pointer-events: auto;
 }
 
 @media (max-width: 767px) {
