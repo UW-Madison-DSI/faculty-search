@@ -13,7 +13,7 @@
 ################################################################################
 
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_mail import Mail, Message
 from controllers.contact_controller import ContactController
 from controllers.pdf_controller import PDFController
