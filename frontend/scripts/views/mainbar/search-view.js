@@ -121,6 +121,10 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 
 	onAttach: function() {
 		this.showMessage(this.message);
+
+		// add button tooltip triggers
+		//
+		this.addTooltips();
 	},
 
 	showArticles: function(articles) {
@@ -169,6 +173,8 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 
 	clear: function() {
 		this.$el.find('.results').empty();
+		this.$el.find('.search-bar .text').empty();
+
 		switch (this.kind) {
 			case 'pdf':
 				this.showHtmlMessage(this.pdfUploadMessage);
