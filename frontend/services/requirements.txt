@@ -1,0 +1,5 @@
+pypdf
+flask
+flask_mail
+langchain
+python-dotenv

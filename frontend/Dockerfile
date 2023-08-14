@@ -2,8 +2,14 @@ FROM python:slim-bullseye
 
 WORKDIR /app
 
-RUN pip install --upgrade pip
-RUN pip install flask flask_mail langchain python-dotenv
+RUN apt-get update && apt-get install -y jq curl
+
+COPY services/requirements.txt /tmp/requirements.txt
+RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt
+
+COPY services/install_latest_release.sh /tmp/install_latest_release.sh
+RUN chmod +x /tmp/install_latest_release.sh
+RUN /tmp/install_latest_release.sh
 
 COPY . .
 EXPOSE 5000
