@@ -10,6 +10,7 @@ from pymilvus import (
     DataType,
     Collection,
     connections,
+    utility,
 )
 
 load_dotenv()
@@ -109,6 +110,7 @@ def make_articles_data_packages(author_id: str) -> list[dict]:
 def connect_milvus() -> None:
     """Connect to Milvus."""
     connections.connect(MILVUS_ALIAS, host=MILVUS_HOST, port=MILVUS_PORT)
+    print(utility.get_server_version())
 
 
 def init_milvus() -> None:
@@ -140,6 +142,8 @@ def push_data(
 
     Note. Remember to call collection.flush() after ingestion session.
     """
+
+    author_collection.load()
 
     author = author_collection.query(expr=f"id == {author_id}", limit=1)
 
