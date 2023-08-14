@@ -18,7 +18,10 @@ from flask_mail import Mail, Message
 from controllers.contact_controller import ContactController
 from controllers.pdf_controller import PDFController
 import config
+from dotenv import load_dotenv
 import logging
+
+load_dotenv()
 
 # set logging file
 # logging.basicConfig(filename='log/info.log', level=logging.INFO)
@@ -32,7 +35,9 @@ app = Flask(__name__, static_folder='../', static_url_path="/")
 
 # configure app fron config.py
 app.config.from_object(config)
-
+DEBUG = os.getenv("DEBUG", app.config['DEBUG'])
+PORT = os.getenv("PORT", app.config['PORT'])
+HOST = os.getenv("HOST", app.config['HOST'])
 ################################################################################
 #                    request parameter parsing methods                         #
 ################################################################################
@@ -150,4 +155,5 @@ def post_create():
 ################################################################################
 
 if __name__ == '__main__':
-	app.run(debug=app.config['DEBUG'], host=app.config['HOST'], port=int(app.config['PORT']))
+	logging.info(HOST, PORT)
+	app.run(debug=DEBUG, host=HOST, port=PORT)
