@@ -27,7 +27,7 @@ export default BaseView.extend({
 
 	template: _.template(`
 		<div class="header">
-			<label><i class="fa fa-search"></i>Search Options</label>
+			<label><i class="fa fa-search"></i>Options</label>
 		</div>
 
 		<br />
@@ -109,6 +109,6 @@ export default BaseView.extend({
 	//
 
 	onChangeSearchBy: function() {
-		this.parent.parent.parent.setSearchKind(this.getValue('kind'));
+		this.parent.parent.setSearchKind(this.getValue('kind'));
 	}
 });

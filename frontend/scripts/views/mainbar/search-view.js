@@ -1,6 +1,6 @@
 /******************************************************************************\
 |                                                                              |
-|                           search-results-view.js                             |
+|                               search-view.js                                 |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
@@ -27,10 +27,21 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// attributes
 	//
 
-	className: 'search-results',
+	className: 'search',
 	template: template(`
-		<div class="content"></div>
-		<div class="full-size message overlay"></div>
+		<div class="content">
+			<div class="results"></div>
+			<div class="message overlay"></div>
+		</div>
+		<div class="search-bar">
+			<div class="input">
+				<div class="text" contenteditable="true"></div>
+				<div class="buttons">
+					<button class="submit btn"><i class="fa fa-search" data-toggle="tooltip" title="Search" data-placement="top"></i></button>
+					<button class="clear btn" style="display:none"><i class="fa fa-xmark" data-toggle="tooltip" title="Clear" data-placement="top"></i></button>
+				</div>
+			</div>
+		</div>
 	`),
 
 	messageTemplate: template(`
@@ -51,20 +62,33 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			<i class="fa fa-file"></i>
 			<h1>Search By PDF</h1>
 			<h3>Drag and drop or select a PDF file to search for the contents of this file.</h3>
-			<br />
+
 			<button class="select-file btn btn-primary"><i class="fa fa-mouse-pointer"></i>Select File</button>
 			<input type="file" id="file" class="form-control" style="display:none" />
+
+			<div class="search-for-file buttons" style="display:none">
+				<button class="submit btn btn-primary"><i class="fa fa-search"></i>Search</button>
+				<button class="clear btn" ><i class="fa fa-xmark"></i>Clear</button>
+			</div>
 		</div>
 	`,
 
 	regions: {
-		content: '.content',
+		results: '.results',
 		message: '.message'
 	},
 
 	events: _.extend({}, Droppable.events, {
+		'click .search-bar .submit': 'onClickSubmitText',
+		'click .search-bar .clear': 'onClickClearText',
+
 		'click .select-file': 'onClickSelectFile',
 		'change input[type="file"]': 'onChangeFile',
+
+		'click .search-for-file .submit': 'onClickSubmitFile',
+		'click .search-for-file .clear': 'onClickClearFile',
+
+		'keydown': 'onKeyDown'
 	}),
 
 	droppable: false,
@@ -72,6 +96,10 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	//
 	// getting methods
 	//
+
+	getQuery: function() {
+		return this.$el.find('.input').text().trim();
+	},
 
 	getFile: function() {
 		return this.$el.find('#file')[0].files[0];
@@ -97,28 +125,61 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 
 	showArticles: function(articles) {
 		this.clearMessage();
-		this.showChildView('content', new ArticlesListView({
+		this.showChildView('results', new ArticlesListView({
 			collection: articles
 		}));
+		this.showClearResultsButton();
+		this.showTextInput();
 	},
 
 	showAuthors: function(authors) {
 		this.clearMessage();
-		this.showChildView('content', new AuthorsListView({
+		this.showChildView('results', new AuthorsListView({
 			collection: authors
 		}));
+		this.showClearResultsButton();
+		this.showTextInput();
+	},
+
+	showTextInput: function() {
+		this.$el.find('.search-bar').show();
+
+		// configure search bar
+		//
+		if (this.kind == 'pdf') {
+			this.$el.find('.search-bar .text').hide();
+			this.$el.find('.search-bar .submit').hide();
+		} else {
+			this.$el.find('.search-bar .text').show();
+			this.$el.find('.search-bar .submit').show();
+		}
+	},
+
+	hideTextInput: function() {
+		this.$el.find('.search-bar').hide();
+	},
+
+	showClearResultsButton: function() {
+		this.$el.find('.search-bar .clear').show();
+	},
+
+	hideClearResultsButton: function() {
+		this.$el.find('.search-bar .clear').hide();
 	},
 
 	clear: function() {
-		this.$el.find('.content').empty();
+		this.$el.find('.results').empty();
 		switch (this.kind) {
 			case 'pdf':
 				this.showHtmlMessage(this.pdfUploadMessage);
+				this.hideTextInput();
 				break;
 			default:
 				this.showMessage(this.message);
+				this.showTextInput();
 				break;
 		}
+		this.hideClearResultsButton();
 	},
 
 	//
@@ -126,11 +187,11 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	//
 
 	highlight: function() {
-		this.$el.find('> .content').addClass('dropzone');
+		this.$el.find('.results').addClass('dropzone');
 	},
 
 	unhighlight: function() {
-		this.$el.find('> .content').removeClass('dropzone');
+		this.$el.find('.results').removeClass('dropzone');
 	},
 
 	//
@@ -164,13 +225,45 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	},
 
 	//
-	// event handling methods
+	// mouse event handling methods
+	//
+
+	onClickSubmitText: function() {
+		this.parent.search();
+	},
+
+	onClickClearText: function() {
+		this.parent.clear();
+	},
+
+	onClickSubmitFile: function() {
+		this.parent.search();
+	},
+
+	onClickClearFile: function() {
+		this.clear();
+	},
+
+	//
+	// keyboard event handling methods
+	//
+
+	onKeyDown: function(event) {
+		if (event.keyCode == 13 && !event.shiftKey) {
+			this.onClickSubmitText();
+			event.preventDefault();
+		}
+	},
+
+	//
+	// file event handling methods
 	//
 
 	onChangeFile: function() {
 		this.$el.find('input[type="file"]').show();
 		this.$el.find('h3').text("Click the search button to search for the contents of this file.");
 		this.$el.find('.select-file').hide();
+		this.$el.find('.search-for-file').show();
 	},
 
 	onClickSelectFile: function() {

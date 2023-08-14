@@ -1,10 +1,10 @@
 /******************************************************************************\
 |                                                                              |
-|                                 main-view.js                                 |
+|                             search-split-view.js                             |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines the top level view of our application.                   |
+|        This defines the main split view of this application.                 |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -17,32 +17,39 @@
 
 import Articles from '../collections/articles.js';
 import Authors from '../collections/authors.js';
-import BaseView from '../views/base-view.js';
-import ToolbarView from '../views/toolbar-view.js';
-import SearchSplitView from '../views/search-split-view.js';
+import SplitView from '../views/layout/split-view.js';
+import SearchView from '../views/mainbar/search-view.js';
+import SideBarView from '../views/sidebar/sidebar-view.js';
 
-export default BaseView.extend({
+export default SplitView.extend({
 
 	//
 	// attributes
 	//
 
-	id: 'main-view',
+	orientation: $(window).width() < 960? 'vertical': 'horizontal',
+	flipped: false,
+	sizes: [30, 70],
 
-	template: _.template(`
-		<div id="toolbar"></div>
-		<div id="contents"></div>
-	`),
+	//
+	// getting methods
+	//
 
-	regions: {
-		toolbar: {
-			el: '#toolbar',
-			replaceElement: true
-		},
-		contents: {
-			el: '#contents',
-			replaceElement: true
-		}
+	getMainBarView: function() {
+		return new SearchView({
+			model: this.model,
+			parent: this
+		});
+	},
+
+	getSideBarView: function() {
+		return new SideBarView({
+			parent: this,
+
+			// callbacks
+			//
+			onchange: (attribute) => this.onChange(attribute)
+		});
 	},
 
 	//
@@ -50,45 +57,35 @@ export default BaseView.extend({
 	//
 
 	getSearchQuery: function() {
-		return this.getChildView('toolbar').getQuery();
+		return this.getChildView('mainbar').getQuery();
 	},
 
 	getSearchKind: function() {
-		return this.getChildView('contents sidebar search').getValue('kind');
+		return this.getChildView('sidebar search').getValue('kind');
 	},
 
 	getSearchTarget: function() {
-		return this.getChildView('contents sidebar search').getValue('target');
+		return this.getChildView('sidebar search').getValue('target');
 	},
 
 	getSearchLimit: function() {
-		return this.getChildView('contents sidebar search').getValue('limit');
+		return this.getChildView('sidebar search').getValue('limit');
 	},
 
 	getFile: function() {
-		return this.getChildView('contents mainbar').getFile();
+		return this.getChildView('mainbar').getFile();
+	},
+
+	getLimit: function() {
+		return this.getChildView('sideebar').getLimit();
 	},
 
 	//
 	// setting methods
 	//
 
-	setToolbarSearchKind: function(kind) {
-		switch (kind) {
-			case 'text':
-			case 'doi':
-			case 'url':
-				this.getChildView('toolbar').showInput();
-				break;
-			case 'pdf':
-				this.getChildView('toolbar').hideInput();
-				break;
-		}
-	},
-
 	setSearchKind: function(kind) {
-		this.getChildView('contents mainbar').setSearchKind(kind);
-		this.setToolbarSearchKind(kind);
+		this.getChildView('mainbar').setSearchKind(kind);
 	},
 
 	//
@@ -166,7 +163,7 @@ export default BaseView.extend({
 						options.success(data);
 					}
 				} else {
-					this.getChildView('contents mainbar').showMessage({
+					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-file"></i>',
 						title: "PDF Error.",
 						subtitle: "The PDF file '" + file.name + "' could not be parsed."
@@ -194,9 +191,9 @@ export default BaseView.extend({
 			success: (data) => {
 				if (data.authors && data.authors.length > 0) {
 					let authors = new Authors(data.authors);
-					this.getChildView('contents mainbar').showAuthors(authors);
+					this.getChildView('mainbar').showAuthors(authors);
 				} else {
-					this.getChildView('contents mainbar').showMessage({
+					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
 						title: "No Authors Found.",
 						subtitle: "No authors were found that met your search criteria."
@@ -224,9 +221,9 @@ export default BaseView.extend({
 			success: (data) => {
 				if (data.articles && data.articles.length > 0) {
 					let articles = new Articles(data.articles);
-					this.getChildView('contents mainbar').showArticles(articles);
+					this.getChildView('mainbar').showArticles(articles);
 				} else {
-					this.getChildView('contents mainbar').showMessage({
+					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
 						title: "No Articles Found.",
 						subtitle: "No articles were found that met your search criteria."
@@ -241,27 +238,12 @@ export default BaseView.extend({
 		});
 	},
 
-	clear: function() {
-		this.getChildView('contents mainbar').clear();
-	},
-
 	//
 	// rendering methods
 	//
 
-	onRender: function() {
-		this.showToolbar();
-		this.showContents();
-	},
-
-	showToolbar: function() {
-		this.showChildView('toolbar', new ToolbarView());
-	},
-
-	showContents: function() {
-		this.showChildView('contents', new SearchSplitView({
-			model: this.model
-		}));
+	clear: function() {
+		this.getChildView('mainbar').clear();
 	},
 
 	//
@@ -269,8 +251,8 @@ export default BaseView.extend({
 	//
 
 	onResize: function() {
-		if (this.hasChildView('contents')) {
-			this.getChildView('contents').onResize();
+		if (this.hasChildView('mainbar')) {
+			this.getChildView('mainbar').onResize();
 		}
 	}
 });
