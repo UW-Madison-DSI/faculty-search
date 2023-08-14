@@ -86,4 +86,6 @@ services:
       - "80:5000"
     command: [ python, ./services/app.py ]
     environment:
-      - FASTAPI_ENDPOINT=http://35.209.217.139:8765
+      - DEBUG=1
+      - PORT=5000
+      - HOST=0.0.0.0
