@@ -13,18 +13,19 @@
 ################################################################################
 
 import os
-import flask
+from dotenv import load_dotenv
+from pathlib import Path
 from flask import request
 from langchain.document_loaders import PyPDFLoader
-
-app = flask.Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+load_dotenv()
 
 class PDFController:
+	
+	def __init__(self, upload_folder: Path):
+		self.upload_folder = upload_folder
+		os.makedirs(upload_folder, exist_ok=True)
 
-	@staticmethod
-	def post_read(target_n: int = 1000):
+	def post_read(self, target_n: int = 1000):
 
 		# check for file parameter
 		if 'file' not in request.files:
@@ -37,7 +38,7 @@ class PDFController:
 		if file and file.filename.endswith('.pdf'):
 
 			# save pdf file to uploads folder
-			file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+			file_path = os.path.join(self.upload_folder, file.filename)
 			file.save(file_path)
 
 			# read pdf file from uploads folder

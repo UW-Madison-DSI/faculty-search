@@ -20,7 +20,6 @@ from controllers.pdf_controller import PDFController
 import config
 from dotenv import load_dotenv
 import logging
-
 load_dotenv()
 
 # set logging file
@@ -38,9 +37,13 @@ app.config.from_object(config)
 DEBUG = os.getenv("DEBUG", app.config['DEBUG'])
 PORT = os.getenv("PORT", app.config['PORT'])
 HOST = os.getenv("HOST", app.config['HOST'])
+UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", app.config['UPLOAD_FOLDER'])
+
 ################################################################################
 #                    request parameter parsing methods                         #
 ################################################################################
+
+pdf_controller = PDFController(upload_folder=UPLOAD_FOLDER)
 
 def get_array(name):
 
@@ -132,7 +135,7 @@ def post_read():
 		response: The text contained in the pdf.
 	"""
 
-	return PDFController.post_read()
+	return pdf_controller.post_read()
 
 ################################################################################
 #                            contact form routes                               #
