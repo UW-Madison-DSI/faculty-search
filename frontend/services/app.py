@@ -40,13 +40,17 @@ try:
     import config
 
     app.config.from_object(config)
+    DEBUG = app.config["DEBUG"]
+    PORT = app.config["PORT"]
+    HOST = app.config["HOST"]
+    UPLOAD_FOLDER = app.config["UPLOAD_FOLDER"]
 except Exception:
+    # Get from environment variables (docker workflow)
+    DEBUG = os.getenv("DEBUG")
+    PORT = os.getenv("PORT")
+    HOST = os.getenv("HOST")
+    UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER")
     pass
-
-DEBUG = os.getenv("DEBUG", app.config["DEBUG"])
-PORT = os.getenv("PORT", app.config["PORT"])
-HOST = os.getenv("HOST", app.config["HOST"])
-UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", app.config["UPLOAD_FOLDER"])
 
 ################################################################################
 #                    request parameter parsing methods                         #
