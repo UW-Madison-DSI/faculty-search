@@ -1,0 +1,3 @@
+#! /bin/bash
+cd /community-search
+docker compose up
