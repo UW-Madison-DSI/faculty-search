@@ -115,6 +115,32 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.clear();
 	},
 
+	setFiles: function(files) {
+		const fileInput = this.$el.find('#file')[0];
+
+		// set file input
+		//
+		fileInput.files = files;
+
+		// set input filename (required for Safari)
+		//
+		this.setFilename(files[0].name);
+
+		// show files
+		//
+		this.onChangeFile();
+	},
+
+	setFilename: function(filename) {
+		const fileInput = this.$el.find('#file')[0];
+
+		// Help Safari out
+		//
+		if (fileInput.webkitEntries.length) {
+			fileInput.dataset.file = filename;
+		}
+	},
+
 	//
 	// rendering methods
 	//
@@ -265,11 +291,21 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// file event handling methods
 	//
 
-	onChangeFile: function() {
+	onChangeFile: function(event) {
+
+		// update view
+		//
 		this.$el.find('input[type="file"]').show();
 		this.$el.find('h3').text("Click the search button to search for the contents of this file.");
 		this.$el.find('.select-file').hide();
 		this.$el.find('.search-for-file').show();
+
+		// set input filename (required for Safari)
+		//
+		if (event) {
+			let filename = event.target.files[0].name;
+			this.setFilename(filename);
+		}
 	},
 
 	onClickSelectFile: function() {
@@ -286,12 +322,8 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		//
 		Droppable.onDrop.call(this, event);
 
-		// set file input
+		// change file input
 		//
-		file.files = event.originalEvent.dataTransfer.files;
-
-		// show files
-		//
-		this.onChangeFile();
+		this.setFiles(event.originalEvent.dataTransfer.files);
 	}
 }));

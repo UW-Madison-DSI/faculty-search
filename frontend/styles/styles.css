@@ -580,6 +580,10 @@ input[type=file]::-webkit-file-upload-button {
   display: none;
 }
 
+input[data-file]::after {
+  content: attr(data-file);
+}
+
 input[type=number], input[type=text] {
   padding: 0 5px;
   border: 1px solid lightgrey;
@@ -2177,7 +2181,7 @@ body[device=phone] h3 {
 .btn i, .btn:focus i {
   margin-right: 5px;
 }
-.btn:hover, .btn:active, .btn:focus:hover, .btn:focus:active {
+.btn:hover, .btn:active, .btn:active:hover, .btn:focus:hover, .btn:focus:active, .btn:focus:active:hover {
   background: #b4b4c0;
   border-color: #b4b4c0;
 }
@@ -2186,7 +2190,7 @@ body[device=phone] h3 {
   background: #c5050c;
   border-color: #c5050c;
 }
-.btn-primary:hover, .btn-primary:active, .btn-primary:focus:hover, .btn-primary:focus:active {
+.btn-primary:hover, .btn-primary:active, .btn-primary:active:hover, .btn-primary:focus:hover, .btn-primary:focus:active, .btn-primary:focus:active:hover {
   background: #930409;
   border-color: #930409;
 }

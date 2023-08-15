@@ -49,7 +49,7 @@ $warning-color: hsl(0, 60%, 50%);
 		margin-right: 5px;
 	}
 
-	&:hover, &:active {
+	&:hover, &:active, &:active:hover {
 		background: darken($btn-color, 10%);
 		border-color: darken($btn-color, 10%);
 	}
@@ -59,7 +59,7 @@ $warning-color: hsl(0, 60%, 50%);
 	background: $btn-primary-color;
 	border-color: $btn-primary-color;
 
-	&:hover, &:active {
+	&:hover, &:active, &:active:hover {
 		background: darken($btn-primary-color, 10%);
 		border-color: darken($btn-primary-color, 10%);
 	}

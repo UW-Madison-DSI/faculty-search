@@ -63,6 +63,14 @@ input[type="file"] {
 	}
 }
 
+// Add file name only if data attribute is set.
+// This addresses a Safari specific problem with
+// not displaying the filenames of file inputs.
+//
+input[data-file]::after {
+	content: attr(data-file);
+}
+
 input[type="number"], input[type="text"] {
 	padding: 0 5px;
 	border: 1px solid lightgrey;
