@@ -28,7 +28,7 @@ def test_engine(author_collection, article_collection, embeddings):
     assert len(embedded) == 1536
 
     # Test the get_author method
-    author = get_author(106927, author_collection)
+    author = get_author_by_id(106927, author_collection)
     assert isinstance(author, dict)
     assert author["id"] == 106927
     assert author["first_name"] == "Kyle"
@@ -51,3 +51,15 @@ def test_engine(author_collection, article_collection, embeddings):
     assert len(scores) <= 3
     assert isinstance(author_ids[0], int)
     assert isinstance(scores[0], float)
+
+
+def test_engine_get_author(author_collection, article_collection, embeddings):
+    engine = Engine(author_collection, article_collection, embeddings)
+    result = engine.get_author(first_name="Kyle", last_name="Cranmer")
+
+    author = result["author"]
+    articles = result["articles"]
+    assert isinstance(author, dict)
+    assert author["id"] == 106927
+    assert isinstance(articles, list)
+    assert len(articles) > 100

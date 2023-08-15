@@ -27,7 +27,36 @@ def convert_article_result(result) -> dict:
     return flat_result
 
 
-def get_author(author_id: int | str, author_collection: Collection) -> dict:
+def get_author_by_name(
+    first_name: str, last_name: str, author_collection: Collection
+) -> dict:
+    """Get author details from Milvus."""
+
+    authors = author_collection.query(
+        expr=f"first_name == '{first_name}' and last_name == '{last_name}'",
+        output_fields=["id", "first_name", "last_name"],
+        limit=1,
+    )
+
+    if not authors:
+        raise ValueError(f"Author with name {first_name} {last_name} not found")
+    return authors[0]
+
+
+def get_author_articles(author_id: int, article_collection: Collection) -> dict:
+    """Get all articles from author with author_id."""
+
+    articles = article_collection.query(
+        expr=f"author_id == {author_id}",
+        output_fields=["id", "title", "publication_year"],
+    )
+
+    if len(articles) == 0:
+        return None
+    return articles
+
+
+def get_author_by_id(author_id: str, author_collection: Collection) -> dict:
     """Get author details from Milvus."""
 
     authors = author_collection.query(
@@ -271,4 +300,16 @@ class Engine:
 
         # Add plot data
         output["plot_data"] = results["plot_data"]
+        return output
+
+    def get_author(self, first_name: str, last_name: str) -> dict:
+        """Get author details from Milvus."""
+
+        output = {}
+        output["author"] = get_author_by_name(
+            first_name, last_name, self.author_collection
+        )
+        output["articles"] = get_author_articles(
+            output["author"]["id"], self.article_collection
+        )
         return output

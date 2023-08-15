@@ -6,7 +6,7 @@ from pydantic import BaseModel, validator
 from dotenv import load_dotenv
 from langchain.embeddings import OpenAIEmbeddings
 from pymilvus import connections, Collection
-from core import Engine, get_author
+from core import Engine, get_author_by_id
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
@@ -70,6 +70,18 @@ class APIQuery(BaseModel):
         return v
 
 
+class APIAuthorQuery(BaseModel):
+    first_name: str
+    last_name: str
+
+    @validator("first_name", "last_name")
+    def name_must_not_be_empty(cls, v):
+        """Validate that name is not empty."""
+        if not v.strip():
+            raise ValueError("name must not be empty")
+        return v
+
+
 class APIPlotData(BaseModel):
     """Plot data model."""
 
@@ -105,6 +117,16 @@ def root():
     return {"api": "is running."}
 
 
+@app.post("/get_author/")
+def get_author(query: APIAuthorQuery) -> dict[str, APIAuthor | list[dict]]:
+    """Search author by name."""
+    results = cached_resources["engine"].get_author(
+        first_name=query.first_name, last_name=query.last_name
+    )
+    logging.debug(results)
+    return results
+
+
 @app.post("/search_authors/")
 def search_authors(query: APIQuery) -> dict[str, list[APIAuthor] | APIPlotData]:
     """Search an author."""
@@ -119,7 +141,7 @@ def search_authors(query: APIQuery) -> dict[str, list[APIAuthor] | APIPlotData]:
 
     authors = []
     for author_id, score in zip(author_ids, scores):
-        author_details = get_author(
+        author_details = get_author_by_id(
             author_id, cached_resources["engine"].author_collection
         )
         author_details["score"] = score  # inject score to author details

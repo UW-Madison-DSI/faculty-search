@@ -1,4 +1,4 @@
-name: Build and Deploy to GCP
+name: Build and Deploy Frontend to GCP
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  deploy-frontend:
     runs-on: ubuntu-latest
 
     steps:

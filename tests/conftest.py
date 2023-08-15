@@ -37,3 +37,8 @@ def search_articles_route():
 @pytest.fixture
 def search_authors_route():
     return f"{API_URL}/search_authors"
+
+
+@pytest.fixture
+def get_author_route():
+    return f"{API_URL}/get_author"

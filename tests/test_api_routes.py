@@ -60,3 +60,13 @@ def test_search_authors_with_plot(search_authors_route):
     # Check all lengths are the same
     data_lengths = [len(data) for data in plot_data.values()]
     assert len(set(data_lengths)) == 1
+
+
+def test_get_author(get_author_route):
+    data = {"first_name": "Kyle", "last_name": "Cranmer"}
+    response = requests.post(get_author_route, json=data)
+    assert response.status_code == 200
+
+    data = response.json()
+    assert "author" in data
+    assert "articles" in data
