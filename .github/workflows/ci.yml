@@ -15,14 +15,17 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build and Push Docker image
+      id: build
       env:
         GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
       run: |
         echo $GHCR_TOKEN | docker login ghcr.io -u USERNAME --password-stdin &&
-        docker compose build flask -t ghcr.io/jasonlo/community-search-frontend:latest &&
+        cd /community-search/frontend &&
+        docker build . -t ghcr.io/jasonlo/community-search-frontend:latest &&
         docker push ghcr.io/jasonlo/community-search-frontend:latest
 
     - name: Deploy to GCP
+      if: steps.build.outputs.exit_code == 0
       env:
         ZONE: 'us-central1-a'
         INSTANCE_NAME: 'community-search'
@@ -32,5 +35,6 @@ jobs:
       run: |
         echo "$GCE_SSH_KEY" > gce_ssh_key.pem
         chmod 600 gce_ssh_key.pem
-        ssh -i gce_ssh_key.pem -o StrictHostKeyChecking=no $GCE_USERNAME@$GCE_HOST 'bash -s' < ./scripts/deploy_frontend.sh
+        
+        ssh -i gce_ssh_key.pem -o StrictHostKeyChecking=no $GCE_USERNAME@$GCE_HOST 'bash -s' < cd /community-search && ./scripts/deploy_frontend.sh
     
