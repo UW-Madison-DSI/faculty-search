@@ -35,5 +35,5 @@ jobs:
       run: |
         echo "$GCE_SSH_KEY" > gce_ssh_key.pem
         chmod 600 gce_ssh_key.pem
-        ssh -i gce_ssh_key.pem -o StrictHostKeyChecking=no $GCE_USERNAME@$GCE_HOST 'bash -s' < cd /community-search && ./scripts/deploy_frontend.sh
+        ssh -i gce_ssh_key.pem -o StrictHostKeyChecking=no $GCE_USERNAME@$GCE_HOST 'bash -s' < ./scripts/deploy_frontend.sh
     
