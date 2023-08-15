@@ -1,5 +1,6 @@
 version: '3.5'
 
+# TODO:Replace ${DOCKER_VOLUME_DIRECTORY:-.} to concrete path
 services:
   etcd:
     container_name: milvus-etcd
@@ -79,9 +80,10 @@ services:
 
   flask:
     container_name: flask
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: ghcr.io/jasonlo/community-search-frontend:latest  # pull from ghcr for CI
+    # build:
+    #   context: ./frontend
+    #   dockerfile: Dockerfile
     ports:
       - "80:5000"
     command: [ python, ./services/app.py ]

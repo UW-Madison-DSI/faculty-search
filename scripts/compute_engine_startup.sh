@@ -1,3 +1,4 @@
 #! /bin/bash
+
 cd /community-search
-docker compose up
+docker compose up -d --build
