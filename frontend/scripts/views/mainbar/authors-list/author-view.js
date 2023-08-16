@@ -27,16 +27,18 @@ export default BaseView.extend({
 
 	template: _.template(`
 		<div class="name">
-			<a>
+			<a href="<%= url %>" target="_blank">
 				<span class="last"><%= last_name %></span>,
 				<span class="first"><%= first_name %></span>
 			</a>
+			<a href="<%= search_url %>" target="_blank">
+				<i class="fa fa-search"></i>
+			</a>
+			<a href="<%= map_url %>" target="_blank">
+				<i class="fa fa-map"></i>
+			</a>
 		</div>
 	`),
-
-	events: {
-		'click a': 'onClickLink'
-	},
 
 	//
 	// getting methods
@@ -46,16 +48,33 @@ export default BaseView.extend({
 		return this.model.get('first_name') + '+' + this.model.get('last_name');
 	},
 
-	//
-	// mouse event handling methods
-	//
+	getUrl: function() {
+		let url = 'https://wisc.discovery.academicanalytics.com/search/stack';
+		let queryString = 'query=' + this.getName() + '&searchType=Name';
+		return url + '?' + queryString;
+	},
 
-	onClickLink: function() {
-		let queryString = 'query=' + this.getName() + '&category=people';
+	getSearchUrl: function() {
+		let url = 'https://www.wisc.edu/search/';
+		let queryString = 'q=' + this.getName();
+		return url + '?' + queryString;
+	},
+
+	getMapUrl: function() {
 		let url = 'https://datascience.sharedigm.com/cmap/';
+		let queryString = 'query=' + this.getName() + '&category=people';
+		return url + '?' + queryString;
+	},
 
-		// open up profile view in new tab
-		//
-		window.open(url + '?' + queryString);
+	//
+	// rendering methods
+	//
+
+	templateContext: function() {
+		return {
+			url: this.getUrl(),
+			map_url: this.getMapUrl(),
+			search_url: this.getSearchUrl()
+		}
 	}
 });
