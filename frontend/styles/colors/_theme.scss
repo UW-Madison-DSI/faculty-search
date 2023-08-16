@@ -20,9 +20,7 @@
 
 .navbar-inverse .navbar-nav {
 	> li.active {
-		> a, a:hover, a:focus {
-			background-color: darken(branding.$primary-color, 10%);
-		}
+		background-color: darken(branding.$primary-color, 10%);
 	}
 }
 

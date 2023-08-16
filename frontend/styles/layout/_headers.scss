@@ -1,6 +1,6 @@
 /******************************************************************************\
 |                                                                              |
-|                                _headers.scss                                 |
+|                                 _headers.scss                                |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
@@ -13,6 +13,12 @@
 @use "../colors/branding";
 
 //
+// variables
+//
+
+$height: 40px;
+
+//
 // colors
 //
 
@@ -23,12 +29,17 @@ $navbar-color: branding.$primary-color;
 //
 
 #header {
+	min-height: $height;
+
 	#brand {
 		display: flex;
 
 		.icon {
 			display: flex;
-			padding: 5px;
+			width: auto;
+			height: 75%;
+			margin: auto;
+			margin-right: 10px;
 		}
 
 		.title {
@@ -39,28 +50,33 @@ $navbar-color: branding.$primary-color;
 	.navbar {
 		background-color: $navbar-color;
 		border: none;
-		height: 50px;
+		height: inherit;
+		min-height: inherit;
 		margin: 0;
 
 		.navbar-brand {
 			padding: 0 15px;
 			color: white;
+			height: inherit;
 		}
 
 		.navbar-nav {
 			margin: 0;
 			white-space: nowrap;
+			height: 100%;
 
 			> li {
-				display: inline-block;
+				display: inline-flex;
+				height: 100%;
 
 				> a {
 					color: white;
 					cursor: pointer;
-					line-height: 30px;
-					padding: 10px 15px;
+					padding: 0 15px;
 					min-width: 50px;
 					text-align: center;
+					background: none;
+					margin: auto;
 
 					i + span {
 						margin-left: 5px;
