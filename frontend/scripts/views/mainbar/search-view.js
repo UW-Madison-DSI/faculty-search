@@ -113,7 +113,6 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	setSearchKind: function(kind) {
 		this.kind = kind;
 		this.droppable = (kind == 'pdf');
-		this.clear();
 	},
 
 	setFiles: function(files) {
@@ -214,9 +213,11 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	},
 
 	clear: function() {
+
+		// update search view
+		//
 		this.$el.find('.results').empty();
 		this.$el.find('.search-bar .text').empty();
-
 		switch (this.kind) {
 			case 'pdf':
 				this.showHtmlMessage(this.pdfUploadMessage);
@@ -228,6 +229,10 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 				break;
 		}
 		this.hideClearResultsButton();
+
+		// update parent / sidebar
+		//
+		this.parent.updateQueryString();
 	},
 
 	//
