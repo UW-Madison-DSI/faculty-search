@@ -7,3 +7,4 @@ fastapi
 tiktoken
 scikit-learn
 numpy
+altair
