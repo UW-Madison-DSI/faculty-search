@@ -51,6 +51,19 @@ $message-color: rgba(#808080, 10%);
 			flex-grow: 1;
 			position: relative;
 
+			.results {
+
+				li {
+					i {
+						margin-left: 10px;
+
+						&:hover {
+							text-decoration: underline;
+						}
+					}
+				}
+			}
+
 			.message.overlay {
 				display: flex;
 				pointer-events: none;

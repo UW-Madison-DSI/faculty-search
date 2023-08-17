@@ -1282,6 +1282,12 @@ span.highlighted {
   flex-grow: 1;
   position: relative;
 }
+.mainbar .search .content .results li i {
+  margin-left: 10px;
+}
+.mainbar .search .content .results li i:hover {
+  text-decoration: underline;
+}
 .mainbar .search .content .message.overlay {
   display: flex;
   pointer-events: none;
