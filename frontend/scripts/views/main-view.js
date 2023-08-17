@@ -20,6 +20,7 @@ import Authors from '../collections/authors.js';
 import SplitView from '../views/layout/split-view.js';
 import SearchView from '../views/mainbar/search-view.js';
 import SideBarView from '../views/sidebar/sidebar-view.js';
+import QueryString from '../utilities/web/query-string.js';
 
 export default SplitView.extend({
 
@@ -37,6 +38,7 @@ export default SplitView.extend({
 
 	getMainBarView: function() {
 		return new SearchView({
+			query: QueryString.getValue('query'),
 			model: this.model,
 			parent: this
 		});
@@ -45,10 +47,11 @@ export default SplitView.extend({
 	getSideBarView: function() {
 		return new SideBarView({
 			parent: this,
+			values: QueryString.getValues(),
 
 			// callbacks
 			//
-			onchange: (attribute) => this.onChange(attribute)
+			onchange: () => this.onChange()
 		});
 	},
 
@@ -77,7 +80,35 @@ export default SplitView.extend({
 	},
 
 	getLimit: function() {
-		return this.getChildView('sideebar').getLimit();
+		return this.getChildView('sidebar').getLimit();
+	},
+
+	getSearchParams: function() {
+		let params = this.getChildView('sidebar').getSearchParams();
+		let query = this.getSearchQuery();
+		if (query) {
+			params.query = query;
+		}
+		return params;
+	},
+
+	//
+	// converting methods
+	//
+
+	stringToName: function(string) {
+		let terms = string.split(' ');
+
+		if (terms.length >= 2) {
+			return {
+				first_name: terms[0],
+				last_name: terms[terms.length - 1]
+			};
+		} else {
+			return {
+				last_name: query
+			}
+		}
 	},
 
 	//
@@ -97,10 +128,14 @@ export default SplitView.extend({
 			case 'pdf':
 				this.searchByFile(this.getFile());
 				break;
+			case 'name':
+				this.searchByName(this.getSearchQuery());
+				break;
 			default:
 				this.searchByText(this.getSearchQuery());
 				break;
 		}
+		this.updateQueryString();
 	},
 
 	searchByText: function(query) {
@@ -116,6 +151,14 @@ export default SplitView.extend({
 					query: query,
 					top_k: this.getSearchLimit()
 				});
+				break;
+		}
+	},
+
+	searchByName: function(query) {
+		switch (this.getSearchTarget()) {
+			case 'authors':
+				this.searchAuthorsByName(this.stringToName(query));
 				break;
 		}
 	},
@@ -238,12 +281,73 @@ export default SplitView.extend({
 		});
 	},
 
+	searchAuthorsByName: function(options) {
+		$.ajax({
+			url: config.server + '/get_author',
+			type: 'POST',
+			data: JSON.stringify(options),
+			contentType: 'application/json',
+			processData: false,
+
+			// callbacks
+			//
+			success: (data) => {
+				/*
+				if (data.authors && data.authors.length > 0) {
+					let authors = new Authors(data.authors);
+					this.getChildView('mainbar').showAuthors(authors);
+				} else {
+					this.getChildView('mainbar').showMessage({
+						icon: '<i class="fa fa-search"></i>',
+						title: "No Authors Found.",
+						subtitle: "No authors were found that met your search criteria."
+					});
+				}
+				*/
+			},
+			error: (response, textStatus, errorThrown) => {
+				application.error({
+					message: response.responseText || 'Could not connect to server.'
+				});
+			}
+		});
+	},
+
 	//
 	// rendering methods
 	//
 
+	onAttach: function() {
+
+		// set initial state
+		//
+		let values = QueryString.getValues();
+
+		if (values) {
+			if (values.kind == 'pdf') {
+				this.setSearchKind(values.kind);
+			}
+			if (values.query) {
+				this.search();
+			}
+		}
+	},
+
 	clear: function() {
 		this.getChildView('mainbar').clear();
+	},
+
+	updateQueryString: function() {
+		let params = this.getSearchParams();
+		QueryString.setValues(params);
+	},
+
+	//
+	// event handling methods
+	//
+
+	onChange: function() {
+		this.updateQueryString();
 	},
 
 	//

@@ -38,6 +38,9 @@ export default BaseView.extend({
 				<div class="radio-inline">
 					<label><input type="radio" name="search-by" value="text" checked>Text</label>
 				</div>
+				<div class="radio-inline">
+					<label><input type="radio" name="search-by" value="name">Name</label>
+				</div>
 				<div class="radio-inline" style="display:none">
 					<label><input type="radio" name="search-by" value="doi">DOI</label>
 				</div>
@@ -86,6 +89,8 @@ export default BaseView.extend({
 
 	events: {
 		'change .search-by input': 'onChangeSearchBy',
+		'change .search-for input': 'onChange',
+		'change .limit input': 'onChange',
 		'keydown': 'onKeyDown'
 	},
 
@@ -104,11 +109,67 @@ export default BaseView.extend({
 		}
 	},
 
+	getValues: function() {
+		return {
+			kind: this.getValue('kind'),
+			target: this.getValue('target'),
+			limit: this.getValue('limit')
+		};
+	},
+
+	//
+	// setting methods
+	//
+
+	setValue: function(key, value) {
+		switch (key) {
+			case 'kind':
+				this.$el.find('.search-by input[value="' + value + '"]').prop('checked', true);
+				break;
+			case 'target':
+				this.$el.find('.search-for input[value="' + value + '"]').prop('checked', true);
+				break;
+			case 'limit':
+				this.$el.find('.limit input').val(value);
+				break;
+		}
+	},
+
+	setValues: function(values) {
+		let keys = Object.keys(values);
+		for (let i = 0; i < keys.length; i++) {
+			let key = keys[i];
+			let value = values[key];
+			this.setValue(key, value);
+		}
+	},
+
+	//
+	// rendering methods
+	//
+
+	onRender: function() {
+
+		// set initial state
+		//
+		this.setValues(this.options.values);
+	},
+
 	//
 	// mouse event handling methods
 	//
 
 	onChangeSearchBy: function() {
 		this.parent.parent.setSearchKind(this.getValue('kind'));
+		this.onChange();
+	},
+
+	onChange: function() {
+
+		// perform callback
+		//
+		if (this.options.onchange) {
+			this.options.onchange();
+		}
 	}
 });

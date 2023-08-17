@@ -35,7 +35,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		</div>
 		<div class="search-bar">
 			<div class="input">
-				<div class="text" contenteditable="true"></div>
+				<div class="text" contenteditable="true"><%= query %></div>
 				<div class="buttons">
 					<button class="submit btn"><i class="fa fa-search" data-toggle="tooltip" title="Search" data-placement="top"></i></button>
 					<button class="clear btn" style="display:none"><i class="fa fa-xmark" data-toggle="tooltip" title="Clear" data-placement="top"></i></button>
@@ -145,7 +145,13 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// rendering methods
 	//
 
-	onAttach: function() {
+	templateContext: function() {
+		return {
+			query: this.options.query
+		}
+	},
+
+	onRender: function() {
 		this.showMessage(this.message);
 
 		// add button tooltip triggers

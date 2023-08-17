@@ -56,16 +56,8 @@ export default {
 		}
 	},
 
-	getParam: function(name, options) {
-		let queryString;
-
-		// get query string
-		//
-		if (options && options.queryString) {
-			queryString = options.queryString;
-		} else {
-			queryString = this.get();
-		}
+	getValue: function(name, options) {
+		let queryString = this.get();
 
 		if (!queryString) {
 			return undefined;
@@ -93,7 +85,35 @@ export default {
 		return undefined;
 	},
 
-	getParams: function(name, options) {
+	getValues: function() {
+		let values = {};
+		let queryString = this.get();
+
+		if (!queryString) {
+			return values;
+		}
+
+		// split query string into key value pairs
+		//
+		let terms = queryString.split('&');
+		for (let i = 0; i < terms.length; i++) {
+			let term = terms[i];
+
+			// split key value pair by first equal sign
+			//
+			let equalSign = term.indexOf('=');
+			let key = term.substr(0, equalSign);
+			let value = term.substr(equalSign + 1, term.length);
+
+			// add to values
+			//
+			values[key] = value;
+		}
+
+		return values;
+	},
+
+	getValuesByName: function(name, options) {
 		let queryString;
 		let params = [];
 
@@ -140,9 +160,17 @@ export default {
 		AddressBar.set(address);
 	},
 
+	setValues: function(object) {
+		this.set(this.encode(object));
+	},
+
 	push: function(queryString) {
 		let address = AddressBar.get('base') + (queryString? "?" + queryString : '');
 		AddressBar.push(address);
+	},
+
+	pushValues: function(object) {
+		this.push(this.encode(object));
 	},
 
 	clear: function() {

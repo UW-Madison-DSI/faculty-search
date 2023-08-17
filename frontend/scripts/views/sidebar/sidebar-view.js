@@ -37,6 +37,14 @@ export default PanelsView.extend({
 	},
 
 	//
+	// getting methods
+	//
+
+	getSearchParams: function() {
+		return this.getChildView('search').getValues();
+	},
+
+	//
 	// panel rendering methods
 	//
 
@@ -59,6 +67,9 @@ export default PanelsView.extend({
 	},
 
 	showSearchPanel: function() {
-		this.showChildView('search', new SearchPanelView());
+		this.showChildView('search', new SearchPanelView({
+			values: this.options.values,
+			onchange: this.options.onchange
+		}));
 	}
 });
