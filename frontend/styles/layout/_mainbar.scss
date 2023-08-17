@@ -26,7 +26,6 @@ $message-color: rgba(#808080, 10%);
 
 .mainbar {
 	ol {
-		margin: 30px;
 
 		li + li {
 			margin-top: 10px;
@@ -50,9 +49,10 @@ $message-color: rgba(#808080, 10%);
 		.content {
 			flex-grow: 1;
 			position: relative;
+			overflow: auto;
+			padding: 30px;
 
 			.results {
-
 				li {
 					i {
 						margin-left: 10px;
@@ -60,6 +60,12 @@ $message-color: rgba(#808080, 10%);
 						&:hover {
 							text-decoration: underline;
 						}
+					}
+				}
+
+				.author {
+					h1 {
+						text-align: center;
 					}
 				}
 			}

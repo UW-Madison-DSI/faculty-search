@@ -29,6 +29,10 @@ export default {
 		return this.decode(this.get());
 	},
 
+	stringToValue: function(string) {
+		return decodeURIComponent(string);
+	},
+
 	//
 	// querying methods
 	//
@@ -73,7 +77,7 @@ export default {
 			//
 			let equalSign = term.indexOf('=');
 			let key = term.substr(0, equalSign);
-			let value = term.substr(equalSign + 1, term.length);
+			let value = this.stringToValue(term.substr(equalSign + 1, term.length));
 
 			// check if key matches name
 			//
@@ -103,7 +107,7 @@ export default {
 			//
 			let equalSign = term.indexOf('=');
 			let key = term.substr(0, equalSign);
-			let value = term.substr(equalSign + 1, term.length);
+			let value = this.stringToValue(term.substr(equalSign + 1, term.length));
 
 			// add to values
 			//
@@ -139,7 +143,7 @@ export default {
 			//
 			let equalSign = term.indexOf('=');
 			let key = term.substr(0, equalSign);
-			let value = term.substr(equalSign + 1, term.length);
+			let value = stringToValue(term.substr(equalSign + 1, term.length));
 
 			// check if key matches name
 			//
@@ -237,7 +241,7 @@ export default {
 				//
 				let equalSign = term.indexOf('=');
 				let key = term.substr(0, equalSign);
-				let value = term.substr(equalSign + 1, term.length);
+				let value = stringToValue(term.substr(equalSign + 1, term.length));
 
 				// check for array values
 				//

@@ -1260,9 +1260,6 @@ span.highlighted {
 |******************************************************************************|
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
-.mainbar ol {
-  margin: 30px;
-}
 .mainbar ol li + li {
   margin-top: 10px;
 }
@@ -1281,12 +1278,17 @@ span.highlighted {
 .mainbar .search .content {
   flex-grow: 1;
   position: relative;
+  overflow: auto;
+  padding: 30px;
 }
 .mainbar .search .content .results li i {
   margin-left: 10px;
 }
 .mainbar .search .content .results li i:hover {
   text-decoration: underline;
+}
+.mainbar .search .content .results .author h1 {
+  text-align: center;
 }
 .mainbar .search .content .message.overlay {
   display: flex;

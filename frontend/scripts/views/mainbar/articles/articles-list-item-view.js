@@ -1,10 +1,10 @@
 /******************************************************************************\
 |                                                                              |
-|                            articles-list-view.js                             |
+|                          articles-list-item-view.js                          |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a view of a list of journal articles.                    |
+|        This defines a view of a single journal article.                      |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -15,15 +15,31 @@
 |     Copyright (C) 2022, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
-import CollectionView from '../../../views/collections/collection-view.js';
-import ArticleView from '../../../views/mainbar/authors-list/author-view.js';
+import BaseView from '../../../views/base-view.js';
 
-export default CollectionView.extend({
+export default BaseView.extend({
 
 	//
 	// attributes
 	//
 
-	tagName: 'ol',
-	childView: ArticleView
+	tagName: 'li',
+
+	template: _.template(`
+		<div class="title"><%= title %></div>
+		<% if (typeof doi != 'undefined') { %>
+		<div class="doi"><%= doi %></div>
+		<% } %>
+	`),
+
+	events: {
+		'click a': 'onClickLink'
+	},
+
+	//
+	// mouse event handling methods
+	//
+
+	onClickLink: function() {
+	}
 });

@@ -16,6 +16,34 @@
 \******************************************************************************/
 
 import '../../library/backbone/backbone.js';
+import Articles from '../collections/articles.js';
 
 export default Backbone.Model.extend({
+
+	//
+	// attributes
+	//
+
+	defaults: {
+		first_name: undefined,
+		last_name: undefined,
+		community: undefined,
+		score: undefined,
+		articles: []
+	},
+
+	//
+	// parsing methods
+	//
+
+	parse: function(data) {
+
+		// parse attributes
+		//
+		if (data.articles) {
+			data.articles = new Articles(data.articles);
+		}
+
+		return data;
+	}
 });

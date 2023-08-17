@@ -110,11 +110,16 @@ export default BaseView.extend({
 	},
 
 	getValues: function() {
-		return {
+		let values = {
 			kind: this.getValue('kind'),
-			target: this.getValue('target'),
-			limit: this.getValue('limit')
+			target: this.getValue('target')
 		};
+
+		if (values.kind != 'name') {
+			values.limit = this.getValue('limit');
+		}
+
+		return values;
 	},
 
 	//
@@ -149,10 +154,29 @@ export default BaseView.extend({
 	//
 
 	onRender: function() {
+		if (!this.options.values) {
+			return;
+		}
 
 		// set initial state
 		//
 		this.setValues(this.options.values);
+
+		// update panel
+		//
+		this.update();
+	},
+
+	update: function() {
+		let kind = this.getValue('kind');
+
+		// hide show limit
+		//
+		if (kind == 'name') {
+			this.$el.find('.limit').hide();
+		} else {
+			this.$el.find('.limit').show();
+		}
 	},
 
 	//
@@ -160,7 +184,11 @@ export default BaseView.extend({
 	//
 
 	onChangeSearchBy: function() {
+
+		// update views
+		//
 		this.parent.parent.setSearchKind(this.getValue('kind'));
+		this.update();
 		this.onChange();
 	},
 

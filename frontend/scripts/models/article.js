@@ -18,4 +18,14 @@
 import '../../library/backbone/backbone.js';
 
 export default Backbone.Model.extend({
+
+	//
+	// attributes
+	//
+
+	defaults: {
+		id: undefined,
+		title: undefined,
+		doi: undefined
+	}
 });

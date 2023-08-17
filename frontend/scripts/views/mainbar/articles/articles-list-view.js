@@ -16,7 +16,7 @@
 \******************************************************************************/
 
 import CollectionView from '../../../views/collections/collection-view.js';
-import ArticleView from '../../../views/mainbar/articles-list/article-view.js';
+import ArticlesListItemView from '../../../views/mainbar/articles/articles-list-item-view.js';
 
 export default CollectionView.extend({
 
@@ -25,5 +25,5 @@ export default CollectionView.extend({
 	//
 
 	tagName: 'ol',
-	childView: ArticleView
+	childView: ArticlesListItemView
 });

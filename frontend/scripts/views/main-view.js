@@ -15,6 +15,7 @@
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
+import Author from '../models/author.js';
 import Articles from '../collections/articles.js';
 import Authors from '../collections/authors.js';
 import SplitView from '../views/layout/split-view.js';
@@ -105,9 +106,7 @@ export default SplitView.extend({
 				last_name: terms[terms.length - 1]
 			};
 		} else {
-			return {
-				last_name: query
-			}
+			return null;
 		}
 	},
 
@@ -158,7 +157,14 @@ export default SplitView.extend({
 	searchByName: function(query) {
 		switch (this.getSearchTarget()) {
 			case 'authors':
-				this.searchAuthorsByName(this.stringToName(query));
+				let name = this.stringToName(query);
+				if (name) {
+					this.searchAuthorsByName(name);
+				} else {
+					application.error({
+						message: "Search by name requires a first name and a last name."
+					});
+				}
 				break;
 		}
 	},
@@ -292,18 +298,30 @@ export default SplitView.extend({
 			// callbacks
 			//
 			success: (data) => {
-				/*
-				if (data.authors && data.authors.length > 0) {
-					let authors = new Authors(data.authors);
-					this.getChildView('mainbar').showAuthors(authors);
+				if (data.articles && data.articles.length > 0) {
+
+					// remove ids since they don't parse properly as integers
+					//
+					for (let i = 0; i < data.articles.length; i++) {
+						delete data.articles[i].id;
+					}
+
+					// parse author from data
+					//
+					let author = data.author;
+					author.articles = data.articles;
+					author = new Author(author, {
+						parse: true
+					});
+
+					this.getChildView('mainbar').showAuthor(author);
 				} else {
 					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
-						title: "No Authors Found.",
-						subtitle: "No authors were found that met your search criteria."
+						title: "No Articles Found.",
+						subtitle: "No articles were found by this author."
 					});
 				}
-				*/
 			},
 			error: (response, textStatus, errorThrown) => {
 				application.error({

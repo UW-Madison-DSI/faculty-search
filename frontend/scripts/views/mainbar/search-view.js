@@ -18,8 +18,9 @@
 import BaseView from '../../views/base-view.js';
 import Loadable from '../../views/behaviors/effects/loadable.js';
 import Droppable from '../../views/behaviors/drag-and-drop/droppable.js';
-import ArticlesListView from '../../views/mainbar/articles-list/articles-list-view.js';
-import AuthorsListView from '../../views/mainbar/authors-list/authors-list-view.js';
+import ArticlesListView from '../../views/mainbar/articles/articles-list-view.js';
+import AuthorsListView from '../../views/mainbar/authors/authors-list-view.js';
+import AuthorProfileView from '../../views/mainbar/authors/author-profile-view.js';
 
 export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 
@@ -172,6 +173,15 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.clearMessage();
 		this.showChildView('results', new AuthorsListView({
 			collection: authors
+		}));
+		this.showClearResultsButton();
+		this.showTextInput();
+	},
+
+	showAuthor: function(author) {
+		this.clearMessage();
+		this.showChildView('results', new AuthorProfileView({
+			model: author
 		}));
 		this.showClearResultsButton();
 		this.showTextInput();
