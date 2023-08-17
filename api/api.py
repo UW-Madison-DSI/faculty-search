@@ -87,7 +87,8 @@ class APIPlotData(BaseModel):
 
     x: list[float]
     y: list[float]
-    id: list[str]
+    id: list[str | int]
+    parent_id: list[int]
     label: list[str]
     type: list[str]
 
@@ -128,7 +129,7 @@ def get_author(query: APIAuthorQuery) -> dict[str, APIAuthor | list[dict]]:
 
 
 @app.post("/search_authors/")
-def search_authors(query: APIQuery) -> dict[str, list[APIAuthor] | APIPlotData]:
+def search_authors(query: APIQuery) -> dict[str, list[APIAuthor] | str]:
     """Search an author."""
 
     data = cached_resources["engine"].search_authors(
@@ -154,12 +155,13 @@ def search_authors(query: APIQuery) -> dict[str, list[APIAuthor] | APIPlotData]:
         return output
 
     # Add plot data
-    output["plot_data"] = APIPlotData(**data["plot_data"])
+    # TODO: Consider validating plot json with VEGA schema
+    output["plot_json"] = data["plot_json"]
     return output
 
 
 @app.post("/search_articles/")
-def search_articles(query: APIQuery) -> dict[str, list[APIArticle] | APIPlotData]:
+def search_articles(query: APIQuery) -> dict[str, list[APIArticle] | str]:
     """Search an article."""
 
     data = cached_resources["engine"].search_articles(
@@ -173,5 +175,5 @@ def search_articles(query: APIQuery) -> dict[str, list[APIArticle] | APIPlotData
         return output
 
     # Add plot data
-    output["plot_data"] = APIPlotData(**data["plot_data"])
+    output["plot_json"] = data["plot_json"]
     return output
