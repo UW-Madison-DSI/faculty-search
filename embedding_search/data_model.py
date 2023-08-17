@@ -10,7 +10,7 @@ class Article(BaseModel):
     publication_year: Optional[int] = None
     title: Optional[str] = None
     abstract: Optional[str] = None
-    cited_by: Optional[int] = None
+    cited_by: Optional[int] = 0
 
     @property
     def text(self) -> str:
@@ -67,7 +67,7 @@ class Author(BaseModel):
 
     def save(self, path: str) -> None:
         with open(path, "w") as f:
-            json.dump(self.dict(skip_defaults=True), f, indent=4)
+            json.dump(self.dict(skip_defaults=False), f, indent=4)
 
     @classmethod
     def load(cls, path: str) -> "Author":

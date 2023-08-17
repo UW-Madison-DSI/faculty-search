@@ -29,8 +29,9 @@ def get_faculties(unit_id: int, institution_id: int = 14) -> list[dict]:
 
 
 @cache
-def get_articles(id: int) -> list[dict]:
-    """Get all articles for a faculty member."""
+def get_author(id: int) -> dict:
+    """Get an author from the academic analytics API."""
+
     url = f"https://wisc.discovery.academicanalytics.com/api/people/{id}"
     response = requests.get(url)
-    return response.json()["articles"]
+    return response.json()

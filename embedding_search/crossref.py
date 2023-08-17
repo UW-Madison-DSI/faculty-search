@@ -1,6 +1,7 @@
 import re
 import requests
 from embedding_search.utils import timeout
+from time import sleep
 
 
 @timeout
@@ -34,6 +35,32 @@ def query_crossref(doi: str, fields: list[str]) -> dict | None:
         output[field] = value if value else None
 
     return output
+
+
+@timeout
+def batch_query_cited_by(dois: list[str], batch_size: int = 100) -> dict:
+    """Query crossref in batches."""
+
+    url = "https://api.crossref.org/works"
+    params = {"rows": batch_size, "filter": ",".join([f"doi:{doi}" for doi in dois])}
+
+    cursor = ""
+    next_cursor = "*"
+    cited_by = {}
+
+    while cursor != next_cursor:
+        cursor = next_cursor
+        params["cursor"] = cursor
+        response = requests.get(url, params=params)
+        data = response.json()
+
+        # Process the items in this page of results
+        for item in data["message"]["items"]:
+            cited_by[item["DOI"]] = item["is-referenced-by-count"]
+
+        next_cursor = data["message"].get("next-cursor")
+
+    return cited_by
 
 
 # Basic abstract cleaning functions

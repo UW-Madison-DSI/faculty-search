@@ -34,8 +34,12 @@ def create_article_collection() -> None:
     schema = CollectionSchema(
         fields=[
             FieldSchema(name="id", dtype=DataType.INT64, is_primary=True),
-            FieldSchema(name="doi", dtype=DataType.VARCHAR, max_length=256),
-            FieldSchema(name="author_id", dtype=DataType.INT64),
+            FieldSchema(
+                name="doi", dtype=DataType.VARCHAR, max_length=256
+            ),  # NOT UNIQUE: multiple authors can have the same article
+            FieldSchema(
+                name="author_id", dtype=DataType.INT64
+            ),  # Only 1-1 mapping for now
             FieldSchema(name="publication_year", dtype=DataType.INT32),
             FieldSchema(name="title", dtype=DataType.VARCHAR, max_length=2048),
             FieldSchema(name="abstract", dtype=DataType.VARCHAR, max_length=65535),
