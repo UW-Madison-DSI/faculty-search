@@ -6,11 +6,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 API_URL = os.getenv("API_URL", "http://localhost:8000")
+MILVUS_HOST = os.getenv("MILVUS_HOST", "localhost")
+MILVUS_PORT = os.getenv("MILVUS_PORT", "19530")
+MILVUS_ALIAS = os.getenv("MILVUS_ALIAS", "default")
 
 
 @pytest.fixture(scope="session", autouse=True)
 def connection():
-    connections.connect("default", host="milvus-standalone", port="19530")
+    connections.connect(MILVUS_ALIAS, host=MILVUS_HOST, port=MILVUS_PORT)
     print(utility.get_server_version())
 
 

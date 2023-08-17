@@ -8,7 +8,7 @@ def test_search_articles(search_articles_route):
 
     data = response.json()
     assert "articles" in data
-    assert "plot_data" not in data
+    assert "plot_json" not in data
 
     # Check length is less than or equal to top_k
     assert len(data["articles"]) <= 3
@@ -22,14 +22,10 @@ def test_search_articles_with_plot(search_articles_route):
 
     data = response.json()
     assert "articles" in data
-    assert "plot_data" in data
+    assert "plot_json" in data
 
-    plot_data = data["plot_data"]
-    assert isinstance(plot_data, dict)
-
-    # Check all lengths are the same
-    data_lengths = [len(data) for data in plot_data.values()]
-    assert len(set(data_lengths)) == 1
+    plot_json = data["plot_json"]
+    assert isinstance(plot_json, str)
 
 
 def test_search_authors(search_authors_route):
@@ -39,7 +35,7 @@ def test_search_authors(search_authors_route):
 
     data = response.json()
     assert "authors" in data
-    assert "plot_data" not in data
+    assert "plot_json" not in data
 
     # Check length is less than or equal to top_k
     assert len(data["authors"]) <= 3
@@ -52,14 +48,10 @@ def test_search_authors_with_plot(search_authors_route):
 
     data = response.json()
     assert "authors" in data
-    assert "plot_data" in data
+    assert "plot_json" in data
 
-    plot_data = data["plot_data"]
-    assert isinstance(plot_data, dict)
-
-    # Check all lengths are the same
-    data_lengths = [len(data) for data in plot_data.values()]
-    assert len(set(data_lengths)) == 1
+    plot_json = data["plot_json"]
+    assert isinstance(plot_json, str)
 
 
 def test_get_author(get_author_route):
