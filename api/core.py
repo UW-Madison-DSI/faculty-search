@@ -1,11 +1,17 @@
 import logging
 from functools import cache
+
+import altair as alt
 import numpy as np
-from sklearn.manifold import TSNE
-from pymilvus import Collection
+import pandas as pd
 from langchain.embeddings import OpenAIEmbeddings
+from pymilvus import Collection
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 
 VISUALIZATION_MAX_ARTICLES = 1000
+
+##### Basic functions #####
 
 
 def sort_dict_by_value(d: dict, reversed: bool = False) -> tuple[list, list]:
@@ -89,17 +95,59 @@ def get_authors_names(
     return [f"{author['first_name']} {author['last_name']}" for author in authors]
 
 
+##### Plotting #####
+
+
+def tsne_projection(
+    query_embedding: np.array, article_author_embeddings: np.array
+) -> dict:
+    """Get 2d projection with T-SNE."""
+
+    data = np.concatenate([[query_embedding], article_author_embeddings], axis=0)
+
+    perplexity = min(int(data.shape[0] / 10), 30)  # avoid error in small n
+    data_2d = TSNE(n_components=2, random_state=0, perplexity=perplexity).fit_transform(
+        data
+    )
+    return {"x": data_2d[:, 0].tolist(), "y": data_2d[:, 1].tolist()}
+
+
+def pca_projection(
+    query_embedding: np.array, article_author_embeddings: np.array
+) -> dict:
+    """Get 2d projection with PCA."""
+
+    data = np.concatenate([[query_embedding], article_author_embeddings], axis=0)
+    data_2d = PCA(n_components=2).fit_transform(data)
+    return {"x": data_2d[:, 0].tolist(), "y": data_2d[:, 1].tolist()}
+
+
 class PlotDataMaker:
     def __init__(
         self,
         author_collection: Collection,
         article_collection: Collection,
+        projection_function: callable,
     ) -> None:
         self.author_collection = author_collection
         self.article_collection = article_collection
+        self.projection_function = projection_function
 
-    def get_embeddings(self, dois: list[str]) -> tuple[list, list, list, np.array]:
-        """Get embeddings of articles by their DOIs."""
+    def get_embeddings(
+        self, dois: list[str]
+    ) -> tuple[list, list, list, list, np.array]:
+        """Get embeddings of articles by their DOIs.
+
+        Args:
+            dois (list[str]): List of article DOIs.
+
+        Returns:
+            ids (list): List of article DOIs or author ids.
+            parent_ids (list): List of parent ids (author ids).
+            labels (list): List of article titles or author names.
+            types (list): List of types (article or author).
+            embeddings (np.array): Embeddings of articles or authors (centroid).
+        """
 
         articles = self.article_collection.query(
             expr=f"doi in {dois}",
@@ -133,43 +181,61 @@ class PlotDataMaker:
         author_centroid = np.stack(author_vectors, axis=0)
 
         # Package articles and authors embeddings with metadata
-        return_dois = [article["doi"] for article in articles]
-        ids = return_dois + author_ids
+        ids = [article["doi"] for article in articles] + author_ids
+
+        parent_ids = [article["author_id"] for article in articles] + author_ids
 
         author_names = get_authors_names(author_ids, self.author_collection)
         labels = articles_titles + author_names
 
-        types = ["article"] * len(return_dois) + ["author"] * len(author_ids)
+        types = ["article"] * len(articles) + ["author"] * len(author_ids)
 
         embeddings = np.concatenate([articles_embeddings, author_centroid], axis=0)
 
-        return ids, labels, types, embeddings
-
-    def get_2d_projection(
-        self, query_embedding: np.array, article_author_embeddings: np.array
-    ) -> dict:
-        """Get 2d projection with T-SNE.
-
-        Note. Returned coordinates in the first element are the query.
-        """
-
-        data = np.concatenate([[query_embedding], article_author_embeddings], axis=0)
-
-        perplexity = min(int(data.shape[0] / 10), 30)  # avoid error in small n
-        data_2d = TSNE(
-            n_components=2, random_state=0, perplexity=perplexity
-        ).fit_transform(data)
-        return {"x": data_2d[:, 0].tolist(), "y": data_2d[:, 1].tolist()}
+        return ids, parent_ids, labels, types, embeddings
 
     def make_plot_data(self, query_embedding: np.array, dois: list[str]) -> dict:
         """Convert data to a dictionary that can be consumed by Pandas."""
+        ids, parent_ids, label, types, article_author_embeddings = self.get_embeddings(
+            dois
+        )
 
-        ids, label, types, article_author_embeddings = self.get_embeddings(dois)
-        output = self.get_2d_projection(query_embedding, article_author_embeddings)
+        # Obtain x, y
+        output = self.projection_function(query_embedding, article_author_embeddings)
+
+        # Add metadata
         output["id"] = ["query"] + ids
+        output["parent_id"] = [0] + parent_ids
         output["label"] = [None] + label  # Inject proper label later
         output["type"] = ["query"] + types
+        logging.debug(f"fn: make_plot_data, {output=}")
         return output
+
+
+def plot_2d_projection(data: dict, width: int = 800, height: int = 600) -> str:
+    """Plot 2d projection of embeddings."""
+
+    df = pd.DataFrame(data)
+    df["size"] = df.type.map({"query": 100, "author": 10, "article": 3})
+
+    selector = alt.selection_point(fields=["parent_id"])
+    chart = (
+        alt.Chart(df)
+        .mark_circle()
+        .encode(
+            x="x:Q",
+            y="y:Q",
+            color="type",
+            size=alt.Size("size", legend=None),
+            opacity=alt.condition(selector, alt.value(0.8), alt.value(0.2)),
+            tooltip=["label", "id", "parent_id"],
+        )
+        .add_params(selector)
+        .properties(width=width, height=height)
+        .interactive()
+    )
+
+    return chart.to_json()
 
 
 class Engine:
@@ -188,7 +254,11 @@ class Engine:
         # load collections into memory
         self.author_collection.load()
         self.article_collection.load()
-        self.plot_maker = PlotDataMaker(self.author_collection, self.article_collection)
+        self.plot_maker = PlotDataMaker(
+            self.author_collection,
+            self.article_collection,
+            projection_function=pca_projection,
+        )
 
     @cache
     def embed(self, text: str) -> list[float]:
@@ -229,10 +299,9 @@ class Engine:
 
         dois = [result["doi"] for result in more_results]
         plot_data = self.plot_maker.make_plot_data(query_embedding, dois)
-
         # Inject the query back into the label in plot data
         plot_data["label"][0] = query
-        return {"articles": results, "plot_data": plot_data}
+        return {"articles": results, "plot_json": plot_2d_projection(plot_data)}
 
     def search_authors(
         self,
@@ -298,8 +367,8 @@ class Engine:
         if not with_plot:
             return output
 
-        # Add plot data
-        output["plot_data"] = results["plot_data"]
+        # Add plot json
+        output["plot_json"] = results["plot_json"]
         return output
 
     def get_author(self, first_name: str, last_name: str) -> dict:
