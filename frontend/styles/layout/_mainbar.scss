@@ -58,12 +58,22 @@ $message-color: rgba(#808080, 10%);
 				width: 100%;
 				overflow: auto;
 
-				li {
-					i {
-						margin-left: 10px;
+				.list {
+					li {
+						padding: 10px;
+						border-radius: 10px;
+						margin-top: 0;
+
+						i {
+							margin-left: 10px;
+
+							&:hover {
+								text-decoration: underline;
+							}
+						}
 
 						&:hover {
-							text-decoration: underline;
+							background-color: #f0f0f0;
 						}
 					}
 				}

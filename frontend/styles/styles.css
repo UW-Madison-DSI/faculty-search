@@ -1276,11 +1276,19 @@ span.highlighted {
   width: 100%;
   overflow: auto;
 }
-.mainbar .search .content .results li i {
+.mainbar .search .content .results .list li {
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 0;
+}
+.mainbar .search .content .results .list li i {
   margin-left: 10px;
 }
-.mainbar .search .content .results li i:hover {
+.mainbar .search .content .results .list li i:hover {
   text-decoration: underline;
+}
+.mainbar .search .content .results .list li:hover {
+  background-color: #f0f0f0;
 }
 .mainbar .search .content .results .tabbed-content {
   display: flex;
