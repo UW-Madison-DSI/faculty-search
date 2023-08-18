@@ -96,18 +96,21 @@ def download_one_author(id: int) -> None:
         logging.info(f"Skipping {author.id} because they have no articles.")
 
 
-def download_authors(overwrite: bool = False) -> None:
+def download_authors(overwrite: bool = False, resume_from: int = 0) -> None:
     """Download authors from ORCID and their papers from CrossRef."""
 
     downloaded = [] if overwrite else list_downloaded_authors()
 
     units = get_units()
+    units = units[resume_from:]
     logging.info(f"Found {len(units)} units.")
 
     for i, unit in enumerate(units):
         faculties = get_faculties(unit["unitId"])
         for j, faculty in enumerate(faculties):
-            print(f"Processing unit {i+1}/{len(units)}; faculty {j+1}/{len(faculties)}")
+            print(
+                f"Processing unit {i+1}/{len(units)}; faculty {j+1}/{len(faculties)}: {faculty['id']}"
+            )
             if int(faculty["id"]) in downloaded:
                 print(f"Skipping {faculty['id']} because it's already downloaded.")
                 continue
@@ -141,9 +144,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--push-to-bucket", action="store_true")
+    parser.add_argument("--resume-from", type=int, default=0)
 
     args = parser.parse_args()
-    download_authors(overwrite=args.overwrite)
+    download_authors(overwrite=args.overwrite, resume_from=args.resume_from)
 
     if args.push_to_bucket:
         upload_blob(bucket_name="community-search-raw", source_folder=AUTHORS_DIR)
