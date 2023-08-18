@@ -174,6 +174,7 @@ export default BaseView.extend({
 		//
 		if (kind == 'name') {
 			this.$el.find('.limit').hide();
+			this.setValue('target', 'authors');
 		} else {
 			this.$el.find('.limit').show();
 		}

@@ -908,19 +908,14 @@ input[type=range]::-moz-range-thumb {
   position: relative;
 }
 .nav-tabs > li > a {
-  width: 50px;
   text-align: center;
-  padding: 10px 0;
-}
-.nav-tabs > li > a i {
-  font-size: 20px;
+  white-space: nowrap;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover {
   background: white;
-  border-color: transparent;
 }
-.nav-tabs > li.active .badge {
-  background: #f7060f;
+.nav-tabs > li.active > a i, .nav-tabs > li.active > a:hover i {
+  color: #c5050c;
 }
 .nav-tabs > li:not(.active) > a i {
   color: #b3b3b3;
@@ -930,12 +925,6 @@ input[type=range]::-moz-range-thumb {
 }
 .nav-tabs > li:not(.active) > a:hover i {
   color: grey;
-}
-.nav-tabs > li .badge {
-  position: absolute;
-  top: 1px;
-  right: 3px;
-  pointer-events: none;
 }
 
 /******************************************************************************\
@@ -1278,8 +1267,14 @@ span.highlighted {
 .mainbar .search .content {
   flex-grow: 1;
   position: relative;
+  padding: 20px;
   overflow: auto;
-  padding: 30px;
+}
+.mainbar .search .content .results {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
 }
 .mainbar .search .content .results li i {
   margin-left: 10px;
@@ -1287,8 +1282,22 @@ span.highlighted {
 .mainbar .search .content .results li i:hover {
   text-decoration: underline;
 }
+.mainbar .search .content .results .tabbed-content {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+}
+.mainbar .search .content .results .tabbed-content .tab-content {
+  overflow: auto;
+}
 .mainbar .search .content .results .author h1 {
   text-align: center;
+}
+.mainbar .search .content .plot #vega {
+  width: 100%;
+  height: 100%;
 }
 .mainbar .search .content .message.overlay {
   display: flex;

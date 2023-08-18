@@ -142,13 +142,15 @@ export default SplitView.extend({
 			case 'authors':
 				this.searchAuthors({
 					query: query,
-					top_k: this.getSearchLimit()
+					top_k: this.getSearchLimit(),
+					with_plot: true
 				});
 				break;
 			case 'articles':
 				this.searchArticles({
 					query: query,
-					top_k: this.getSearchLimit()
+					top_k: this.getSearchLimit(),
+					with_plot: true
 				});
 				break;
 		}
@@ -270,7 +272,7 @@ export default SplitView.extend({
 			success: (data) => {
 				if (data.articles && data.articles.length > 0) {
 					let articles = new Articles(data.articles);
-					this.getChildView('mainbar').showArticles(articles);
+					this.getChildView('mainbar').showArticles(articles, JSON.parse(data.plot_json));
 				} else {
 					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',

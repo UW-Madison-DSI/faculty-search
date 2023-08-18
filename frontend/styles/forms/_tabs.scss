@@ -28,23 +28,17 @@
 		position: relative;
 
 		> a {
-			width: 50px;
 			text-align: center;
-			padding: 10px 0;
-
-			i {
-				font-size: 20px;
-			}
+			white-space: nowrap;
 		}
 
 		&.active {
 			> a, > a:hover {
 				background: colors.$very-light-grey;
-				border-color: transparent;
-			}
 
-			.badge {
-				background: colors.$select-color;
+				i {
+					color: branding.$primary-color;
+				}
 			}
 		}
 
@@ -62,13 +56,6 @@
 					}
 				}
 			}
-		}
-
-		.badge {
-			position: absolute;
-			top: 1px;
-			right: 3px;
-			pointer-events: none;
 		}
 	}
 }

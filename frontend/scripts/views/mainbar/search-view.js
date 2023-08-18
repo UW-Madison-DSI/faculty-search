@@ -18,7 +18,7 @@
 import BaseView from '../../views/base-view.js';
 import Loadable from '../../views/behaviors/effects/loadable.js';
 import Droppable from '../../views/behaviors/drag-and-drop/droppable.js';
-import ArticlesListView from '../../views/mainbar/articles/articles-list-view.js';
+import ArticlesView from '../../views/mainbar/articles/articles-view.js';
 import AuthorsListView from '../../views/mainbar/authors/authors-list-view.js';
 import AuthorProfileView from '../../views/mainbar/authors/author-profile-view.js';
 
@@ -31,8 +31,8 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	className: 'search',
 	template: template(`
 		<div class="content">
-			<div class="results"></div>
 			<div class="message overlay"></div>
+			<div class="results"></div>
 		</div>
 		<div class="search-bar">
 			<div class="input">
@@ -159,10 +159,11 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.addTooltips();
 	},
 
-	showArticles: function(articles) {
+	showArticles: function(articles, json) {
 		this.clearMessage();
-		this.showChildView('results', new ArticlesListView({
-			collection: articles
+		this.showChildView('results', new ArticlesView({
+			collection: articles,
+			json: json
 		}));
 		this.showClearResultsButton();
 		this.showTextInput();
