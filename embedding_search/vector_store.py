@@ -28,7 +28,7 @@ def get_author(id: str) -> Author:
     return Author.load(AUTHORS_DIR / f"{id}.json")
 
 
-def create_article_collection() -> None:
+def create_article_collection() -> Collection:
     """Create a collection named articles in Milvus."""
 
     schema = CollectionSchema(
@@ -50,10 +50,10 @@ def create_article_collection() -> None:
         auto_id=True,
     )
 
-    Collection(name="articles", schema=schema, using="default")
+    return Collection(name="articles", schema=schema)
 
 
-def create_author_collection() -> None:
+def create_author_collection() -> Collection:
     """Create a collection named authors in Milvus."""
 
     schema = CollectionSchema(
@@ -68,10 +68,10 @@ def create_author_collection() -> None:
         description="Authors",
     )
 
-    Collection(name="authors", schema=schema, using="default")
+    return Collection(name="authors", schema=schema)
 
 
-def make_author_data_package(author_id: str) -> None:
+def make_author_data_package(author_id: str) -> dict:
     """Convert into data package that fits Milvus schema."""
 
     author = get_author(author_id)
@@ -122,11 +122,8 @@ def init_milvus() -> None:
 
     # Create collections
     logging.info("Creating collections...")
-    create_article_collection()
-    create_author_collection()
-
-    author_collection = Collection("authors")
-    article_collection = Collection("articles")
+    article_collection = create_article_collection()
+    author_collection = create_author_collection()
 
     # Create index setting
     index_params = {
