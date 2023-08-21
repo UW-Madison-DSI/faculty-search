@@ -1,7 +1,7 @@
 import os
 import logging
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, validator
 from dotenv import load_dotenv
 from langchain.embeddings import OpenAIEmbeddings
@@ -121,10 +121,14 @@ def root():
 @app.post("/get_author/")
 def get_author(query: APIAuthorQuery) -> dict[str, APIAuthor | list[dict]]:
     """Search author by name."""
-    results = cached_resources["engine"].get_author(
-        first_name=query.first_name, last_name=query.last_name
-    )
-    logging.debug(results)
+
+    try:
+        results = cached_resources["engine"].get_author(
+            first_name=query.first_name, last_name=query.last_name
+        )
+        logging.debug(results)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Author not found.")
     return results
 
 

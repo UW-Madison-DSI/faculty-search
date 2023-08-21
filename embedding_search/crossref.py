@@ -37,8 +37,7 @@ def query_crossref(doi: str, fields: list[str]) -> dict | None:
     return output
 
 
-@timeout
-def batch_query_cited_by(dois: list[str], batch_size: int = 100) -> dict:
+def batch_query_cited_by(dois: list[str], batch_size: int = 30) -> dict:
     """Query crossref in batches."""
 
     url = "https://api.crossref.org/works"
@@ -59,6 +58,7 @@ def batch_query_cited_by(dois: list[str], batch_size: int = 100) -> dict:
             cited_by[item["DOI"]] = item["is-referenced-by-count"]
 
         next_cursor = data["message"].get("next-cursor")
+        sleep(1)
 
     return cited_by
 

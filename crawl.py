@@ -1,37 +1,13 @@
 import logging
-import os
-from pathlib import Path
-from dotenv import load_dotenv
 from langchain.embeddings import OpenAIEmbeddings
-from embedding_search.community_map import download_datafile
 from embedding_search.crossref import batch_query_cited_by
 from embedding_search.academic_analytics import get_units, get_faculties, get_author
 from embedding_search.data_model import Article, Author
 from tqdm import tqdm
-from google.cloud import storage
-from datetime import datetime
+from embedding_search.utils import AUTHORS_DIR, list_downloaded_authors, upload_blob
 import argparse
 
-load_dotenv()
-
-AUTHORS_DIR = os.getenv("AUTHORS_DIR")
-AUTHORS_DIR = Path(AUTHORS_DIR)
-print(f"{AUTHORS_DIR=}")
-
 logging.basicConfig(filename="main.log", level=logging.INFO)
-
-if not AUTHORS_DIR:
-    raise ValueError("AUTHORS_DIR must be set in .env")
-
-COMMUNITY_DF = download_datafile()
-DEBUG = int(os.getenv("DEBUG", 0))
-
-
-def list_downloaded_authors() -> list[int]:
-    """List downloaded authors."""
-
-    downloaded = AUTHORS_DIR.glob("*.json")
-    return [int(author.stem) for author in downloaded]
 
 
 def append_embeddings(author: Author) -> Author:
@@ -119,23 +95,6 @@ def download_authors(overwrite: bool = False, resume_from: int = 0) -> None:
             except Exception as e:
                 print(f"Error downloading {faculty['id']}: {e}")
                 continue
-
-
-def upload_blob(
-    bucket_name: str, source_folder: str, destination_folder: str | None = None
-):
-    if destination_folder is None:
-        destination_folder = datetime.today().strftime("%Y-%m-%d")
-    storage_client = storage.Client()
-    bucket = storage_client.get_bucket(bucket_name)
-    source_path = Path(source_folder)
-
-    for local_path in source_path.rglob("*"):
-        if local_path.is_file():
-            blob_path = Path(destination_folder, local_path.relative_to(source_folder))
-            blob = bucket.blob(str(blob_path))
-            blob.upload_from_filename(str(local_path))
-            print(f"{local_path} uploaded to {blob_path}.")
 
 
 def main():

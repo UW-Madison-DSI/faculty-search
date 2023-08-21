@@ -10,7 +10,11 @@ class Article(BaseModel):
     publication_year: Optional[int] = None
     title: Optional[str] = None
     abstract: Optional[str] = None
-    cited_by: Optional[int] = 0
+    cited_by: Optional[int] = None
+
+    @validator("doi", pre=True)
+    def doi_lower_case(cls, v):
+        return v.lower()
 
     @property
     def text(self) -> str:
