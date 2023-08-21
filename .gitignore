@@ -3,7 +3,6 @@ pdfs/
 .DS_Store
 data/
 volumes/
-authors/
 .streamlit/secrets.toml
 tmp/
 authors-bak/
