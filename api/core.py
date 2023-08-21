@@ -228,7 +228,7 @@ def plot_2d_projection(data: dict, width: int = 800, height: int = 600) -> str:
             color="type",
             size=alt.Size("size", legend=None),
             opacity=alt.condition(selector, alt.value(0.8), alt.value(0.2)),
-            tooltip=["label", "id", "parent_id"],
+            tooltip=["label:N", "id:N", "parent_id"],
         )
         .add_params(selector)
         .properties(width=width, height=height)
