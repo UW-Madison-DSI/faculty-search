@@ -113,6 +113,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	setSearchKind: function(kind) {
 		this.kind = kind;
 		this.droppable = (kind == 'pdf');
+		this.update();
 	},
 
 	setFiles: function(files) {
@@ -120,7 +121,9 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 
 		// set file input
 		//
-		fileInput.files = files;
+		if (fileInput) {
+			fileInput.files = files;
+		}
 
 		// set input filename (required for Safari)
 		//
@@ -165,6 +168,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			collection: authors,
 			json: json
 		}));
+		this.showResults();
 		this.showClearResultsButton();
 		this.showTextInput();
 	},
@@ -175,6 +179,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			collection: articles,
 			json: json
 		}));
+		this.showResults();
 		this.showClearResultsButton();
 		this.showTextInput();
 	},
@@ -184,6 +189,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.showChildView('results', new AuthorProfileView({
 			model: author
 		}));
+		this.showResults();
 		this.showClearResultsButton();
 		this.showTextInput();
 	},
@@ -200,6 +206,14 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			this.$el.find('.search-bar .text').show();
 			this.$el.find('.search-bar .submit').show();
 		}
+	},
+
+	showResults: function() {
+		this.$el.find('.results').show();
+	},
+
+	hideResults: function() {
+		this.$el.find('.results').hide();
 	},
 
 	hideTextInput: function() {
@@ -220,12 +234,18 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		//
 		this.$el.find('.results').empty();
 		this.$el.find('.search-bar .text').empty();
+		this.update();
+	},
+
+	update: function() {
 		switch (this.kind) {
 			case 'pdf':
+				this.hideResults();
 				this.showHtmlMessage(this.pdfUploadMessage);
 				this.hideTextInput();
 				break;
 			default:
+				this.hideResults();
 				this.showMessage(this.message);
 				this.showTextInput();
 				break;
@@ -348,5 +368,15 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		// change file input
 		//
 		this.setFiles(event.originalEvent.dataTransfer.files);
+	},
+
+	//
+	// window event handling methods
+	//
+
+	onResize: function() {
+		if (this.hasChildView('results') && this.getChildView('results').onResize) {
+			this.getChildView('results').onResize();
+		}
 	}
 }));

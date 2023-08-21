@@ -60,6 +60,12 @@ export default Marionette.Application.extend(_.extend({}, Alertable, {
 			}, false);
 		}
 
+		// listen for window resize
+		//
+		$(window).on('resize', (event) => {
+			this.onResize(event);
+		});
+
 		// create routers
 		//
 		this.router = new Router();
@@ -115,6 +121,17 @@ export default Marionette.Application.extend(_.extend({}, Alertable, {
 				contentView: view,
 				nav: options? options.nav : undefined
 			}));
+		}
+	},
+
+	//
+	// window event handling methods
+	//
+
+	onResize: function(event) {
+		let view = this.getView();
+		if (view && view.onResize) {
+			view.onResize(event);
 		}
 	}
 }));

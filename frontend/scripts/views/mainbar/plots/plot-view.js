@@ -27,17 +27,38 @@ export default BaseView.extend({
 
 	template: template(``),
 
+	//
+	// getting methods
+	//
+
+	getWidth: function() {
+		let $el = this.$el;
+		while ($el && $el.width() == 0) {
+			$el = $el.parent();
+		}
+		return $el? $el.width() : undefined;
+	},
+
+	//
+	// rendering methods
+	//
+
 	onAttach: function() {
-		this.plot();
+
+		// wait for layout to finish
+		//
+		window.setTimeout(() => {
+			this.plot();
+		}, 100);
 	},
 
 	plot: function() {
-		let width = this.$el.parent().parent().parent().width();
+		let width = this.getWidth();
 
 		vegaEmbed("#vega", this.options.json, {
 				theme: "dark",
 				actions: false,
-				width: width
+				width: width - 125
 			})
 			.then(function (result) {})
 			.catch(console.error);

@@ -54,8 +54,8 @@ $message-color: rgba(#808080, 10%);
 
 			.results {
 				position: relative;
-				height: 100%;
 				width: 100%;
+				height: 100%;
 				overflow: auto;
 
 				.list {
@@ -83,10 +83,23 @@ $message-color: rgba(#808080, 10%);
 					position: absolute;
 					flex-direction: column;
 					width: 100%;
+					height: 100%;
 					max-height: 100%;
 
 					.tab-content {
+						width: 100%;
+						height: 100%;
 						overflow: auto;
+
+						.plot {
+							width: 100%;
+							height: 100%;
+
+							#vega {
+								width: 100%;
+								height: 100%;
+							}
+						}
 					}
 				}
 
@@ -94,13 +107,6 @@ $message-color: rgba(#808080, 10%);
 					h1 {
 						text-align: center;
 					}
-				}
-			}
-
-			.plot {
-				#vega {
-					width: 100%;
-					height: 100%;
 				}
 			}
 

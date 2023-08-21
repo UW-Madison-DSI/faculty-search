@@ -63,10 +63,10 @@ export default BaseView.extend({
 		<div class="search-for form-group">
 			<label class="control-label">Search For</label>
 			<div class="controls">
-				<div class="radio-inline">
+				<div class="authors radio-inline">
 					<label><input type="radio" name="search-for" value="authors" checked>Authors</label>
 				</div>
-				<div class="radio-inline">
+				<div class="articles radio-inline">
 					<label><input type="radio" name="search-for" value="articles">Articles</label>
 				</div>
 			</div>
@@ -173,9 +173,11 @@ export default BaseView.extend({
 		// hide show limit
 		//
 		if (kind == 'name') {
+			this.$el.find('.articles').hide();
 			this.$el.find('.limit').hide();
 			this.setValue('target', 'authors');
 		} else {
+			this.$el.find('.articles').show();
 			this.$el.find('.limit').show();
 		}
 	},

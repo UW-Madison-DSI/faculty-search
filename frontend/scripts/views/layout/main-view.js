@@ -62,5 +62,15 @@ export default BaseView.extend({
 		if (this.options.contentView) {
 			this.showChildView('content', this.options.contentView);
 		}
+	},
+
+	//
+	// window event handling methods
+	//
+
+	onResize: function() {
+		if (this.hasChildView('content')) {
+			this.getChildView('content').onResize();
+		}
 	}
 });

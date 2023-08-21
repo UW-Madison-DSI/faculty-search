@@ -85,9 +85,10 @@ export default SplitView.extend({
 	},
 
 	getSearchParams: function() {
+		let kind = this.getSearchKind();
 		let params = this.getChildView('sidebar').getSearchParams();
 		let query = this.getSearchQuery();
-		if (query) {
+		if (query && kind != 'pdf') {
 			params.query = query;
 		}
 		return params;

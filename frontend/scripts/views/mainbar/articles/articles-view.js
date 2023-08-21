@@ -76,6 +76,9 @@ export default BaseView.extend({
 
 	onRender: function() {
 		this.showList();
+	},
+
+	onAttach: function() {
 		this.showPlot();
 	},
 
@@ -89,5 +92,13 @@ export default BaseView.extend({
 		this.showChildView('plot', new PlotView({
 			json: this.options.json
 		}));
+	},
+
+	//
+	// window event handling methods
+	//
+
+	onResize: function() {
+		this.getChildView('plot').onResize();
 	}
 });
