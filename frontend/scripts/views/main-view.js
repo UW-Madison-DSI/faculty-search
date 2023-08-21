@@ -242,7 +242,7 @@ export default SplitView.extend({
 			success: (data) => {
 				if (data.authors && data.authors.length > 0) {
 					let authors = new Authors(data.authors);
-					this.getChildView('mainbar').showAuthors(authors);
+					this.getChildView('mainbar').showAuthors(authors, JSON.parse(data.plot_json));
 				} else {
 					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
@@ -316,7 +316,7 @@ export default SplitView.extend({
 						parse: true
 					});
 
-					this.getChildView('mainbar').showAuthor(author);
+					this.getChildView('mainbar').showAuthorProfile(author);
 				} else {
 					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
