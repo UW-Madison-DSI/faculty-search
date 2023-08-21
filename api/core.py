@@ -22,13 +22,15 @@ def sort_dict_by_value(d: dict, reversed: bool = False) -> tuple[list, list]:
     return sorted_keys, sorted_values
 
 
-def convert_article_result(result) -> dict:
+def convert_article_result(result: dict) -> dict:
     """Convert an article result to proper distance and flatten."""
 
     flat_result = {}
     # CAUTION: result.distance is inner-product, i.e., similarity
     flat_result["distance"] = 1 - result.distance
-    for field in ["title", "author_id", "doi"]:
+
+    remaining_fields = set(result.entity.fields) - set(["distance"])
+    for field in remaining_fields:
         flat_result[field] = result.entity.get(field)
     return flat_result
 
@@ -49,11 +51,13 @@ def get_author_by_name(
     return authors[0]
 
 
-def get_author_articles(author_id: int, article_collection: Collection) -> dict:
+def get_author_articles(
+    author_id: int, since_year: int, article_collection: Collection
+) -> dict:
     """Get all articles from author with author_id."""
 
     articles = article_collection.query(
-        expr=f"author_id == {author_id}",
+        expr=f"author_id == {author_id} and publication_year >= {since_year}",
         output_fields=["id", "title", "publication_year"],
     )
 
@@ -270,6 +274,7 @@ class Engine:
         query: str,
         top_k: int,
         distance_threshold: float = 0.2,
+        since_year: int = 1900,
         with_plot: bool = False,
     ) -> dict:
         """Search for articles by a query."""
@@ -278,11 +283,12 @@ class Engine:
 
         def _search(limit: int) -> list:
             raws = self.article_collection.search(
+                expr=f"publication_year >= {since_year}",
                 data=[query_embedding],
                 anns_field="embedding",
                 param={"metric_type": "IP", "params": {"nprobe": 16}},
                 limit=limit,
-                output_fields=["doi", "title", "author_id"],
+                output_fields=["doi", "title", "publication_year", "author_id"],
             )[0]
 
             return [convert_article_result(raw) for raw in raws]
@@ -308,10 +314,13 @@ class Engine:
         query: str,
         top_k: int,
         n: int = 500,
+        m: int = 5,
+        since_year: int = 1900,
         distance_threshold: float = 0.2,
         pow: float = 3.0,
         with_plot: bool = False,
-    ) -> tuple[list[int], list[float]]:
+        with_evidence: bool = False,
+    ) -> dict:
         """Search for author by a query.
         
         Each author is given by a score, defined as:
@@ -332,6 +341,7 @@ class Engine:
             query (str): Query string.
             top_k (int, optional): Number of authors to return. 
             n (int, optional): Number of articles $n$ in the weighting pool. Defaults to 500.
+            m (int, optional): Maximum number of articles per author. Defaults to 10.
             distance_threshold (float, optional): Distance threshold. Defaults to 0.2.
             pow (float, optional): Power in weighting function $p$. Defaults to 3.0.
 
@@ -340,18 +350,37 @@ class Engine:
         """
 
         author_scores: dict[str, float] = {}
+        author_article_counts: dict[str, int] = {}
         results = self.search_articles(
-            query, top_k=n, distance_threshold=distance_threshold, with_plot=with_plot
+            query,
+            top_k=n,
+            distance_threshold=distance_threshold,
+            since_year=since_year,
+            with_plot=with_plot,
         )
 
         # Calculate author scores by their relevant articles
+
         for article in results["articles"]:
             author_id = article["author_id"]
+
+            # Skip if author has reached max articles `m`
+            counted_articles = author_article_counts.get(author_id, 0)
+            if counted_articles >= m:
+                continue
+
+            # Add article score to author
             article["weight"] = (1 - article["distance"]) ** pow
             author_scores[author_id] = (
                 author_scores.get(author_id, 0) + article["weight"]
             )
 
+            # Track number of articles per author
+            author_article_counts[author_id] = (
+                author_article_counts.get(author_id, 0) + 1
+            )
+
+        logging.debug(f"{author_article_counts=}")
         logging.debug(f"{author_scores=}")
         top_ids, top_scores = sort_dict_by_value(author_scores, reversed=True)
         top_ids, top_scores = top_ids[:top_k], top_scores[:top_k]
@@ -364,14 +393,19 @@ class Engine:
                 "scores": top_scores,
             }
         }
-        if not with_plot:
-            return output
 
         # Add plot json
-        output["plot_json"] = results["plot_json"]
+        if with_plot:
+            output["plot_json"] = results["plot_json"]
+
+        if with_evidence:
+            output["evidence"] = results["articles"]
+
         return output
 
-    def get_author(self, first_name: str, last_name: str) -> dict:
+    def get_author(
+        self, first_name: str, last_name: str, since_year: int = 1900
+    ) -> dict:
         """Get author details from Milvus."""
 
         output = {}
@@ -379,6 +413,8 @@ class Engine:
             first_name, last_name, self.author_collection
         )
         output["articles"] = get_author_articles(
-            output["author"]["id"], self.article_collection
+            author_id=output["author"]["id"],
+            since_year=since_year,
+            article_collection=self.article_collection,
         )
         return output

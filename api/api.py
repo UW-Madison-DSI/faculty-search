@@ -1,5 +1,6 @@
 import os
 import logging
+from datetime import datetime
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, validator
@@ -48,11 +49,13 @@ app.add_middleware(
 
 
 # IO Models
-class APIQuery(BaseModel):
+class SearchArticlesInputs(BaseModel):
     """Query data model."""
 
     query: str
     top_k: int = 3
+    distance_threshold: float = 0.2
+    since_year: int = 1900
     with_plot: bool = False
 
     @validator("query")
@@ -69,8 +72,80 @@ class APIQuery(BaseModel):
             raise ValueError("top_k must be positive")
         return v
 
+    @validator("distance_threshold")
+    def distance_threshold_must_be_zero_to_one(cls, v):
+        """Validate that distance_threshold is between 0 and 1."""
+        if v < 0 or v > 1:
+            raise ValueError("distance_threshold must be between 0 and 1")
+        return v
 
-class APIAuthorQuery(BaseModel):
+    @validator("since_year")
+    def since_year_must_be_past(cls, v):
+        """Validate that since_year is in the past."""
+        current_year = datetime.now().year
+        if v > current_year:
+            raise ValueError("since_year must be in the past")
+        return v
+
+
+class SearchAuthorsInputs(BaseModel):
+    """Query data model."""
+
+    query: str
+    top_k: int = 3
+    n: int = 500
+    m: int = 5
+    since_year: int = 1900
+    distance_threshold: float = 0.2
+    pow: float = 3.0
+    with_plot: bool = False
+    with_evidence: bool = False
+
+    @validator("query")
+    def query_must_not_be_empty(cls, v):
+        """Validate that query is not empty."""
+        if not v.strip():
+            raise ValueError("query must not be empty")
+        return v
+
+    @validator("top_k")
+    def top_k_must_be_positive(cls, v):
+        """Validate that top_k is positive."""
+        if v <= 0:
+            raise ValueError("top_k must be positive")
+        return v
+
+    @validator("n")
+    def n_must_be_positive(cls, v):
+        """Validate that n is positive."""
+        if v <= 0:
+            raise ValueError("n must be positive")
+        return v
+
+    @validator("m")
+    def m_must_be_positive(cls, v):
+        """Validate that m is positive."""
+        if v <= 0:
+            raise ValueError("m must be positive")
+        return v
+
+    @validator("since_year")
+    def since_year_must_be_past(cls, v):
+        """Validate that since_year is in the past."""
+        current_year = datetime.now().year
+        if v > current_year:
+            raise ValueError("since_year must be in the past")
+        return v
+
+    @validator("distance_threshold")
+    def distance_threshold_must_be_zero_to_one(cls, v):
+        """Validate that distance_threshold is between 0 and 1."""
+        if v < 0 or v > 1:
+            raise ValueError("distance_threshold must be between 0 and 1")
+        return v
+
+
+class GetAuthorInput(BaseModel):
     first_name: str
     last_name: str
 
@@ -119,7 +194,7 @@ def root():
 
 
 @app.post("/get_author/")
-def get_author(query: APIAuthorQuery) -> dict[str, APIAuthor | list[dict]]:
+def get_author(query: GetAuthorInput) -> dict[str, APIAuthor | list[dict]]:
     """Search author by name."""
 
     try:
@@ -133,12 +208,12 @@ def get_author(query: APIAuthorQuery) -> dict[str, APIAuthor | list[dict]]:
 
 
 @app.post("/search_authors/")
-def search_authors(query: APIQuery) -> dict[str, list[APIAuthor] | str]:
+def search_authors(
+    query: SearchAuthorsInputs,
+) -> dict[str, list[APIAuthor] | str | list]:
     """Search an author."""
 
-    data = cached_resources["engine"].search_authors(
-        query=query.query, top_k=query.top_k, with_plot=query.with_plot
-    )
+    data = cached_resources["engine"].search_authors(**query.dict())
 
     # Unpack data
     author_ids, scores = data["authors"]["author_ids"], data["authors"]["scores"]
@@ -155,29 +230,25 @@ def search_authors(query: APIQuery) -> dict[str, list[APIAuthor] | str]:
     output = {}
     output["authors"] = authors
 
-    if not query.with_plot:
-        return output
+    if query.with_plot:
+        output["plot_json"] = data["plot_json"]
 
-    # Add plot data
-    # TODO: Consider validating plot json with VEGA schema
-    output["plot_json"] = data["plot_json"]
+    if query.with_evidence:
+        output["evidence"] = data["evidence"]
+
     return output
 
 
 @app.post("/search_articles/")
-def search_articles(query: APIQuery) -> dict[str, list[APIArticle] | str]:
+def search_articles(query: SearchArticlesInputs) -> dict[str, list[APIArticle] | str]:
     """Search an article."""
 
-    data = cached_resources["engine"].search_articles(
-        query=query.query, top_k=query.top_k, with_plot=query.with_plot
-    )
+    data = cached_resources["engine"].search_articles(**query.dict())
 
     output = {}
     output["articles"] = [APIArticle(**result) for result in data["articles"]]
 
-    if not query.with_plot:
-        return output
+    if query.with_plot:
+        output["plot_json"] = data["plot_json"]
 
-    # Add plot data
-    output["plot_json"] = data["plot_json"]
     return output
