@@ -46,9 +46,18 @@ export default SplitView.extend({
 	},
 
 	getSideBarView: function() {
+		let values = QueryString.getValues();
+
+		// if debug not specified by query string, then
+		// allow it to be specified by the config file.
+		//
+		if (!values.debug && config.debug) {
+			values.debug = config.debug;
+		}
+
 		return new SideBarView({
 			parent: this,
-			values: QueryString.getValues(),
+			values: values,
 
 			// callbacks
 			//
@@ -80,17 +89,29 @@ export default SplitView.extend({
 		return this.getChildView('mainbar').getFile();
 	},
 
-	getLimit: function() {
-		return this.getChildView('sidebar').getLimit();
-	},
-
 	getSearchParams: function() {
-		let kind = this.getSearchKind();
 		let params = this.getChildView('sidebar').getSearchParams();
+
+		// add query to params
+		//
 		let query = this.getSearchQuery();
+		let kind = this.getSearchKind();
 		if (query && kind != 'pdf') {
 			params.query = query;
 		}
+
+		return params;
+	},
+
+	getQueryParams: function() {
+		let params = this.getSearchParams();
+
+		// remove params pertaining to search type
+		//
+		delete(params.kind);
+		delete(params.target);
+		delete(params.debug);
+
 		return params;
 	},
 
@@ -139,30 +160,28 @@ export default SplitView.extend({
 	},
 
 	searchByText: function(query) {
+		let params = this.getQueryParams();
 		switch (this.getSearchTarget()) {
 			case 'authors':
-				this.searchAuthors({
-					query: query,
-					top_k: this.getSearchLimit(),
-					with_plot: true
-				});
+				this.searchAuthors(_.extend(params, {
+					query: query
+				}));
 				break;
 			case 'articles':
-				this.searchArticles({
-					query: query,
-					top_k: this.getSearchLimit(),
-					with_plot: true
-				});
+				this.searchArticles(_.extend(params, {
+					query: query
+				}));
 				break;
 		}
 	},
 
 	searchByName: function(query) {
+		let params = this.getQueryParams();
 		switch (this.getSearchTarget()) {
 			case 'authors':
 				let name = this.stringToName(query);
 				if (name) {
-					this.searchAuthorsByName(name);
+					this.searchAuthorsByName(name, params);
 				} else {
 					application.error({
 						message: "Search by name requires a first name and a last name."
@@ -243,7 +262,8 @@ export default SplitView.extend({
 			success: (data) => {
 				if (data.authors && data.authors.length > 0) {
 					let authors = new Authors(data.authors);
-					this.getChildView('mainbar').showAuthors(authors, JSON.parse(data.plot_json));
+					let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
+					this.getChildView('mainbar').showAuthors(authors, plot);
 				} else {
 					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
@@ -273,7 +293,8 @@ export default SplitView.extend({
 			success: (data) => {
 				if (data.articles && data.articles.length > 0) {
 					let articles = new Articles(data.articles);
-					this.getChildView('mainbar').showArticles(articles, JSON.parse(data.plot_json));
+					let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
+					this.getChildView('mainbar').showArticles(articles, plot);
 				} else {
 					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
@@ -290,11 +311,13 @@ export default SplitView.extend({
 		});
 	},
 
-	searchAuthorsByName: function(options) {
+	searchAuthorsByName: function(name, options) {
 		$.ajax({
 			url: config.server + '/get_author',
 			type: 'POST',
-			data: JSON.stringify(options),
+			data: JSON.stringify(_.extend({
+				name: name
+			}, options)),
 			contentType: 'application/json',
 			processData: false,
 

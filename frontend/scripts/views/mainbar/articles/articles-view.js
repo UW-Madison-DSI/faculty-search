@@ -39,12 +39,14 @@ export default BaseView.extend({
 				</a>
 			</li>
 
+			<% if (plot) { %>
 			<li role="presentation" class="plot-tab<% if (tab == 'plot') { %> active<% } %>">
 				<a role="tab" data-toggle="tab" href=".plot">
 					<i class="fa fa-chart-line"></i>
 					<label>Plot</label>
 				</a>
 			</li>
+			<% } %>
 		</ul>
 
 		<div class="tab-content">
@@ -70,7 +72,8 @@ export default BaseView.extend({
 
 	templateContext: function() {
 		return {
-			tab: this.options.tab
+			tab: this.options.tab,
+			plot: this.options.plot
 		}
 	},
 
@@ -79,7 +82,9 @@ export default BaseView.extend({
 	},
 
 	onAttach: function() {
-		this.showPlot();
+		if (this.options.plot) {
+			this.showPlot(this.options.plot);
+		}
 	},
 
 	showList: function() {
@@ -88,9 +93,9 @@ export default BaseView.extend({
 		}));
 	},
 
-	showPlot: function() {
+	showPlot: function(plot) {
 		this.showChildView('plot', new PlotView({
-			json: this.options.json
+			json: plot
 		}));
 	},
 

@@ -32,7 +32,7 @@ export default BaseView.extend({
 
 		<br />
 
-		<div class="search-by form-group">
+		<div class="kind form-group">
 			<label class="control-label">Search By</label>
 			<div class="controls">
 				<div class="radio-inline">
@@ -53,14 +53,7 @@ export default BaseView.extend({
 			</div>
 		</div>
 
-		<div class="search-term form-group" style="display:none">
-			<label class="control-label">Text</label>
-			<div class="controls">
-				<input type="text" class="form-control" />
-			</div>
-		</div>
-
-		<div class="search-for form-group">
+		<div class="target form-group">
 			<label class="control-label">Search For</label>
 			<div class="controls">
 				<div class="authors radio-inline">
@@ -72,7 +65,7 @@ export default BaseView.extend({
 			</div>
 		</div>
 
-		<div class="limit form-group">
+		<div class="top-k form-group">
 			<label class="control-label">How Many Results?</label>
 			<div class="controls">
 				<input type="number" class="form-control" value="10" style="width:100px" />
@@ -85,12 +78,64 @@ export default BaseView.extend({
 				<input type="checkbox" checked>
 			</div>
 		</div>
+
+		<% if (debug) { %>
+
+		<div class="n form-group">
+			<label class="control-label">n</label>
+			<div class="controls">
+				<input type="number" class="form-control" value="500" style="width:100px" />
+			</div>
+		</div>
+
+		<div class="m form-group">
+			<label class="control-label">m</label>
+			<div class="controls">
+				<input type="number" class="form-control" value="5" style="width:100px" />
+			</div>
+		</div>
+
+		<div class="since-year form-group">
+			<label class="control-label">Since year</label>
+			<div class="controls">
+				<input type="number" class="form-control" value="1900" style="width:100px" />
+			</div>
+		</div>
+
+		<div class="distance-threshold form-group">
+			<label class="control-label">Distance threshold</label>
+			<div class="controls">
+				<input type="number" class="form-control" value="0.2" style="width:100px" />
+			</div>
+		</div>
+
+		<div class="pow form-group">
+			<label class="control-label">pow</label>
+			<div class="controls">
+				<input type="number" class="form-control" value="3" style="width:100px" />
+			</div>
+		</div>
+
+		<div class="with-plot form-group">
+			<label class="control-label">With plot</label>
+			<div class="controls">
+				<input type="checkbox" />
+			</div>
+		</div>
+
+		<div class="with-evidence form-group">
+			<label class="control-label">With evidence</label>
+			<div class="controls">
+				<input type="checkbox" />
+			</div>
+		</div>
+
+		<% } %>
 	`),
 
 	events: {
-		'change .search-by input': 'onChangeSearchBy',
-		'change .search-for input': 'onChange',
-		'change .limit input': 'onChange',
+		'change .kind input': 'onChangeKind',
+		'change input': 'onChange',
 		'keydown': 'onKeyDown'
 	},
 
@@ -101,23 +146,69 @@ export default BaseView.extend({
 	getValue: function(key) {
 		switch (key) {
 			case 'kind':
-				return this.$el.find('.search-by input:checked').val();
+				return this.$el.find('.kind input:checked').val();
 			case 'target':
-				return this.$el.find('.search-for input:checked').val();
-			case 'limit':
-				return parseInt(this.$el.find('.limit input').val());
+				return this.$el.find('.target input:checked').val();
+			case 'top_k':
+				return parseInt(this.$el.find('.top-k input').val());
+			case 'weight_results':
+				return this.$el.find('.weight-results input').is(':checked');
+			case 'n':
+				return parseInt(this.$el.find('.n input').val());
+			case 'm':
+				return parseInt(this.$el.find('.m input').val());
+			case 'since_year':
+				return parseInt(this.$el.find('.since-year input').val());
+			case 'distance_threshold':
+				return parseFloat(this.$el.find('.distance-threshold input').val());
+			case 'pow':
+				return parseFloat(this.$el.find('.pow input').val());
+			case 'with_plot':
+				return this.$el.find('.with-plot input').is(':checked');
+			case 'with_evidence':
+				return this.$el.find('.with-evidence input').is(':checked');
 		}
 	},
 
-	getValues: function() {
-		let values = {
-			kind: this.getValue('kind'),
-			target: this.getValue('target')
-		};
-
-		if (values.kind != 'name') {
-			values.limit = this.getValue('limit');
+	getNames: function() {
+		let names = [];
+		let formGroups = this.$el.find('.form-group');
+		for (let i = 0; i < formGroups.length; i++) {
+			names.push($(formGroups[i]).attr('class').replace('form-group', '').trim().replace(/-/g, '_'));
 		}
+		return names;
+	},
+
+	getAllValues: function() {
+		let values = {};
+		let names = this.getNames();
+		for (let i = 0; i < names.length; i++) {
+			let name = names[i];
+			values[name] = this.getValue(name);
+		}
+		return values;
+	},
+
+	getValues: function(which) {
+		let values;
+
+		if (this.options.values.debug) {
+			values = this.getAllValues();
+		} else {
+			values = {
+				kind: this.getValue('kind'),
+				target: this.getValue('target'),
+				top_k: this.getValue('top_k'),
+				with_plot: true
+			};
+		}
+
+		// modify values
+		//
+		if (values.kind == 'name') {
+			delete(values.top_k);
+		}
+		values.debug = this.options.values.debug;
 
 		return values;
 	},
@@ -129,13 +220,37 @@ export default BaseView.extend({
 	setValue: function(key, value) {
 		switch (key) {
 			case 'kind':
-				this.$el.find('.search-by input[value="' + value + '"]').prop('checked', true);
+				this.$el.find('.kind input[value="' + value + '"]').prop('checked', true);
 				break;
 			case 'target':
-				this.$el.find('.search-for input[value="' + value + '"]').prop('checked', true);
+				this.$el.find('.target input[value="' + value + '"]').prop('checked', true);
 				break;
-			case 'limit':
-				this.$el.find('.limit input').val(value);
+			case 'top_k':
+				this.$el.find('.top-k input').val(value);
+				break;
+			case 'weight_results':
+				this.$el.find('.weight-results input').prop('checked', value);
+				break;
+			case 'n':
+				this.$el.find('.n input').val(value);
+				break;
+			case 'm':
+				this.$el.find('.m input').val(value);
+				break;
+			case 'since_year':
+				this.$el.find('.since-year input').val(value);
+				break;
+			case 'distance_threshold':
+				this.$el.find('.distance-threshold input').val(value);
+				break;
+			case 'pow':
+				this.$el.find('.pow input').val(value);
+				break;
+			case 'with_plot':
+				this.$el.find('.with-plot input').prop('checked', value);
+				break;
+			case 'with_evidence':
+				this.$el.find('.with-evidence input').prop('checked', value);
 				break;
 		}
 	},
@@ -152,6 +267,12 @@ export default BaseView.extend({
 	//
 	// rendering methods
 	//
+
+	templateContext: function() {
+		return {
+			debug: this.options.values.debug
+		};
+	},
 
 	onRender: function() {
 		if (!this.options.values) {
@@ -186,13 +307,12 @@ export default BaseView.extend({
 	// mouse event handling methods
 	//
 
-	onChangeSearchBy: function() {
+	onChangeKind: function() {
 
 		// update views
 		//
 		this.parent.parent.setSearchKind(this.getValue('kind'));
 		this.update();
-		this.onChange();
 	},
 
 	onChange: function() {

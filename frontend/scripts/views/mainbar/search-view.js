@@ -162,22 +162,22 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.addTooltips();
 	},
 
-	showAuthors: function(authors, json) {
+	showAuthors: function(authors, plot) {
 		this.clearMessage();
 		this.showChildView('results', new AuthorsView({
 			collection: authors,
-			json: json
+			plot: plot
 		}));
 		this.showResults();
 		this.showClearResultsButton();
 		this.showTextInput();
 	},
 
-	showArticles: function(articles, json) {
+	showArticles: function(articles, plot) {
 		this.clearMessage();
 		this.showChildView('results', new ArticlesView({
 			collection: articles,
-			json: json
+			plot: plot
 		}));
 		this.showResults();
 		this.showClearResultsButton();
