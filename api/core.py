@@ -29,6 +29,7 @@ def convert_article_result(result: dict) -> dict:
     # CAUTION: result.distance is inner-product, i.e., similarity
     flat_result["distance"] = 1 - result.distance
 
+    # throw away misleading distance (it is similarity)
     remaining_fields = set(result.entity.fields) - set(["distance"])
     for field in remaining_fields:
         flat_result[field] = result.entity.get(field)
@@ -58,7 +59,7 @@ def get_author_articles(
 
     articles = article_collection.query(
         expr=f"author_id == {author_id} and publication_year >= {since_year}",
-        output_fields=["id", "title", "publication_year"],
+        output_fields=["doi", "title", "publication_year", "cited_by"],
     )
 
     if len(articles) == 0:
@@ -258,6 +259,7 @@ class Engine:
         # load collections into memory
         self.author_collection.load()
         self.article_collection.load()
+
         self.plot_maker = PlotDataMaker(
             self.author_collection,
             self.article_collection,
@@ -288,7 +290,13 @@ class Engine:
                 anns_field="embedding",
                 param={"metric_type": "IP", "params": {"nprobe": 16}},
                 limit=limit,
-                output_fields=["doi", "title", "publication_year", "author_id"],
+                output_fields=[
+                    "doi",
+                    "title",
+                    "publication_year",
+                    "author_id",
+                    "cited_by",
+                ],
             )[0]
 
             return [convert_article_result(raw) for raw in raws]
@@ -318,39 +326,33 @@ class Engine:
         since_year: int = 1900,
         distance_threshold: float = 0.2,
         pow: float = 3.0,
+        ks: float = 1.0,
+        ka: float = 1.0,
         with_plot: bool = False,
         with_evidence: bool = False,
     ) -> dict:
         """Search for author by a query.
-        
-        Each author is given by a score, defined as:
-        $$ S_j = \sum_{i=1}^n (1 - d_{i,j})^p $$
 
-        where $d_{i,j}$ is the distance between the query and the $i$-th article of the $j$-th author.
-        The value $d$ is discarded if it is larger than the `distance_threshold` $t$, i.e.,
-
-        $$
-        d = 
-        \begin{cases} 
-        d & \text{if } d \leq t \\
-        1 & \text{if } d > t 
-        \end{cases}
-        $$
+        Each author is given by a score, defined as the linear combination of similarity $S$ and authority $A$:
+        $$ Score_j = ks * S_j + ka * A_j $$
+        See [documentation](https://docs.google.com/presentation/d/1OAPVU8E7c4vmPQZMqdPGDd37FOjUigm8nU135m1gkR4) for details.
 
         Args:
             query (str): Query string.
-            top_k (int, optional): Number of authors to return. 
+            top_k (int, optional): Number of authors to return.
             n (int, optional): Number of articles $n$ in the weighting pool. Defaults to 500.
             m (int, optional): Maximum number of articles per author. Defaults to 10.
+            since_year (int, optional): Earliest year of articles to consider. Defaults to 1900.
             distance_threshold (float, optional): Distance threshold. Defaults to 0.2.
             pow (float, optional): Power in weighting function $p$. Defaults to 3.0.
+            ks (float, optional): Linear scaling of similarity $S$ . Defaults to 1.0.
+            ka (float, optional): Linear scaling of authority $A$ = log10(cited_by + 1). Defaults to 1.0.
 
         Returns:
             list[dict]: key: author_id; value: their scores.
         """
 
         author_scores: dict[str, float] = {}
-        author_article_counts: dict[str, int] = {}
         results = self.search_articles(
             query,
             top_k=n,
@@ -360,27 +362,34 @@ class Engine:
         )
 
         # Calculate author scores by their relevant articles
+        # Similarity $S$: (1 - distance) ** pow
+        # Authority $A$ = log(cited_by + 1)
+        # Weight $W$ = S * A
 
-        for article in results["articles"]:
-            author_id = article["author_id"]
+        author_ids = [article["author_id"] for article in results["articles"]]
+        c = np.array([article["cited_by"] for article in results["articles"]])
+        d = np.array([article["distance"] for article in results["articles"]])
+        s = (1 - d) ** pow
+        a = np.log10(c + 1)
+        w = ks * s + ka * a
 
-            # Skip if author has reached max articles `m`
-            counted_articles = author_article_counts.get(author_id, 0)
-            if counted_articles >= m:
-                continue
+        unique_author_ids, idx = np.unique(author_ids, return_inverse=True)
 
-            # Add article score to author
-            article["weight"] = (1 - article["distance"]) ** pow
-            author_scores[author_id] = (
-                author_scores.get(author_id, 0) + article["weight"]
-            )
+        for i, author_id in enumerate(unique_author_ids):
+            this_author_weights = w[idx == i]
+            logging.debug(f"{author_id=}, {this_author_weights=}")
 
-            # Track number of articles per author
-            author_article_counts[author_id] = (
-                author_article_counts.get(author_id, 0) + 1
-            )
+            # Obtain top m articles
+            top_m_idx = np.argsort(this_author_weights)[-m:]
+            logging.debug(f"{top_m_idx=}")
+            top_m_weights = this_author_weights[top_m_idx]
+            logging.debug(f"{top_m_weights=}")
 
-        logging.debug(f"{author_article_counts=}")
+            # Calculate author score
+            author_scores[author_id] = np.sum(top_m_weights)
+            logging.debug(f"{author_scores[author_id]=}")
+            logging.debug("=" * 50)
+
         logging.debug(f"{author_scores=}")
         top_ids, top_scores = sort_dict_by_value(author_scores, reversed=True)
         top_ids, top_scores = top_ids[:top_k], top_scores[:top_k]
