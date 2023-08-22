@@ -58,7 +58,6 @@ def batch_query_cited_by(dois: list[str], batch_size: int = 80) -> dict:
 
     output = {}
     for i in range(0, len(dois), batch_size):
-        print(f"Querying Crossref for {i+1}/{len(dois)} DOIs.")
         batch = dois[i : i + batch_size]
         cited_by = query_cited_by(batch)
         output.update(cited_by)
