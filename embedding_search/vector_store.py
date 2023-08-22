@@ -153,11 +153,10 @@ def push_data(
         return
 
     # Ingest authors
-    logging.info("Ingesting authors...")
+    logging.info(f"Ingesting author {author_id}...")
     author_data_package = make_author_data_package(author_id)
     author_collection.insert([author_data_package])
 
     # Ingest articles (can be quite large)
-    logging.info("Ingesting articles...")
     articles_data_package = make_articles_data_packages(author_id)
     article_collection.insert(articles_data_package)
