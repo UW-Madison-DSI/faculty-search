@@ -98,7 +98,13 @@ $border-color: colors.$very-very-light-grey;
 			}
 		}
 	}
+
+	&.name {
+		--search-placeholder: "Firstname Lastname";
+	}
 }
+
+
 
 //
 // dark styles

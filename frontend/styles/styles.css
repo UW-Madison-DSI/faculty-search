@@ -1238,10 +1238,10 @@ canvas {
 }
 
 a {
-  color: #808080;
+  color: #9a9a9a;
 }
 a:hover {
-  color: color-mix(in srgb, #343434 10%, #808080);
+  color: black;
 }
 
 span.count {
@@ -1535,6 +1535,9 @@ span.highlighted {
 }
 .search-bar .input .buttons button + button {
   margin-left: 5px;
+}
+.search-bar.name {
+  --search-placeholder: "Firstname Lastname";
 }
 
 @media (prefers-color-scheme: dark) {

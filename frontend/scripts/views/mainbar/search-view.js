@@ -251,10 +251,22 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 				break;
 		}
 		this.hideClearResultsButton();
+		this.updatePlaceholder();
 
 		// update parent / sidebar
 		//
 		this.parent.updateQueryString();
+	},
+
+	updatePlaceholder: function() {
+
+		// update search placeholder text
+		//
+		if (this.kind == 'name') {
+			this.$el.find('.search-bar').addClass('name');
+		} else {
+			this.$el.find('.search-bar').removeClass('name');
+		}
 	},
 
 	//

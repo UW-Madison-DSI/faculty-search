@@ -366,7 +366,7 @@ export default SplitView.extend({
 		let values = QueryString.getValues();
 
 		if (values) {
-			if (values.kind == 'pdf') {
+			if (values.kind) {
 				this.setSearchKind(values.kind);
 			}
 			if (values.query) {
@@ -390,6 +390,7 @@ export default SplitView.extend({
 
 	onChange: function() {
 		this.updateQueryString();
+		this.getChildView('mainbar').setSearchKind(this.getSearchKind());
 	},
 
 	//
