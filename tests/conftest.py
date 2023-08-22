@@ -1,5 +1,6 @@
 import pytest
 import os
+import sys
 from pymilvus import Collection, connections, utility
 from langchain.embeddings import OpenAIEmbeddings
 from dotenv import load_dotenv
@@ -9,6 +10,8 @@ API_URL = os.getenv("API_URL", "http://localhost:8000")
 MILVUS_HOST = os.getenv("MILVUS_HOST", "localhost")
 MILVUS_PORT = os.getenv("MILVUS_PORT", "19530")
 MILVUS_ALIAS = os.getenv("MILVUS_ALIAS", "default")
+
+sys.path.append("/community-search")
 
 
 @pytest.fixture(scope="session", autouse=True)

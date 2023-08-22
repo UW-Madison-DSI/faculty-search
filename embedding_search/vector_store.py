@@ -94,7 +94,7 @@ def make_articles_data_packages(author_id: str) -> list[dict]:
 
     data_packages = []
     for article, embedding in zip(author.articles, author.articles_embeddings):
-        if len(embedding) != 1536 or article.doi is None:
+        if article.doi is None:
             continue
 
         data = article.dict().copy()

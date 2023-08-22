@@ -47,23 +47,27 @@ def download_one_author(id: int) -> None:
         first_name=raw_author["firstName"],
         last_name=raw_author["lastName"],
     )
+    print(author)
 
-    article_dois = [
-        article["digitalObjectIdentifier"] for article in raw_author["articles"]
-    ]
-    cited_by_data = batch_query_cited_by(article_dois)
-
+    # Subset to articles with DOIs
     valid_articles = []
     for article in tqdm(raw_author["articles"]):
         try:
             parsed_article = parse_article(article)
             parsed_article.author_id = author.id
-            parsed_article.cited_by = cited_by_data.get(parsed_article.doi, 0)
             valid_articles.append(parsed_article)
         except Exception:
             continue
-
     author.articles = valid_articles
+
+    # Append cited by count
+    article_dois = [article.doi for article in author.articles]
+    print(article_dois)
+    cited_by_data = batch_query_cited_by(article_dois)
+    print(cited_by_data)
+
+    for article in author.articles:
+        article.cited_by = cited_by_data.get(parsed_article.doi, None)
 
     if author.articles:
         author = append_embeddings(author)

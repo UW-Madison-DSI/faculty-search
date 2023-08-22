@@ -11,7 +11,7 @@ AUTHORS_DIR = Path(os.getenv("AUTHORS_DIR"))
 DEBUG = int(os.getenv("DEBUG", 0))
 
 
-def timeout(func, duration=1):
+def timeout(func, duration=0.5):
     """Delay the execution of a function to prevent blockage."""
 
     def wrapper(*args, **kwargs):

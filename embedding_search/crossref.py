@@ -37,30 +37,34 @@ def query_crossref(doi: str, fields: list[str]) -> dict | None:
     return output
 
 
-def batch_query_cited_by(dois: list[str], batch_size: int = 30) -> dict:
+def batch_query_cited_by(dois: list[str], batch_size: int = 80) -> dict:
     """Query crossref in batches."""
 
-    url = "https://api.crossref.org/works"
-    params = {"rows": batch_size, "filter": ",".join([f"doi:{doi}" for doi in dois])}
-
-    cursor = ""
-    next_cursor = "*"
-    cited_by = {}
-
-    while cursor != next_cursor:
-        cursor = next_cursor
-        params["cursor"] = cursor
+    @timeout
+    def query_cited_by(batch: list[str]) -> dict:
+        url = "https://api.crossref.org/works"
+        params = {
+            "rows": batch_size,
+            "filter": ",".join([f"doi:{doi}" for doi in batch]),
+        }
         response = requests.get(url, params=params)
         data = response.json()
 
-        # Process the items in this page of results
+        cited_by = {}
         for item in data["message"]["items"]:
             cited_by[item["DOI"]] = item["is-referenced-by-count"]
 
-        next_cursor = data["message"].get("next-cursor")
-        sleep(1)
+        return cited_by
 
-    return cited_by
+    output = {}
+    for i in range(0, len(dois), batch_size):
+        print(f"Querying Crossref for {i+1}/{len(dois)} DOIs.")
+        batch = dois[i : i + batch_size]
+        cited_by = query_cited_by(batch)
+        output.update(cited_by)
+
+    # Return combined results
+    return output
 
 
 # Basic abstract cleaning functions
