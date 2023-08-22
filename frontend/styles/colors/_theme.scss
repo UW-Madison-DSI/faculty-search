@@ -56,3 +56,22 @@ input[type="range"] {
 .error-icon {
 	color: branding.$primary-color;
 }
+
+//
+// dark mode
+//
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: colors.$very-very-dark-grey;
+		color: colors.$very-very-light-grey;
+	}
+
+	select, button, input {
+		color: black;
+	}
+
+	.panel {
+		background-color: colors.$very-very-dark-grey;
+	}
+}

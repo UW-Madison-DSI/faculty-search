@@ -19,6 +19,7 @@
 
 $icon-color: colors.$medium-grey;
 $message-color: rgba(#808080, 10%);
+$list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 
 //
 // styles
@@ -73,7 +74,7 @@ $message-color: rgba(#808080, 10%);
 						}
 
 						&:hover {
-							background-color: #f0f0f0;
+							background-color: $list-item-hover-color;
 						}
 					}
 				}
@@ -138,82 +139,6 @@ $message-color: rgba(#808080, 10%);
 
 				.buttons {
 					margin-top: 20px;
-				}
-			}
-		}
-
-		.search-bar {
-			background: white;
-			--search-placeholder: "Search terms or text";
-
-			.input {
-				position: relative;
-				min-height: 50px;
-				border: 1px solid lightgrey;
-				border-radius: 10px;
-				text-align: left;
-				padding: 10px;
-				margin: 20px 10%;
-				margin-bottom: 30px;
-				box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-
-				[contenteditable="true"] {
-					font-family: inherit;
-					font-weight: normal;
-					font-size: inherit;
-					outline: none;
-					max-height: 150px;
-					overflow: auto;
-					line-height: 30px;
-
-					* {
-						font-family: inherit !important;
-						font-weight: normal !important;
-						font-size: inherit !important;
-					}
-
-					&:empty {
-						&:before {
-							content: var(--search-placeholder);
-							color: lightgrey;
-						}
-
-						& + .buttons {
-
-							.submit {
-								opacity: 0.5;
-							}
-
-							.clear {
-								display: none;
-							}
-						}
-					}
-				}
-
-				.buttons {
-					display: flex;
-					position: absolute;
-					right: 0;
-					bottom: 0;
-					padding: 10px;
-
-					button {
-						display: inline-block;
-						width: 30px;
-						height: 30px;
-						border-radius: 5px;
-						padding: 0;
-
-						i {
-							margin: 0;
-							color: white;
-						}
-
-						& + button {
-							margin-left: 5px;
-						}
-					}
 				}
 			}
 		}

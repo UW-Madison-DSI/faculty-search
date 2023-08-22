@@ -1,0 +1,113 @@
+/******************************************************************************\
+|                                                                              |
+|                              _search-bar.scss                                |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@use "../bootstrap/variables";
+@use "../colors/colors.scss";
+
+//
+// colors
+//
+
+$background-color: colors.fade(colors.$very-very-light-grey, 25%);
+$border-color: colors.$very-very-light-grey;
+
+//
+// styles
+//
+
+.search-bar {
+	--search-placeholder: "Search terms or text";
+
+	.input {
+		position: relative;
+		min-height: 50px;
+		border-radius: 10px;
+		text-align: left;
+		padding: 10px;
+		margin: 20px 10%;
+		margin-bottom: 30px;
+		border: 1px solid $border-color;
+		background-color: $background-color;
+		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+
+		[contenteditable="true"] {
+			font-family: inherit;
+			font-weight: normal;
+			font-size: inherit;
+			outline: none;
+			max-height: 150px;
+			overflow: auto;
+			line-height: 30px;
+
+			* {
+				font-family: inherit !important;
+				font-weight: normal !important;
+				font-size: inherit !important;
+			}
+
+			&:empty {
+				&:before {
+					content: var(--search-placeholder);
+					color: colors.$very-light-grey;
+				}
+
+				& + .buttons {
+
+					.submit {
+						opacity: 0.5;
+					}
+
+					.clear {
+						display: none;
+					}
+				}
+			}
+		}
+
+		.buttons {
+			display: flex;
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			padding: 10px;
+
+			button {
+				display: inline-block;
+				width: 30px;
+				height: 30px;
+				border-radius: 5px;
+				padding: 0;
+
+				i {
+					margin: 0;
+					color: white;
+				}
+
+				& + button {
+					margin-left: 5px;
+				}
+			}
+		}
+	}
+}
+
+//
+// dark styles
+//
+
+@media (prefers-color-scheme: dark) {
+	.search-bar {
+		.input {
+			color: white;
+		}
+	}
+}

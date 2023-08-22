@@ -315,9 +315,7 @@ export default SplitView.extend({
 		$.ajax({
 			url: config.server + '/get_author',
 			type: 'POST',
-			data: JSON.stringify(_.extend({
-				name: name
-			}, options)),
+			data: JSON.stringify(name),
 			contentType: 'application/json',
 			processData: false,
 

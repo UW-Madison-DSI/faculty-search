@@ -11,6 +11,17 @@
 \******************************************************************************/
 
 @use "../bootstrap/variables";
+@use "../colors/colors";
+
+//
+// colors
+//
+
+$link-color: colors.$medium-grey;
+$link-hover-color: colors.darken($link-color, 10%);
+
+$dark-link-color: colors.$very-light-grey;
+$dark-link-hover-color: white;
 
 //
 // styles
@@ -184,8 +195,16 @@ canvas {
 	box-shadow: none;
 }
 
-a, a:hover {
-	color: #894b9d;
+//
+// links
+//
+
+a {
+	color: $link-color;
+
+	&:hover {
+		color: $link-hover-color;
+	}
 }
 
 //
@@ -263,5 +282,24 @@ span.highlighted {
 	.credits {
 		width: 75%;
 		margin: auto;
+	}
+}
+
+//
+// dark mode
+//
+
+@media (prefers-color-scheme: dark) {
+
+	//
+	// links
+	//
+
+	a {
+		color: $dark-link-color;
+
+		&:hover {
+			color: $dark-link-hover-color;
+		}
 	}
 }

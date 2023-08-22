@@ -16,6 +16,7 @@
 \******************************************************************************/
 
 @use "../bootstrap/variables";
+@use "../colors/colors";
 @use "../colors/branding";
 
 //
@@ -30,6 +31,8 @@ $shadow: 10px 10px 50px 10px rgba(black, 0.5);
 //
 
 $header-icon-color: branding.$primary-color;
+$dark-background-color: colors.$very-dark-grey;
+$dark-close-button-color: colors.$very-light-grey;
 
 //
 // styles
@@ -183,6 +186,12 @@ $header-icon-color: branding.$primary-color;
 			.modal-header {
 				border-top-left-radius: 3px;
 				border-top-right-radius: 3px;
+
+				button.close {
+					width: 25px;
+					height: 25px;
+					border-radius: 5px;
+				}
 			}
 
 			.modal-body.flexible {
@@ -268,10 +277,6 @@ body[device="desktop"] {
 					// max-width: calc(~"100% - 60px");
 					margin-right: 0;
 				}
-
-				.buttons {
-					margin-left: 0;
-				}
 			}
 
 			.modal-body {
@@ -334,6 +339,24 @@ body[device="phone"] {
 			.modal-footer {
 				text-align: center;
 			}
+		}
+	}
+}
+
+
+//
+// dark styles
+//
+
+@media (prefers-color-scheme: dark) {
+	.modal {
+		.modal-content {
+			background-color: $dark-background-color;
+		}
+
+		button.close {
+			background-color: $dark-close-button-color !important;
+			border-color: $dark-close-button-color !important;
 		}
 	}
 }

@@ -14,6 +14,28 @@
 @use "../colors/branding";
 
 //
+// colors
+//
+
+$color: transparent;
+$hover-color: colors.$very-very-very-light-grey;
+$active-color: colors.$very-very-very-light-grey;
+
+$text-color: colors.$medium-grey;
+$hover-text-color: colors.$dark-grey;
+$active-text-color: black;
+
+$icon-color: var(--primary-color);
+
+$dark-color: transparent;
+$dark-hover-color: colors.$very-dark-grey;
+$dark-active-color: colors.$dark-grey;
+
+$dark-text-color: colors.$medium-grey;
+$dark-hover-text-color: colors.$light-grey;
+$dark-active-text-color: white;
+
+//
 // styles
 //
 
@@ -30,31 +52,52 @@
 		> a {
 			text-align: center;
 			white-space: nowrap;
-		}
+			color: $text-color !important;
+			background-color: $color !important;
+			border-color: $color !important;
 
-		&.active {
-			> a, > a:hover {
-				background: colors.$very-light-grey;
-
-				i {
-					color: branding.$primary-color;
-				}
+			i {
+				color: $icon-color;
 			}
 		}
 
-		&:not(.active) {
+		> a:hover {
+			color: $hover-text-color !important;
+			background-color: $hover-color !important;
+			border-color: $hover-color !important;
+		}
+
+		&.active > a {
+			color: $active-text-color !important;
+			background-color: $active-color !important;
+			hover-color: $active-color !important;
+		}
+	}
+}
+
+//
+// dark styles
+//
+
+@media (prefers-color-scheme: dark) {
+	.nav-tabs {
+		> li {
 			> a {
-				i {
-					color: lighten(grey, 20%);
-				}
+				color: $dark-text-color !important;
+				background-color: $dark-color !important;
+				border-color: $dark-color !important;
+			}
 
-				&:hover {
-					border-color: transparent;
+			> a:hover {
+				color: $dark-hover-text-color !important;
+				background-color: $dark-hover-color !important;
+				border-color: $dark-hover-color !important;
+			}
 
-					i {
-						color: grey;
-					}
-				}
+			&.active > a {
+				color: $dark-active-text-color !important;
+				background-color: $dark-active-color !important;
+				border-color: $dark-active-color !important;
 			}
 		}
 	}

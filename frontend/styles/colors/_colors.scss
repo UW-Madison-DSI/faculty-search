@@ -14,13 +14,17 @@
 
 // greys
 //
-$medium-grey: #d0d0d7;
+$medium-grey: #808080;
+$ultra-dark-grey: darken($medium-grey, 45%);
+$very-very-very-dark-grey: darken($medium-grey, 40%);
 $very-very-dark-grey: darken($medium-grey, 30%);
 $very-dark-grey: darken($medium-grey, 20%);
 $dark-grey: darken($medium-grey, 10%);
 $light-grey: lighten($medium-grey, 10%);
 $very-light-grey: lighten($medium-grey, 20%);
 $very-very-light-grey: lighten($medium-grey, 30%);
+$very-very-very-light-grey: lighten($medium-grey, 40%);
+$ultra-light-grey: lighten($medium-grey, 45%);
 
 // highlighting colors
 //
@@ -28,3 +32,27 @@ $select-color: branding.$light-color;
 $highlight-color: $select-color;
 $select-fill: lighten($select-color, 33%);
 $highlight-fill: lighten($highlight-color, 33%);
+
+//
+// mixins
+//
+
+@function lighten($color, $amount) {
+	@return color-mix(in srgb, white $amount, $color);
+}
+
+@function darken($color, $amount) {
+	@return color-mix(in srgb, $very-very-dark-grey $amount, $color);
+}
+
+@function blacken($color, $amount) {
+	@return color-mix(in srgb, black $amount, $color);
+}
+
+@function fade($color, $amount) {
+	@return color-mix(in srgb, $color $amount, transparent);
+}
+
+@function blend($color1, $color2, $amount:50%) {
+	@return color-mix(in srgb, $color1 $amount, $color2);
+}

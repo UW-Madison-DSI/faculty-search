@@ -30,7 +30,8 @@ $grip-vertical-image: url('../images/splitters/vertical-grip.png');
 // colors
 //
 
-$gutter-color: colors.$light-grey;
+$gutter-color: colors.$ultra-light-grey;
+$dark-gutter-color: colors.$very-dark-grey;
 
 //
 // splitter styles
@@ -144,17 +145,14 @@ body:not(.binary) {
 }
 
 //
-// mobile styles
+// dark styles
 //
 
-/*
-body[device="phone"] {
-	.gutter.gutter-vertical {
-		padding: 2px;
-
-		.handle {
-			width: 90%;
+@media (prefers-color-scheme: dark) {
+	.split-view {
+		> .gutter {
+			background-color: $dark-gutter-color;
+			border-color: lighten($dark-gutter-color, 10%);
 		}
 	}
 }
-*/

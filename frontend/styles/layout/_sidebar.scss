@@ -17,15 +17,20 @@
 // variables
 //
 
-$sidebar-panel-padding: 10px;
-$sidebar-panel-min-width: 200px;
+$panel-padding: 10px;
+$panel-min-width: 200px;
 
 //
 // colors
 //
 
-$sidebar-background-color: colors.$light-grey;
-$sidebar-text-color: #303030;
+$background-color: colors.$ultra-light-grey;
+$text-color: colors.$medium-grey;
+
+$dark-background-color: colors.$very-dark-grey;
+$dark-text-color: colors.$very-very-very-light-grey;
+$dark-panel-color: transparent;
+$dark-label-color: white;
 
 //
 // styles
@@ -33,14 +38,14 @@ $sidebar-text-color: #303030;
 
 .sidebar {
 	overflow: auto;
-	color: $sidebar-text-color;
-	background-color: $sidebar-background-color;
+	color: $text-color;
+	background-color: $background-color;
 	word-break: break-word;
 
 	.panel {
 		margin: 10px;
 		padding: 10px;
-		min-width: $sidebar-panel-min-width;
+		min-width: $panel-min-width;
 
 		.header {
 
@@ -113,6 +118,30 @@ $sidebar-text-color: #303030;
 				i {
 					display: none;
 				}
+			}
+		}
+	}
+}
+
+//
+// dark styles
+//
+
+@media (prefers-color-scheme: dark) {
+	.sidebar {
+		color: $dark-text-color;
+		background-color: $dark-background-color;
+
+		.panel, .section {
+			background: $dark-panel-color;
+			border-color: $dark-panel-color;
+
+			.header > label {
+				color: $dark-label-color;
+			}
+
+			.form-group .control-label {
+				color: $dark-label-color;
 			}
 		}
 	}

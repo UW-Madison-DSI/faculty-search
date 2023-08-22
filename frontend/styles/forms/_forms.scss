@@ -16,6 +16,7 @@
 \******************************************************************************/
 
 @use "../bootstrap/variables";
+@use "../colors/colors";
 @use "../colors/branding";
 
 //
@@ -281,5 +282,16 @@ body[device="phone"] {
 			padding: 0;
 			overflow: hidden;
 		}
+	}
+}
+
+//
+// dark styles
+//
+
+@media (prefers-color-scheme: dark) {
+	input, textarea, select {
+		color: white !important;
+		background: colors.$dark-grey !important;
 	}
 }
