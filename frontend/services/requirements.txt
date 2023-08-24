@@ -3,3 +3,4 @@ flask
 flask_mail
 langchain
 python-dotenv
+bs4
