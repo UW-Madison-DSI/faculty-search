@@ -1882,7 +1882,8 @@ body:not(.binary) .desktop.app .contents.split-view > .split.mainbar::after {
 table {
   display: table;
   width: 100%;
-  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
 }
 table th {
   padding: 5px;
@@ -1890,10 +1891,10 @@ table th {
   outline: none;
   white-space: nowrap;
   text-align: center;
-  background: #9a9a9a;
+  background: #e6e6e6;
   border-width: 1px;
   border-style: solid;
-  border-color: #808080;
+  border-color: #e6e6e6;
 }
 table th:not(:last-child) {
   border-right-width: 0;
@@ -1919,7 +1920,7 @@ table tbody tr td {
   padding: 0 10px;
   border-width: 1px;
   border-style: solid;
-  border-color: lightgrey;
+  border-color: #e6e6e6;
 }
 table tbody tr td:not(:last-child) {
   border-right-width: 0;

@@ -16,7 +16,7 @@
 \******************************************************************************/
 
 import FormView from '../../../views/forms/form-view.js';
-import ArticlesListView from '../../../views/mainbar/articles/articles-list-view.js';
+import ArticlesListView from '../../../views/mainbar/articles/lists/articles-list-view.js';
 
 export default FormView.extend({
 

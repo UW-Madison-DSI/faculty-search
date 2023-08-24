@@ -18,15 +18,14 @@
 
 $table-head-border-width: 2px;
 $table-border-width: 1px;
-$rounded-table-border-radius: 5px;
-$round-table-border-radius: 10px;
+$border-radius: 10px;
 
 //
 // colors
 //
 
-$head-color: colors.$light-grey;
-$border-color: colors.$medium-grey;
+$head-color: colors.$very-very-very-light-grey;
+$border-color: $head-color;
 $select-color: colors.$select-color;
 
 //
@@ -36,7 +35,8 @@ $select-color: colors.$select-color;
 table {
 	display: table;
 	width: 100%;
-	border-collapse: collapse;
+	border-radius: $border-radius;
+	overflow: hidden;
 
 	//
 	// table headers
@@ -122,7 +122,7 @@ table {
 				//
 				border-width: 1px;
 				border-style: solid;
-				border-color: lightgrey;
+				border-color: $border-color;
 
 				&:not(:last-child) {
 					border-right-width: 0;

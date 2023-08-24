@@ -1,6 +1,6 @@
 /******************************************************************************\
 |                                                                              |
-|                            articles-list-view.js                             |
+|                           articles-table-view.js                             |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
@@ -15,15 +15,30 @@
 |     Copyright (C) 2022, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
-import CollectionView from '../../../views/collections/collection-view.js';
-import ArticlesListItemView from '../../../views/mainbar/articles/articles-list-item-view.js';
+import TableView from '../../../../views/collections/tables/table-view.js';
+import ArticlesTableItemView from '../../../../views/mainbar/articles/tables/articles-table-item-view.js';
 
-export default CollectionView.extend({
+export default TableView.extend({
 
 	//
 	// attributes
 	//
 
-	tagName: 'ol',
-	childView: ArticlesListItemView
+	childView: ArticlesTableItemView,
+
+	template: _.template(`
+		<thead>
+			<th class="title">
+				Title
+			</th>
+			<th class="doi">
+				DOI
+			</th>
+			<th class="distance">
+				Distance
+			</th>
+		</thead>
+		<tbody>
+		</tbody>
+	`),
 });
