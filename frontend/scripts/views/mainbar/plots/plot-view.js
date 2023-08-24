@@ -32,7 +32,7 @@ export default BaseView.extend({
 	// constructor
 	//
 
-	initialize: function() {
+	initialize: function () {
 
 		// listen for color scheme changes
 		//
@@ -45,19 +45,19 @@ export default BaseView.extend({
 	// getting methods
 	//
 
-	getWidth: function() {
+	getWidth: function () {
 		let $el = this.$el;
 		while ($el && $el.width() == 0) {
 			$el = $el.parent();
 		}
-		return $el? $el.width() : undefined;
+		return $el ? $el.width() : undefined;
 	},
 
 	//
 	// rendering methods
 	//
 
-	onAttach: function() {
+	onAttach: function () {
 
 		// wait for layout to finish
 		//
@@ -66,14 +66,14 @@ export default BaseView.extend({
 		}, 100);
 	},
 
-	update: function() {
+	update: function () {
 		let width = this.getWidth();
 		vegaEmbed("#vega", this.options.json, {
-				theme: Browser.isDarkModeEnabled()? 'dark' : 'light',
-				actions: false,
-				width: width - 125
-			})
-			.then(function (result) {})
+			theme: Browser.isDarkModeEnabled() ? 'dark' : 'light',
+			actions: false,
+			width: width - 135
+		})
+			.then(function (result) { })
 			.catch(console.error);
 	},
 
@@ -81,7 +81,7 @@ export default BaseView.extend({
 	// window event handling methods
 	//
 
-	onResize: function() {
+	onResize: function () {
 		this.update();
 	}
 });
