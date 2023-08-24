@@ -14,9 +14,11 @@
 
 import os
 from flask import Flask, request
-from flask_mail import Mail, Message
+
+# from flask_mail import Mail, Message
 from controllers.contact_controller import ContactController
 from controllers.pdf_controller import PDFController
+from controllers.url_controller import URLController
 from dotenv import load_dotenv
 import logging
 
@@ -57,6 +59,7 @@ except Exception:
 ################################################################################
 
 pdf_controller = PDFController(upload_folder=UPLOAD_FOLDER)
+url_controller = URLController()
 
 
 def get_array(name):
@@ -139,6 +142,18 @@ def catch_all(path):
 ################################################################################
 #                            contact form routes                               #
 ################################################################################
+
+
+@app.post("/api/url")
+def post_url():
+    """
+    Read a PDF file from a URL.
+
+    Return
+            response: The text contained in the pdf.
+    """
+
+    return url_controller.post_read()
 
 
 @app.post("/api/pdf")
