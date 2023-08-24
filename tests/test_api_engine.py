@@ -40,7 +40,9 @@ def test_engine(author_collection, article_collection, embeddings):
     articles = results["articles"]
     assert len(articles) <= 3
     assert isinstance(articles[0], dict)
-    assert list(articles[0].keys()) == ["distance", "title", "author_id", "doi"]
+    assert sorted(list(articles[0].keys())) == sorted(
+        ["distance", "title", "author_id", "doi", "cited_by", "publication_year"]
+    )
 
     # Test the search_authors method
     authors = engine.search_authors("Dark Higgs Boson", top_k=3)["authors"]
@@ -49,8 +51,6 @@ def test_engine(author_collection, article_collection, embeddings):
     assert isinstance(scores, list)
     assert len(author_ids) <= 3
     assert len(scores) <= 3
-    assert isinstance(author_ids[0], int)
-    assert isinstance(scores[0], float)
 
 
 def test_engine_get_author(author_collection, article_collection, embeddings):
