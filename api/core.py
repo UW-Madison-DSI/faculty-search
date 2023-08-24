@@ -217,6 +217,25 @@ class PlotDataMaker:
         return output
 
 
+def apply_font_sizes(
+    chart: alt.Chart,
+    title_font_size: int = 20,
+    element_title_font_size: int = 14,
+    label_font_size: int = 12,
+) -> alt.Chart:
+    """Apply font sizes to the chart elements."""
+
+    return (
+        chart.configure_title(fontSize=title_font_size)
+        .configure_axis(
+            titleFontSize=element_title_font_size, labelFontSize=label_font_size
+        )
+        .configure_legend(
+            titleFontSize=element_title_font_size, labelFontSize=label_font_size
+        )
+    )
+
+
 def plot_2d_projection(data: dict, width: int = 800, height: int = 600) -> str:
     """Plot 2d projection of embeddings."""
 
@@ -240,7 +259,7 @@ def plot_2d_projection(data: dict, width: int = 800, height: int = 600) -> str:
         .interactive()
     )
 
-    return chart.to_json()
+    return apply_font_sizes(chart).to_json()
 
 
 class Engine:
