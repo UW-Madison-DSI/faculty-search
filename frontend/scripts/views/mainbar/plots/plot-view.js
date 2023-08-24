@@ -16,6 +16,7 @@
 \******************************************************************************/
 
 import BaseView from '../../../views/base-view.js';
+import Browser from '../../../utilities/web/browser.js';
 
 export default BaseView.extend({
 
@@ -26,6 +27,19 @@ export default BaseView.extend({
 	id: 'vega',
 
 	template: template(``),
+
+	//
+	// constructor
+	//
+
+	initialize: function() {
+
+		// listen for color scheme changes
+		//
+		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+			this.update();
+		});
+	},
 
 	//
 	// getting methods
@@ -48,15 +62,14 @@ export default BaseView.extend({
 		// wait for layout to finish
 		//
 		window.setTimeout(() => {
-			this.plot();
+			this.update();
 		}, 100);
 	},
 
-	plot: function() {
+	update: function() {
 		let width = this.getWidth();
-
 		vegaEmbed("#vega", this.options.json, {
-				theme: "dark",
+				theme: Browser.isDarkModeEnabled()? 'dark' : 'light',
 				actions: false,
 				width: width - 125
 			})
@@ -69,6 +82,6 @@ export default BaseView.extend({
 	//
 
 	onResize: function() {
-		this.plot();
+		this.update();
 	}
 });
