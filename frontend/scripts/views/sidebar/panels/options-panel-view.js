@@ -30,8 +30,6 @@ export default BaseView.extend({
 			<label><i class="fa fa-desktop"></i>Display</label>
 		</div>
 
-		<br />
-
 		<div class="theme form-group">
 			<label class="control-label">Theme</label>
 			<div class="controls">
@@ -46,10 +44,20 @@ export default BaseView.extend({
 				</div>
 			</div>
 		</div>
+
+		<div class="options form-group">
+			<label class="control-label">Options</label>
+			<div class="controls">
+				<div class="checkbox-inline">
+					<label><input type="checkbox" name="advanced"<% if (is_advanced) { %> checked<% } %>>Advanced</label>
+				</div>
+			</div>
+		</div>
 	`),
 
 	events: {
-		'change .theme input': 'onChangeTheme'
+		'change .theme input': 'onChangeTheme',
+		'change .options input': 'onChangeOptions'
 	},
 
 	//
@@ -60,6 +68,8 @@ export default BaseView.extend({
 		switch (key) {
 			case 'theme':
 				return this.$el.find('.theme input:checked').val();
+			case 'options':
+				return this.$el.find('.options input').is(':checked');
 		}
 	},
 
@@ -69,7 +79,8 @@ export default BaseView.extend({
 
 	templateContext: function() {
 		return {
-			theme: localStorage.getItem('theme') || 'auto'
+			theme: localStorage.getItem('theme') || 'auto',
+			is_advanced: localStorage.getItem('options') == 'advanced'
 		};
 	},
 
@@ -91,5 +102,18 @@ export default BaseView.extend({
 		// update view
 		//
 		application.setTheme(theme);
+	},
+
+	onChangeOptions: function() {
+		let advanced = this.getValue('options');
+
+		// save value for later
+		//
+		localStorage.setItem('options', advanced? 'advanced' : 'standard');
+
+		// update view
+		//
+		this.parent.getChildView('search').render();
+		this.parent.parent.updateQueryString();
 	}
 });

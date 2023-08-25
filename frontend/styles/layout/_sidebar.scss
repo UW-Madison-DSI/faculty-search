@@ -48,6 +48,8 @@ $dark-label-color: white;
 		min-width: $panel-min-width;
 
 		.header {
+			// border-bottom: 2px solid var(--primary-color);
+			margin-bottom: 10px;
 
 			> label {
 				font-size: 18px;

@@ -46,18 +46,9 @@ export default SplitView.extend({
 	},
 
 	getSideBarView: function() {
-		let values = QueryString.getValues();
-
-		// if debug not specified by query string, then
-		// allow it to be specified by the config file.
-		//
-		if (!values.debug && config.debug) {
-			values.debug = config.debug;
-		}
-
 		return new SideBarView({
 			parent: this,
-			values: values,
+			values: QueryString.getValues(),
 
 			// callbacks
 			//
@@ -110,7 +101,6 @@ export default SplitView.extend({
 		//
 		delete(params.kind);
 		delete(params.target);
-		delete(params.debug);
 
 		return params;
 	},

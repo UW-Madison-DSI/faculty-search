@@ -30,8 +30,6 @@ export default BaseView.extend({
 			<label><i class="fa fa-search"></i>Options</label>
 		</div>
 
-		<br />
-
 		<div class="kind form-group">
 			<label class="control-label">Search By</label>
 			<div class="controls">
@@ -79,7 +77,7 @@ export default BaseView.extend({
 			</div>
 		</div>
 
-		<% if (debug) { %>
+		<% if (options == 'advanced') { %>
 
 		<div class="n form-group">
 			<label class="control-label">n</label>
@@ -140,6 +138,14 @@ export default BaseView.extend({
 	},
 
 	//
+	// querying methods
+	//
+
+	isAdvanced: function() {
+		return localStorage.getItem('options') == 'advanced';
+	},
+
+	//
 	// getting methods
 	//
 
@@ -192,7 +198,7 @@ export default BaseView.extend({
 	getValues: function(which) {
 		let values;
 
-		if (this.options.values.debug) {
+		if (this.isAdvanced()) {
 			values = this.getAllValues();
 		} else {
 			values = {
@@ -208,7 +214,6 @@ export default BaseView.extend({
 		if (values.kind == 'name') {
 			delete(values.top_k);
 		}
-		values.debug = this.options.values.debug;
 
 		return values;
 	},
@@ -270,7 +275,7 @@ export default BaseView.extend({
 
 	templateContext: function() {
 		return {
-			debug: this.options.values.debug
+			options: localStorage.getItem('options')
 		};
 	},
 
