@@ -31,7 +31,7 @@ export default SplitView.extend({
 
 	orientation: $(window).width() < 960? 'vertical': 'horizontal',
 	flipped: false,
-	sizes: [30, 70],
+	sizes: [40, 60],
 
 	//
 	// getting methods

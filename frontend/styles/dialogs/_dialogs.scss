@@ -348,7 +348,7 @@ body[device="phone"] {
 // dark styles
 //
 
-@media (prefers-color-scheme: dark) {
+body.dark {
 	.modal {
 		.modal-content {
 			background-color: $dark-background-color;

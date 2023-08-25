@@ -44,7 +44,7 @@ export default BaseView.extend({
 				<div class="radio-inline" style="display:none">
 					<label><input type="radio" name="search-by" value="doi">DOI</label>
 				</div>
-				<div class="radio-inline" style="display:none">
+				<div class="radio-inline">
 					<label><input type="radio" name="search-by" value="url">URL</label>
 				</div>
 				<div class="radio-inline">

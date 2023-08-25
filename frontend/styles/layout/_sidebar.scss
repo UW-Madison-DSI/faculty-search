@@ -127,7 +127,7 @@ $dark-label-color: white;
 // dark styles
 //
 
-@media (prefers-color-scheme: dark) {
+body.dark {
 	.sidebar {
 		color: $dark-text-color;
 		background-color: $dark-background-color;

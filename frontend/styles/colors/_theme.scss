@@ -61,11 +61,9 @@ input[type="range"] {
 // dark mode
 //
 
-@media (prefers-color-scheme: dark) {
-	body {
-		background-color: colors.$very-very-dark-grey;
-		color: colors.$very-very-light-grey;
-	}
+body.dark {
+	background-color: colors.$very-very-dark-grey;
+	color: colors.$very-very-light-grey;
 
 	select, button, input {
 		color: black;

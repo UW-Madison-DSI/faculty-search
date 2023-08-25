@@ -110,7 +110,7 @@ $border-color: colors.$very-very-light-grey;
 // dark styles
 //
 
-@media (prefers-color-scheme: dark) {
+body.dark {
 	.search-bar {
 		.input {
 			color: white;

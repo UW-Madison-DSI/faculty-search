@@ -17,6 +17,7 @@
 
 import PanelsView from '../../views/layout/panels-view.js';
 import SearchPanelView from '../../views/sidebar/panels/search-panel-view.js';
+import OptionsPanelView from '../../views/sidebar/panels/options-panel-view.js';
 
 export default PanelsView.extend({
 
@@ -24,7 +25,7 @@ export default PanelsView.extend({
 	// attributes
 	//
 
-	panels: ['search'],
+	panels: ['search', 'options'],
 
 	//
 	// querying methods
@@ -63,11 +64,21 @@ export default PanelsView.extend({
 			case 'search':
 				this.showSearchPanel();
 				break;
+			case 'options':
+				this.showOptionsPanel();
+				break;
 		}
 	},
 
 	showSearchPanel: function() {
 		this.showChildView('search', new SearchPanelView({
+			values: this.options.values,
+			onchange: this.options.onchange
+		}));
+	},
+
+	showOptionsPanel: function() {
+		this.showChildView('options', new OptionsPanelView({
 			values: this.options.values,
 			onchange: this.options.onchange
 		}));

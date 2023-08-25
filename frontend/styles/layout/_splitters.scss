@@ -148,7 +148,7 @@ body:not(.binary) {
 // dark styles
 //
 
-@media (prefers-color-scheme: dark) {
+body.dark {
 	.split-view {
 		> .gutter {
 			background-color: $dark-gutter-color;

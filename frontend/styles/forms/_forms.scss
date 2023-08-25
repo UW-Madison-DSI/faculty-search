@@ -289,7 +289,7 @@ body[device="phone"] {
 // dark styles
 //
 
-@media (prefers-color-scheme: dark) {
+body.dark {
 	input, textarea, select {
 		color: white !important;
 		background: colors.$dark-grey !important;

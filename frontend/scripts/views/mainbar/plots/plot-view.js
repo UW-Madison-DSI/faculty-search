@@ -15,15 +15,16 @@
 |     Copyright (C) 2022, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
-import BaseView from "../../../views/base-view.js";
-import Browser from "../../../utilities/web/browser.js";
+import BaseView from '../../../views/base-view.js';
+import Browser from '../../../utilities/web/browser.js';
 
 export default BaseView.extend({
+
 	//
 	// attributes
 	//
 
-	id: "vega",
+	id: 'vega',
 
 	template: template(``),
 
@@ -32,13 +33,12 @@ export default BaseView.extend({
 	//
 
 	initialize: function () {
+
 		// listen for color scheme changes
 		//
-		window
-			.matchMedia("(prefers-color-scheme: dark)")
-			.addEventListener("change", (event) => {
-				this.update();
-			});
+		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+			this.update();
+		});
 	},
 
 	//
@@ -58,6 +58,7 @@ export default BaseView.extend({
 	//
 
 	onAttach: function () {
+
 		// wait for layout to finish
 		//
 		window.setTimeout(() => {
@@ -68,9 +69,9 @@ export default BaseView.extend({
 	update: function () {
 		let width = this.getWidth();
 		vegaEmbed("#vega", this.options.json, {
-			theme: Browser.isDarkModeEnabled() ? "dark" : "light",
+			theme: Browser.isDarkModeEnabled() ? 'dark' : 'light',
 			actions: false,
-			width: width - 145,
+			width: width - 135
 		})
 			.then(function (result) { })
 			.catch(console.error);
@@ -82,5 +83,5 @@ export default BaseView.extend({
 
 	onResize: function () {
 		this.update();
-	},
+	}
 });

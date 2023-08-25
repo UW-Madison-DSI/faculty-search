@@ -95,6 +95,24 @@ export default Marionette.Application.extend(_.extend({}, Alertable, {
 	},
 
 	//
+	// setting methods
+	//
+
+	setTheme: function(theme) {
+		switch (theme) {
+			case 'light':
+				$('body').removeClass('dark');
+				break;
+			case 'dark':
+				$('body').addClass('dark');
+				break;
+			case 'auto':
+				this.setTheme(Browser.isDarkModeEnabled()? 'dark' : 'light');
+				break;
+		}
+	},
+
+	//
 	// rendering methods
 	//
 

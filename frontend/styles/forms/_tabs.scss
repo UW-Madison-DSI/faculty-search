@@ -79,7 +79,7 @@ $dark-active-text-color: white;
 // dark styles
 //
 
-@media (prefers-color-scheme: dark) {
+body.dark {
 	.nav-tabs {
 		> li {
 			> a {
