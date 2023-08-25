@@ -110,6 +110,7 @@ export default Marionette.Application.extend(_.extend({}, Alertable, {
 				this.setTheme(Browser.isDarkModeEnabled()? 'dark' : 'light');
 				break;
 		}
+		this.updatePlot();
 	},
 
 	//
@@ -139,6 +140,13 @@ export default Marionette.Application.extend(_.extend({}, Alertable, {
 				contentView: view,
 				nav: options? options.nav : undefined
 			}));
+		}
+	},
+
+	updatePlot: function() {
+		let plotView = this.getView().getChildView('content mainbar results plot');
+		if (plotView) {
+			plotView.update();
 		}
 	},
 

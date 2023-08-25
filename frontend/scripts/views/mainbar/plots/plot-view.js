@@ -69,7 +69,7 @@ export default BaseView.extend({
 	update: function () {
 		let width = this.getWidth();
 		vegaEmbed("#vega", this.options.json, {
-			theme: Browser.isDarkModeEnabled() ? 'dark' : 'light',
+			theme: $('body').hasClass('dark')? 'dark' : 'light',
 			actions: false,
 			width: width - 135
 		})
