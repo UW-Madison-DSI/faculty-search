@@ -29,19 +29,6 @@ export default BaseView.extend({
 	template: template(``),
 
 	//
-	// constructor
-	//
-
-	initialize: function () {
-
-		// listen for color scheme changes
-		//
-		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
-			this.update();
-		});
-	},
-
-	//
 	// getting methods
 	//
 

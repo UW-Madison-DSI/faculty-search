@@ -66,6 +66,12 @@ export default Marionette.Application.extend(_.extend({}, Alertable, {
 			this.onResize(event);
 		});
 
+		// listen for color scheme changes
+		//
+		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+			this.onThemeChange();
+		});
+
 		// create routers
 		//
 		this.router = new Router();
@@ -92,6 +98,14 @@ export default Marionette.Application.extend(_.extend({}, Alertable, {
 
 	navigate: function(url, options) {
 		this.router.navigate(url, options);
+	},
+
+	//
+	// getting methods
+	//
+
+	getTheme: function(key) {
+		return this.getView().getChildView('content sidebar options').getValue('theme');
 	},
 
 	//
@@ -159,5 +173,9 @@ export default Marionette.Application.extend(_.extend({}, Alertable, {
 		if (view && view.onResize) {
 			view.onResize(event);
 		}
+	},
+
+	onThemeChange: function() {
+		this.setTheme(this.getTheme());
 	}
 }));
