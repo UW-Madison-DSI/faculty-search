@@ -136,11 +136,14 @@ export default SplitView.extend({
 
 	search: function() {
 		switch (this.getSearchKind()) {
-			case 'pdf':
-				this.searchByFile(this.getFile());
-				break;
 			case 'name':
 				this.searchByName(this.getSearchQuery());
+				break;
+			case 'url':
+				this.searchByUrl(this.getSearchQuery());
+				break;
+			case 'pdf':
+				this.searchByFile(this.getFile());
 				break;
 			default:
 				this.searchByText(this.getSearchQuery());
@@ -200,6 +203,30 @@ export default SplitView.extend({
 	//
 	// ajax methods
 	//
+
+	searchByUrl: function(url) {
+		$.ajax({
+			url: '/api/url',
+			type: 'POST',
+			data: JSON.stringify({
+				url: url
+			}),
+			contentType: 'application/json',
+			processData: false,
+			cache: false,
+
+			// callbacks
+			//
+			success: (data) => {
+				this.searchByText(data);
+			},
+			error: (response, textStatus, errorThrown) => {
+				application.error({
+					message: response.responseText || 'Could not connect to server.'
+				});
+			}
+		});
+	},
 
 	readFile: function(file, options) {
 
