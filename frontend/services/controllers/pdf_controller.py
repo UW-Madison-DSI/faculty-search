@@ -63,5 +63,5 @@ class PDFController:
                 # n += len(page.page_content.split(" "))
 
             return output
-
-        return "Invalid PDF file."
+        else:
+            raise ValueError("Invalid PDF file.")

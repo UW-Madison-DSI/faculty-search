@@ -13,6 +13,11 @@ from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 
 cached_resources = {}
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    filename="api.log",
+)
 
 
 @asynccontextmanager
@@ -171,7 +176,7 @@ class APIPlotData(BaseModel):
 class APIAuthor(BaseModel):
     """Author output data model."""
 
-    id: str
+    id: str | int
     first_name: str
     last_name: str
     community_name: str | None = None
@@ -201,7 +206,7 @@ def get_author(query: GetAuthorInput) -> dict[str, APIAuthor | list[dict]]:
         results = cached_resources["engine"].get_author(
             first_name=query.first_name, last_name=query.last_name
         )
-        logging.debug(results)
+        # logging.debug(results)
     except ValueError:
         raise HTTPException(status_code=404, detail="Author not found.")
     return results
@@ -213,11 +218,12 @@ def search_authors(
 ) -> dict[str, list[APIAuthor] | str | list]:
     """Search an author."""
 
+    logging.debug(f"Search authors: {query.dict()}")
     data = cached_resources["engine"].search_authors(**query.dict())
 
     # Unpack data
     author_ids, scores = data["authors"]["author_ids"], data["authors"]["scores"]
-    logging.debug(f"{author_ids=}, {scores=}")
+    # logging.debug(f"{author_ids=}, {scores=}")
 
     authors = []
     for author_id, score in zip(author_ids, scores):
