@@ -213,7 +213,6 @@ class PlotDataMaker:
         output["parent_id"] = [0] + parent_ids
         output["label"] = [None] + label  # Inject proper label later
         output["type"] = ["query"] + types
-        logging.debug(f"fn: make_plot_data, {output=}")
         return output
 
 
@@ -396,24 +395,16 @@ class Engine:
 
         for i, author_id in enumerate(unique_author_ids):
             this_author_weights = w[idx == i]
-            logging.debug(f"{author_id=}, {this_author_weights=}")
 
             # Obtain top m articles
             top_m_idx = np.argsort(this_author_weights)[-m:]
-            logging.debug(f"{top_m_idx=}")
             top_m_weights = this_author_weights[top_m_idx]
-            logging.debug(f"{top_m_weights=}")
 
             # Calculate author score
             author_scores[author_id] = np.sum(top_m_weights)
-            logging.debug(f"{author_scores[author_id]=}")
-            logging.debug("=" * 50)
 
-        logging.debug(f"{author_scores=}")
         top_ids, top_scores = sort_dict_by_value(author_scores, reversed=True)
         top_ids, top_scores = top_ids[:top_k], top_scores[:top_k]
-
-        logging.debug(f"{top_ids=}, {top_scores=}")
 
         output = {
             "authors": {
