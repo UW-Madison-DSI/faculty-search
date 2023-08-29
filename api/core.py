@@ -42,18 +42,28 @@ def get_author_by_name(
 
     first_name, last_name = first_name.title(), last_name.title()
 
-    _query = partial(author_collection.query, output_fields=["id", "first_name", "last_name"], limit=1)
+    _query = partial(
+        author_collection.query,
+        output_fields=["id", "first_name", "last_name"],
+        limit=1,
+    )
 
-    authors = _query(expr=f"(first_name LIKE '{first_name}') and (last_name LIKE '{last_name}')")
+    authors = _query(
+        expr=f"(first_name LIKE '{first_name}') and (last_name LIKE '{last_name}')"
+    )
 
     if not authors:
         # Fuzzy match first name and last name
-        authors = _query(expr=f"(first_name LIKE '{first_name}%') and (last_name LIKE '{last_name}%')")
+        authors = _query(
+            expr=f"(first_name LIKE '{first_name}%') and (last_name LIKE '{last_name}%')"
+        )
 
     if not authors:
         # Fuzzy match first or last name
-        authors = _query(expr=f"(first_name LIKE '{first_name}%') or (last_name LIKE '{last_name}%')")
-    
+        authors = _query(
+            expr=f"(first_name LIKE '{first_name}%') or (last_name LIKE '{last_name}%')"
+        )
+
     if not authors:
         raise ValueError(f"Author with name {first_name} {last_name} not found")
     return authors[0]
@@ -250,22 +260,29 @@ def plot_2d_projection(data: dict, width: int = 800, height: int = 600) -> str:
     color_domain = ["query", "author", "article"]
     color_range = ["#c5050c", "#ff8811", "#537dab"]
 
-    selector = alt.selection_point(fields=["parent_id"])
-    chart = (
+    author_selector = alt.selection_point(fields=["parent_id"])
+    base = (
         alt.Chart(df)
         .mark_circle()
         .encode(
             x=alt.X("x:Q", title=None, axis=None),
             y=alt.Y("y:Q", title=None, axis=None),
-            color=alt.Color("type:N").scale(domain=color_domain, range=color_range).legend(orient="top-left"),
+            color=alt.Color("type:N")
+            .scale(domain=color_domain, range=color_range)
+            .legend(orient="top-left"),
             size=alt.Size("size", legend=None),
-            opacity=alt.condition(selector, alt.value(1.0), alt.value(0.3)),
+            opacity=alt.condition(author_selector, alt.value(1.0), alt.value(0.3)),
             tooltip=["label:N", "id:N", "parent_id"],
         )
-        .add_params(selector)
+        .add_params(author_selector)
         .properties(width=width, height=height)
         .interactive()
     )
+
+    # z-ordering work around
+    query = base.transform_filter(alt.datum.type == "query")
+    other = base.transform_filter(alt.datum.type != "query")
+    chart = other + query
 
     return apply_font_sizes(chart).to_json()
 
