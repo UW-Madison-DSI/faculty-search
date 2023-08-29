@@ -166,7 +166,13 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.clearMessage();
 		this.showChildView('results', new AuthorsView({
 			collection: authors,
-			plot: plot
+			plot: plot,
+
+			// callbacks
+			//
+			onclick: (author) => {
+				this.showAuthorProfile(author);
+			}
 		}));
 		this.showResults();
 		this.showClearResultsButton();

@@ -25,5 +25,11 @@ export default CollectionView.extend({
 	//
 
 	tagName: 'ol',
-	childView: AuthorsListItemView
+	childView: AuthorsListItemView,
+
+	childViewOptions: function() {
+		return {
+			onclick: this.options.onclick
+		};
+	}
 });

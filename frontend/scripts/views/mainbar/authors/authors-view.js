@@ -89,7 +89,8 @@ export default BaseView.extend({
 
 	showList: function() {
 		this.showChildView('list', new AuthorsListView({
-			collection: this.collection
+			collection: this.collection,
+			onclick: this.options.onclick
 		}));
 	},
 

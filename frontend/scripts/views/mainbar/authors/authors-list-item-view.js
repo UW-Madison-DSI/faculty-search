@@ -26,10 +26,10 @@ export default BaseView.extend({
 	tagName: 'li',
 
 	template: _.template(`
-		<div class="name">
+		<a class="name">
 			<span class="last"><%= last_name %></span>,
 			<span class="first"><%= first_name %></span>
-		</div>
+		</a>
 
 		<div class="details">
 			<a href="<%= url %>" target="_blank">
@@ -43,6 +43,10 @@ export default BaseView.extend({
 			</a>
 		</div>
 	`),
+
+	events: {
+		'click .name': 'onClickName'
+	},
 
 	//
 	// getting methods
@@ -87,5 +91,18 @@ export default BaseView.extend({
 		// add tooltip triggers
 		//
 		this.addTooltips();
+	},
+
+	//
+	// mouse event handling methods
+	//
+
+	onClickName: function() {
+
+		// perform callback
+		//
+		if (this.options.onclick) {
+			this.options.onclick(this.model);
+		}
 	}
 });

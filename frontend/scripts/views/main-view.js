@@ -354,8 +354,10 @@ export default SplitView.extend({
 					author = new Author(author, {
 						parse: true
 					});
+					let authors = new Authors([author]);
 
-					this.getChildView('mainbar').showAuthorProfile(author);
+					this.getChildView('mainbar').showAuthors(authors);
+					// this.getChildView('mainbar').showAuthorProfile(author);
 				} else {
 					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
