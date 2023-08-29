@@ -21,6 +21,9 @@ $icon-color: colors.$medium-grey;
 $icon-hover-color: black;
 $list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 
+$dark-icon-hover-color: white;
+$dark-list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
+
 //
 // styles
 //
@@ -42,12 +45,41 @@ $list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 			}
 		}
 
+		.name, .details {
+			display: inline-block;
+		}
+
+		.name {
+			min-width: 150px;
+		}
+
+		.details {
+			float: right;
+		}
+
 		i {
-			margin-left: 15px;
+			margin-left: 25px;
 		}
 
 		&:hover {
 			background-color: $list-item-hover-color;
+		}
+	}
+}
+
+.dark {
+	.list {
+		li {
+			a, a:focus {
+
+				&:hover {
+					color: $dark-icon-hover-color;
+				}
+			}
+
+			&:hover {
+				background-color: $dark-list-item-hover-color;
+			}
 		}
 	}
 }

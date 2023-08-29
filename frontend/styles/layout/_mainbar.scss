@@ -76,6 +76,7 @@ $list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 
 						.tab-pane {
 							display: block;
+							width: 100%;
 							position: absolute;
 
 							&:not(.active) {

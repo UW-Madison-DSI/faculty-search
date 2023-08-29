@@ -1317,10 +1317,26 @@ body.dark a:hover {
   color: black;
   text-decoration: none;
 }
+.list li .name, .list li .details {
+  display: inline-block;
+}
+.list li .name {
+  min-width: 150px;
+}
+.list li .details {
+  float: right;
+}
 .list li i {
-  margin-left: 15px;
+  margin-left: 25px;
 }
 .list li:hover {
+  background-color: color-mix(in srgb, #b3b3b3 25%, transparent);
+}
+
+.dark .list li a:hover, .dark .list li a:focus:hover {
+  color: white;
+}
+.dark .list li:hover {
   background-color: color-mix(in srgb, #b3b3b3 25%, transparent);
 }
 
@@ -1378,6 +1394,7 @@ body.dark a:hover {
 }
 .mainbar .search .content .results .tabbed-content .tab-content .tab-pane {
   display: block;
+  width: 100%;
   position: absolute;
 }
 .mainbar .search .content .results .tabbed-content .tab-content .tab-pane:not(.active) {

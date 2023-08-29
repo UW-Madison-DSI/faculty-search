@@ -29,7 +29,9 @@ export default BaseView.extend({
 		<div class="name">
 			<span class="last"><%= last_name %></span>,
 			<span class="first"><%= first_name %></span>
+		</div>
 
+		<div class="details">
 			<a href="<%= url %>" target="_blank">
 				<i class="fa fa-user" data-toggle="tooltip" title="Show UW Profile"></i>
 			</a>
