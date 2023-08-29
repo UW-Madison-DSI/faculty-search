@@ -18,10 +18,12 @@
 
 $color: colors.$medium-grey;
 $icon-color: colors.$medium-grey;
-$icon-hover-color: black;
+$hover-color: black;
 $list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 
-$dark-icon-hover-color: white;
+$dark-color: colors.$very-light-grey;
+$dark-icon-color: colors.$very-light-grey;
+$dark-hover-color: white;
 $dark-list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 
 //
@@ -40,7 +42,7 @@ $dark-list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 			text-decoration: none;
 
 			&:hover {
-				color: $icon-hover-color;
+				color: $hover-color;
 				text-decoration: none;
 			}
 		}
@@ -49,16 +51,16 @@ $dark-list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 			display: inline-block;
 		}
 
-		.name {
-			min-width: 150px;
-		}
-
 		.details {
 			float: right;
 		}
 
 		i {
 			margin-left: 25px;
+
+			&:hover {
+				color: $hover-color;
+			}
 		}
 
 		&:hover {
@@ -71,9 +73,16 @@ $dark-list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 	.list {
 		li {
 			a, a:focus {
+				color: $dark-color;
 
 				&:hover {
-					color: $dark-icon-hover-color;
+					color: $dark-hover-color;
+				}
+			}
+
+			i {
+				&:hover {
+					color: $dark-hover-color;
 				}
 			}
 

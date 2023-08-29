@@ -1328,20 +1328,26 @@ body.dark a:hover {
 .list li .name, .list li .details {
   display: inline-block;
 }
-.list li .name {
-  min-width: 150px;
-}
 .list li .details {
   float: right;
 }
 .list li i {
   margin-left: 25px;
 }
+.list li i:hover {
+  color: black;
+}
 .list li:hover {
   background-color: color-mix(in srgb, #b3b3b3 25%, transparent);
 }
 
+.dark .list li a, .dark .list li a:focus {
+  color: #b3b3b3;
+}
 .dark .list li a:hover, .dark .list li a:focus:hover {
+  color: white;
+}
+.dark .list li i:hover {
   color: white;
 }
 .dark .list li:hover {
