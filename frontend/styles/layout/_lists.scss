@@ -1,31 +1,53 @@
 /******************************************************************************\
 |                                                                              |
-|                                 _index.scss                                  |
+|                                 _lists.scss                                  |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
 |        This defines the visual styling rules used in this application.       |
 |                                                                              |
-|        Author(s): Abe Megahed                                                |
-|                                                                              |
-|        This file is subject to the terms and conditions defined in           |
-|        'LICENSE.txt', which is part of this source code distribution.        |
-|                                                                              |
 |******************************************************************************|
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
-@use "headers";
-@use "layout";
-@use "lists";
-@use "mainbar";
-@use "pages";
-@use "search-bar";
-@use "sections";
-@use "sidebar";
-@use "spinners";
-@use "splitters";
-@use "tables";
-@use "toolbar";
-@use "typeography";
-@use "welcome";
+@use "../colors/colors.scss";
+
+//
+// colors
+//
+
+$color: colors.$medium-grey;
+$icon-color: colors.$medium-grey;
+$icon-hover-color: black;
+$list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
+
+//
+// styles
+//
+
+.list {
+	li {
+		padding: 10px;
+		border-radius: 10px;
+		margin-top: 0;
+
+		a, a:focus {
+			color: $color;
+			outline: none;
+			text-decoration: none;
+
+			&:hover {
+				color: $icon-hover-color;
+				text-decoration: none;
+			}
+		}
+
+		i {
+			margin-left: 15px;
+		}
+
+		&:hover {
+			background-color: $list-item-hover-color;
+		}
+	}
+}

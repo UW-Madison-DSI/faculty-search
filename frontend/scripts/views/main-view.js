@@ -114,8 +114,8 @@ export default SplitView.extend({
 
 		if (terms.length >= 2) {
 			return {
-				first_name: terms[0],
-				last_name: terms[terms.length - 1]
+				first_name: terms[0].toTitleCase(),
+				last_name: terms[terms.length - 1].toTitleCase()
 			};
 		} else {
 			return null;

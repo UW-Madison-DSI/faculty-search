@@ -32,12 +32,12 @@ export default BaseView.extend({
 	// getting methods
 	//
 
-	getWidth: function () {
-		let $el = this.$el;
-		while ($el && $el.width() == 0) {
-			$el = $el.parent();
-		}
-		return $el ? $el.width() : undefined;
+	getWidth: function() {
+		return this.parent.$el.width();
+	},
+
+	getHeight: function() {
+		return this.parent.$el.height();
 	},
 
 	//
@@ -55,10 +55,13 @@ export default BaseView.extend({
 
 	update: function () {
 		let width = this.getWidth();
+		let height = this.getHeight();
+
 		vegaEmbed("#vega", this.options.json, {
 			theme: $('body').hasClass('dark')? 'dark' : 'light',
 			actions: false,
-			width: width - 135
+			width: width - 10,
+			height: height - 100
 		})
 			.then(function (result) { })
 			.catch(console.error);

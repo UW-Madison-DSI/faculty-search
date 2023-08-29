@@ -27,15 +27,17 @@ export default BaseView.extend({
 
 	template: _.template(`
 		<div class="name">
+			<span class="last"><%= last_name %></span>,
+			<span class="first"><%= first_name %></span>
+
 			<a href="<%= url %>" target="_blank">
-				<span class="last"><%= last_name %></span>,
-				<span class="first"><%= first_name %></span>
+				<i class="fa fa-user" data-toggle="tooltip" title="Show UW Profile"></i>
 			</a>
 			<a href="<%= search_url %>" target="_blank">
-				<i class="fa fa-search"></i>
+				<i class="fa fa-search" data-toggle="tooltip" title="Search UW Directory"></i>
 			</a>
 			<a href="<%= map_url %>" target="_blank">
-				<i class="fa fa-map"></i>
+				<i class="fa fa-map" data-toggle="tooltip" title="Show on Map"></i>
 			</a>
 		</div>
 	`),
@@ -76,5 +78,12 @@ export default BaseView.extend({
 			map_url: this.getMapUrl(),
 			search_url: this.getSearchUrl()
 		}
+	},
+
+	onRender: function() {
+
+		// add tooltip triggers
+		//
+		this.addTooltips();
 	}
 });

@@ -572,6 +572,10 @@ input {
   outline: none;
 }
 
+input[type=number] {
+  width: 100px;
+}
+
 textarea {
   width: 100%;
   height: 100%;
@@ -1290,6 +1294,38 @@ body.dark a:hover {
 
 /******************************************************************************\
 |                                                                              |
+|                                 _lists.scss                                  |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+.list li {
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 0;
+}
+.list li a, .list li a:focus {
+  color: #808080;
+  outline: none;
+  text-decoration: none;
+}
+.list li a:hover, .list li a:focus:hover {
+  color: black;
+  text-decoration: none;
+}
+.list li i {
+  margin-left: 15px;
+}
+.list li:hover {
+  background-color: color-mix(in srgb, #b3b3b3 25%, transparent);
+}
+
+/******************************************************************************\
+|                                                                              |
 |                                _mainbar.scss                                 |
 |                                                                              |
 |******************************************************************************|
@@ -1326,20 +1362,6 @@ body.dark a:hover {
   height: 100%;
   overflow: auto;
 }
-.mainbar .search .content .results .list li {
-  padding: 10px;
-  border-radius: 10px;
-  margin-top: 0;
-}
-.mainbar .search .content .results .list li i {
-  margin-left: 10px;
-}
-.mainbar .search .content .results .list li i:hover {
-  text-decoration: underline;
-}
-.mainbar .search .content .results .list li:hover {
-  background-color: color-mix(in srgb, #b3b3b3 25%, transparent);
-}
 .mainbar .search .content .results .tabbed-content {
   display: flex;
   position: absolute;
@@ -1351,13 +1373,21 @@ body.dark a:hover {
 .mainbar .search .content .results .tabbed-content .tab-content {
   width: 100%;
   height: 100%;
+  position: relative;
   overflow: auto;
 }
-.mainbar .search .content .results .tabbed-content .tab-content .plot {
+.mainbar .search .content .results .tabbed-content .tab-content .tab-pane {
+  display: block;
+  position: absolute;
+}
+.mainbar .search .content .results .tabbed-content .tab-content .tab-pane:not(.active) {
+  visibility: hidden;
+}
+.mainbar .search .content .results .tabbed-content .tab-content .tab-pane .plot {
   width: 100%;
   height: 100%;
 }
-.mainbar .search .content .results .tabbed-content .tab-content .plot #vega {
+.mainbar .search .content .results .tabbed-content .tab-content .tab-pane .plot #vega {
   width: 100%;
   height: 100%;
 }
@@ -2009,16 +2039,6 @@ label {
 
 .fineprint {
   font-size: 1em;
-}
-
-.tooltip {
-  font-family: "Red Hat Display", sans-serif;
-  font-size: 14px;
-}
-
-.popover {
-  font-family: "Red Hat Display", sans-serif;
-  font-size: 16px;
 }
 
 .btn {
