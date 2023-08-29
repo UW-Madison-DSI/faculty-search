@@ -1,5 +1,4 @@
-import logging
-from functools import cache
+from functools import cache, partial
 
 import altair as alt
 import numpy as np
@@ -41,12 +40,20 @@ def get_author_by_name(
 ) -> dict:
     """Get author details from Milvus."""
 
-    authors = author_collection.query(
-        expr=f"first_name == '{first_name}' and last_name == '{last_name}'",
-        output_fields=["id", "first_name", "last_name"],
-        limit=1,
-    )
+    first_name, last_name = first_name.title(), last_name.title()
 
+    _query = partial(author_collection.query, output_fields=["id", "first_name", "last_name"], limit=1)
+
+    authors = _query(expr=f"(first_name LIKE '{first_name}') and (last_name LIKE '{last_name}')")
+
+    if not authors:
+        # Fuzzy match first name and last name
+        authors = _query(expr=f"(first_name LIKE '{first_name}%') and (last_name LIKE '{last_name}%')")
+
+    if not authors:
+        # Fuzzy match first or last name
+        authors = _query(expr=f"(first_name LIKE '{first_name}%') or (last_name LIKE '{last_name}%')")
+    
     if not authors:
         raise ValueError(f"Author with name {first_name} {last_name} not found")
     return authors[0]
