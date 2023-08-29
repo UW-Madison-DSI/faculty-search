@@ -246,18 +246,20 @@ def plot_2d_projection(data: dict, width: int = 800, height: int = 600) -> str:
     """Plot 2d projection of embeddings."""
 
     df = pd.DataFrame(data)
-    df["size"] = df.type.map({"query": 100, "author": 10, "article": 3})
+    df["size"] = df.type.map({"query": 100, "author": 10, "article": 5})
+    color_domain = ["query", "author", "article"]
+    color_range = ["#c5050c", "#ff8811", "#537dab"]
 
     selector = alt.selection_point(fields=["parent_id"])
     chart = (
         alt.Chart(df)
         .mark_circle()
         .encode(
-            x="x:Q",
-            y="y:Q",
-            color="type",
+            x=alt.X("x:Q", title=None, axis=None),
+            y=alt.Y("y:Q", title=None, axis=None),
+            color=alt.Color("type:N").scale(domain=color_domain, range=color_range).legend(orient="top-left"),
             size=alt.Size("size", legend=None),
-            opacity=alt.condition(selector, alt.value(0.8), alt.value(0.2)),
+            opacity=alt.condition(selector, alt.value(1.0), alt.value(0.3)),
             tooltip=["label:N", "id:N", "parent_id"],
         )
         .add_params(selector)
