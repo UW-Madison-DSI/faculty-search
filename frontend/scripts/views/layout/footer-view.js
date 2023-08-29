@@ -22,11 +22,26 @@ export default BaseView.extend({
 	template: _.template(`
 		<div class="container">
 			<a href="<%= defaults.application.organization.url%>" target="_blank"><img class="logo" src="<%= defaults.footer.image %>" /></a>
-			<p>
+			<div>
 				<%= defaults.application.name %>, Copyright &copy; <%= defaults.application.year %> <br />
 				<a href="<%= defaults.application.author.url %>" target="_blank"><%= defaults.application.author.name %></a>,
 				<a href="<%= defaults.application.organization.url %>" target="_blank"><%= defaults.application.organization.name %></a>
-			</p>
+			</div>
+			<div>
+				<% if (defaults.navbar.navs) { %>
+					<% let keys = Object.keys(defaults.navbar.navs); %>
+					<% for (let i = 0; i < keys.length; i++) { %>
+					<% let key = keys[i]; %>
+					<% let item = defaults.navbar.navs[key]; %>
+					<a href="#<%= key %>">
+						<i class="<%= item.icon %>"></i>
+						<%= item.text %>
+					</a>
+					<% if (i < keys.length - 1) { %>
+					<span class="separator"> | </span><% } %>
+					<% } %>
+				<% } %>
+			</div>
 		</div>
 	`),
 

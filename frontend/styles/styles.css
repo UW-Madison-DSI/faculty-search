@@ -1016,52 +1016,6 @@ body.dark .nav-tabs > li.active > a {
 #header {
   min-height: 40px;
 }
-#header #brand {
-  display: flex;
-}
-#header #brand .icon {
-  display: flex;
-  width: auto;
-  height: 75%;
-  margin: auto;
-  margin-right: 10px;
-}
-#header #brand .title {
-  margin: auto 0;
-}
-#header .navbar {
-  background-color: #c5050c;
-  border: none;
-  height: inherit;
-  min-height: inherit;
-  margin: 0;
-}
-#header .navbar .navbar-brand {
-  padding: 0 15px;
-  color: white;
-  height: inherit;
-}
-#header .navbar .navbar-nav {
-  margin: 0;
-  white-space: nowrap;
-  height: 100%;
-}
-#header .navbar .navbar-nav > li {
-  display: inline-flex;
-  height: 100%;
-}
-#header .navbar .navbar-nav > li > a {
-  color: white;
-  cursor: pointer;
-  padding: 0 15px;
-  min-width: 50px;
-  text-align: center;
-  background: none;
-  margin: auto;
-}
-#header .navbar .navbar-nav > li > a i + span {
-  margin-left: 5px;
-}
 
 /******************************************************************************\
 |                                                                              |
@@ -1508,6 +1462,9 @@ body.dark a:hover {
 #page #footer .container a:hover {
   color: white;
 }
+#page #footer .separator {
+  margin: 0 5px;
+}
 
 @media (max-width: 992px) {
   #page .container, #page .section {
@@ -1744,6 +1701,13 @@ body[device=phone] .page .section > .row > div + div {
 }
 .sidebar .buttons .btn + .btn {
   margin-left: 5px;
+}
+.sidebar .footer {
+  margin: 10px;
+  text-align: center;
+}
+.sidebar .footer .separator {
+  margin: 0 5px;
 }
 
 @media (max-width: 480px) {
@@ -2431,6 +2395,69 @@ i.rotated.reversed {
   transform: scaleX(-1) rotate(90deg);
 }
 
+/******************************************************************************\
+|                                                                              |
+|                                _nav-bars.scss                                |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+#header .navbar {
+  border: none;
+  height: inherit;
+  min-height: inherit;
+  margin: 0;
+  background-color: #c5050c;
+}
+#header .navbar #brand {
+  display: flex;
+}
+#header .navbar #brand .icon {
+  display: flex;
+  width: auto;
+  height: 75%;
+  margin: auto;
+  margin-right: 10px;
+}
+#header .navbar #brand .title {
+  margin: auto 0;
+}
+#header .navbar .navbar-brand {
+  padding: 0 15px;
+  color: white;
+  height: inherit;
+}
+#header .navbar .navbar-nav {
+  margin: 0;
+  white-space: nowrap;
+  height: 100%;
+}
+#header .navbar .navbar-nav > li {
+  display: inline-flex;
+  height: 100%;
+}
+#header .navbar .navbar-nav > li > a {
+  color: white;
+  cursor: pointer;
+  padding: 0 15px;
+  min-width: 50px;
+  text-align: center;
+  background: none;
+  margin: auto;
+}
+#header .navbar .navbar-nav > li > a i + span {
+  margin-left: 5px;
+}
+
+@media (max-width: 991px) {
+  #header .navbar .navbar-nav > li {
+    display: none;
+  }
+}
 /******************************************************************************\
 |                                                                              |
 |                                  _index.scss                                 |

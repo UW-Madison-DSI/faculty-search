@@ -27,6 +27,24 @@ export default PanelsView.extend({
 
 	panels: ['search', 'options'],
 
+	html: _.template(`
+		<div class="footer visible-xs">
+		<% if (defaults.navbar.navs) { %>
+			<% let keys = Object.keys(defaults.navbar.navs); %>
+			<% for (let i = 0; i < keys.length; i++) { %>
+			<% let key = keys[i]; %>
+			<% let item = defaults.navbar.navs[key]; %>
+			<a href="#<%= key %>">
+				<i class="<%= item.icon %>"></i>
+				<%= item.text %>
+			</a>
+			<% if (i < keys.length - 1) { %>
+			<span class="separator"> | </span><% } %>
+			<% } %>
+		<% } %>
+		</div>
+	`),
+
 	//
 	// querying methods
 	//

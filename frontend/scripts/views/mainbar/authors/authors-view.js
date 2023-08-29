@@ -105,6 +105,8 @@ export default BaseView.extend({
 	//
 
 	onResize: function() {
-		this.getChildView('plot').onResize();
+		if (this.hasChildView('plot')) {
+			this.getChildView('plot').onResize();
+		}
 	}
 });

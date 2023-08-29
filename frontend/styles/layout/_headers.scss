@@ -10,8 +10,6 @@
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
-@use "../colors/branding";
-
 //
 // variables
 //
@@ -19,70 +17,9 @@
 $height: 40px;
 
 //
-// colors
-//
-
-$navbar-color: branding.$primary-color;
-
-//
 // styles
 //
 
 #header {
 	min-height: $height;
-
-	#brand {
-		display: flex;
-
-		.icon {
-			display: flex;
-			width: auto;
-			height: 75%;
-			margin: auto;
-			margin-right: 10px;
-		}
-
-		.title {
-			margin: auto 0;
-		}
-	}
-
-	.navbar {
-		background-color: $navbar-color;
-		border: none;
-		height: inherit;
-		min-height: inherit;
-		margin: 0;
-
-		.navbar-brand {
-			padding: 0 15px;
-			color: white;
-			height: inherit;
-		}
-
-		.navbar-nav {
-			margin: 0;
-			white-space: nowrap;
-			height: 100%;
-
-			> li {
-				display: inline-flex;
-				height: 100%;
-
-				> a {
-					color: white;
-					cursor: pointer;
-					padding: 0 15px;
-					min-width: 50px;
-					text-align: center;
-					background: none;
-					margin: auto;
-
-					i + span {
-						margin-left: 5px;
-					}
-				}
-			}
-		}
-	}
 }

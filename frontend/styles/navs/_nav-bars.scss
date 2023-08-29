@@ -1,6 +1,6 @@
 /******************************************************************************\
 |                                                                              |
-|                                 _pages.scss                                  |
+|                                _nav-bars.scss                                |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
@@ -17,75 +17,81 @@
 // colors
 //
 
-$footer-border-color: branding.$primary-color;
+$navbar-color: branding.$primary-color;
 
 //
 // styles
 //
 
-#page {
-	display: flex;
-	flex-direction: column;
-	position: relative;
-	line-height: 2em;
-	min-height: 100%;
-	overflow-y: auto;
+#header {
+	.navbar {
+		border: none;
+		height: inherit;
+		min-height: inherit;
+		margin: 0;
+		background-color: $navbar-color;
 
-	.container {
-		padding-top: 50px;
-		padding-bottom: 50px;
-		flex-grow: 1;
-	}
+		#brand {
+			display: flex;
 
-	.figure {
-		max-width: 75%;
-		margin: auto;
-	}
-
-	.buttons {
-		button {
-			margin-top: 10px;
-		}
-	}
-
-	#footer {
-		bottom: 0;
-		width: 100%;
-		color: lightgrey;
-		background: #494949;
-		border-top: 5px solid $footer-border-color;
-	
-		.container {
-			text-align: center;
-
-			.logo {
-				height: 100px;
-				margin: 10px;
+			.icon {
+				display: flex;
+				width: auto;
+				height: 75%;
+				margin: auto;
+				margin-right: 10px;
 			}
 
-			a {
-				color: lightgrey;
+			.title {
+				margin: auto 0;
+			}
+		}
 
-				&:hover {
+		.navbar-brand {
+			padding: 0 15px;
+			color: white;
+			height: inherit;
+		}
+
+		.navbar-nav {
+			margin: 0;
+			white-space: nowrap;
+			height: 100%;
+
+			> li {
+				display: inline-flex;
+				height: 100%;
+
+				> a {
 					color: white;
+					cursor: pointer;
+					padding: 0 15px;
+					min-width: 50px;
+					text-align: center;
+					background: none;
+					margin: auto;
+
+					i + span {
+						margin-left: 5px;
+					}
 				}
 			}
-		}
-
-		.separator {
-			margin: 0 5px;
 		}
 	}
 }
 
 //
-// mobile modals
+// small styles
 //
 
-@media (max-width: variables.$screen-md-min) {
-	#page {
-		.container, .section {
-			padding: 20px !important;
+@media (max-width: variables.$screen-sm-max) {
+	#header {
+		.navbar {
+			.navbar-nav {
+				> li {
+					display: none;
+				}
+			}
 		}
 	}
 }

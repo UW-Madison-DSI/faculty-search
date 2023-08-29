@@ -71,6 +71,10 @@ export default BaseView.extend({
 			let className = key.replace(/_/g, '-');
 			html += '<div class="' + className + '"></div>';
 		}
+
+		if (this.html) {
+			html += this.html();
+		}
 		return template(html);	
 	},
 
