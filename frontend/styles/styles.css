@@ -1285,6 +1285,10 @@ span.highlighted {
     margin: auto;
   }
 }
+.vg-tooltip {
+  display: flex;
+}
+
 body.dark a {
   color: #b3b3b3;
 }
