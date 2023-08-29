@@ -1285,8 +1285,12 @@ span.highlighted {
     margin: auto;
   }
 }
-.vg-tooltip {
-  display: flex;
+body[device=phone] .vg-tooltip {
+  margin: auto;
+  width: 80%;
+  margin-top: auto;
+  margin-bottom: 100px;
+  left: 10% !important;
 }
 
 body.dark a {

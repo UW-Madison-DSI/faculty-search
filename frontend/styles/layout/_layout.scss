@@ -275,7 +275,7 @@ span.highlighted {
 }
 
 //
-// non-mobile modals
+// non-small modals
 //
 
 @media (min-width: variables.$screen-xs-min) {
@@ -286,11 +286,17 @@ span.highlighted {
 }
 
 //
-// vega tooltips
+// mobile styles
 //
 
-.vg-tooltip {
-	display: flex;
+body[device="phone"] {
+	.vg-tooltip {
+		margin: auto;
+		width: 80%;
+		margin-top: auto;
+	    margin-bottom: 100px;
+	    left: 10% !important;
+	}
 }
 
 //
