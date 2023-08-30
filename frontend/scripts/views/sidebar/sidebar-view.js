@@ -18,6 +18,7 @@
 import PanelsView from '../../views/layout/panels-view.js';
 import SearchPanelView from '../../views/sidebar/panels/search-panel-view.js';
 import OptionsPanelView from '../../views/sidebar/panels/options-panel-view.js';
+import FooterView from '../../views/layout/footer-view.js';
 
 export default PanelsView.extend({
 
@@ -28,21 +29,7 @@ export default PanelsView.extend({
 	panels: ['search', 'options'],
 
 	html: _.template(`
-		<div class="footer visible-xs">
-		<% if (defaults.navbar.navs) { %>
-			<% let keys = Object.keys(defaults.navbar.navs); %>
-			<% for (let i = 0; i < keys.length; i++) { %>
-			<% let key = keys[i]; %>
-			<% let item = defaults.navbar.navs[key]; %>
-			<a href="#<%= key %>">
-				<i class="<%= item.icon %>"></i>
-				<%= item.text %>
-			</a>
-			<% if (i < keys.length - 1) { %>
-			<span class="separator"> | </span><% } %>
-			<% } %>
-		<% } %>
-		</div>
+		<div class="footer"></div>
 	`),
 
 	//
@@ -55,12 +42,40 @@ export default PanelsView.extend({
 		}
 	},
 
+	regions: function() {
+		let regions = PanelsView.prototype.regions.call(this);
+		regions.footer = {
+			el: '.footer',
+			replaceElement: false
+		};
+		return regions;
+	},
+
 	//
 	// getting methods
 	//
 
 	getSearchParams: function() {
 		return this.getChildView('search').getValues();
+	},
+
+	//
+	// rendering methods
+	//
+
+	onRender: function() {
+
+		// call superclass method
+		//
+		PanelsView.prototype.onRender.call(this);
+
+		// add page footer to sidebar
+		//
+		this.showFooter();
+	},
+
+	showFooter: function() {
+		this.showChildView('footer', new FooterView());
 	},
 
 	//

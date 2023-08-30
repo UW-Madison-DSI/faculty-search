@@ -1225,16 +1225,16 @@ span.highlighted {
   display: none;
 }
 
-.credits .credit {
+.modal .credits .credit {
   font-style: italic;
 }
-.credits .credit + .name {
+.modal .credits .credit + .name {
   font-weight: bold;
   float: right;
 }
 
 @media (min-width: 480px) {
-  .credits {
+  .modal .credits {
     width: 75%;
     margin: auto;
   }
@@ -1702,11 +1702,21 @@ body[device=phone] .page .section > .row > div + div {
 .sidebar .buttons .btn + .btn {
   margin-left: 5px;
 }
-.sidebar .footer {
-  margin: 10px;
+.sidebar .container {
+  width: 100%;
   text-align: center;
+  padding: 10px;
 }
-.sidebar .footer .separator {
+.sidebar .container .logo {
+  width: 100px;
+}
+.sidebar .container .credits {
+  margin: 10px;
+}
+.sidebar .container .links {
+  margin: 10px;
+}
+.sidebar .container .links .separator {
   margin: 0 5px;
 }
 
@@ -2411,6 +2421,7 @@ i.rotated.reversed {
   height: inherit;
   min-height: inherit;
   margin: 0;
+  white-space: nowrap;
   background-color: #c5050c;
 }
 #header .navbar #brand {

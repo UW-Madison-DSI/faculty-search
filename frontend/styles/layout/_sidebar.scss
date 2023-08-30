@@ -106,12 +106,25 @@ $dark-label-color: white;
 		}
 	}
 
-	.footer {
-		margin: 10px;
+	.container {
+		width: 100%;
 		text-align: center;
+		padding: 10px;
 
-		.separator {
-			margin: 0 5px;
+		.logo {
+			width: 100px;
+		}
+
+		.credits {
+			margin: 10px;
+		}
+
+		.links {
+			margin: 10px;
+
+			.separator {
+				margin: 0 5px;
+			}
 		}
 	}
 }

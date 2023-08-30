@@ -32,7 +32,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	template: template(`
 		<div class="content">
 			<div class="message overlay"></div>
-			<div class="results"></div>
+			<div class="results" style="display:none"></div>
 		</div>
 		<div class="search-bar">
 			<div class="input">
@@ -52,11 +52,6 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			<h3><%= subtitle %></h3>
 		</div>
 	`),
-	message: {
-		icon: '<i class="fa fa-search"></i>',
-		title: 'Data Science @ UW <br /> Community Search',
-		subtitle: 'Search for authors or articles related to data science at UW-Madison.'
-	},
 
 	pdfUploadMessage: `
 		<div class="content">
@@ -155,7 +150,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	},
 
 	onRender: function() {
-		this.showMessage(this.message);
+		this.showMessage(defaults.message);
 
 		// add button tooltip triggers
 		//
@@ -215,6 +210,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	},
 
 	showResults: function() {
+		this.$el.find('.message').hide();
 		this.$el.find('.results').show();
 	},
 
@@ -252,7 +248,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 				break;
 			default:
 				this.hideResults();
-				this.showMessage(this.message);
+				this.showMessage(defaults.message);
 				this.showTextInput();
 				break;
 		}
@@ -302,6 +298,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		// add message to dom
 		//
 		this.$el.find('.message').html(html);
+		this.$el.find('.message').show();
 	},
 
 	showMessage: function(options) {

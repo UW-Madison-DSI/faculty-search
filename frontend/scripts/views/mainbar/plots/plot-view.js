@@ -54,6 +54,12 @@ export default BaseView.extend({
 	},
 
 	update: function () {
+		if (this.options.json) {
+			this.showPlot(this.options.json);
+		}
+	},
+
+	showPlot: function(json) {
 		let width = this.getWidth();
 		let height = this.getHeight();
 
@@ -62,9 +68,7 @@ export default BaseView.extend({
 			actions: false,
 			width: width - 10,
 			height: height - 100
-		})
-			.then(function (result) { })
-			.catch(console.error);
+		}).then(function (result) { }).catch(console.error);
 	},
 
 	//

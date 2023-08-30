@@ -263,13 +263,15 @@ span.highlighted {
 	}
 }
 
-.credits {
-	.credit {
-		font-style: italic;
+.modal {
+	.credits {
+		.credit {
+			font-style: italic;
 
-		+ .name {
-			font-weight: bold;
-			float: right;
+			+ .name {
+				font-weight: bold;
+				float: right;
+			}
 		}
 	}
 }
@@ -279,9 +281,11 @@ span.highlighted {
 //
 
 @media (min-width: variables.$screen-xs-min) {
-	.credits {
-		width: 75%;
-		margin: auto;
+	.modal {
+		.credits {
+			width: 75%;
+			margin: auto;
+		}
 	}
 }
 

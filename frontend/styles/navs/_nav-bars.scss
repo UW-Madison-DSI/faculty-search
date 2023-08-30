@@ -29,6 +29,7 @@ $navbar-color: branding.$primary-color;
 		height: inherit;
 		min-height: inherit;
 		margin: 0;
+		white-space: nowrap;
 		background-color: $navbar-color;
 
 		#brand {
