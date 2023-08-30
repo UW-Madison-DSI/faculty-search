@@ -117,7 +117,7 @@ export default BaseView.extend({
 		<div class="with-plot form-group">
 			<label class="control-label">With plot</label>
 			<div class="controls">
-				<input type="checkbox" />
+				<input type="checkbox" checked />
 			</div>
 		</div>
 
