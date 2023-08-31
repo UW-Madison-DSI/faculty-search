@@ -36,7 +36,7 @@ class Article(BaseModel):
 class Author(BaseModel):
     """An author object."""
 
-    id: Optional[int] = None
+    id: Optional[str] = None
     unit_id: Optional[int] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None

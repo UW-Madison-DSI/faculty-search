@@ -27,9 +27,10 @@ def convert_article_result(result: dict) -> dict:
     flat_result = {}
     # CAUTION: result.distance is inner-product, i.e., similarity
     flat_result["distance"] = 1 - result.distance
+    flat_result["author_id"] = str(result.entity.get("author_id"))
 
     # throw away misleading distance (it is similarity)
-    remaining_fields = set(result.entity.fields) - set(["distance"])
+    remaining_fields = set(result.entity.fields) - set(["distance", "author_id"])
     for field in remaining_fields:
         flat_result[field] = result.entity.get(field)
     return flat_result
