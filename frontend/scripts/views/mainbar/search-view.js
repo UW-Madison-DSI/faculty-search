@@ -150,7 +150,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	},
 
 	onRender: function() {
-		this.showMessage(defaults.message);
+		this.showMessage(defaults.messages.main);
 
 		// add button tooltip triggers
 		//
@@ -248,7 +248,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 				break;
 			default:
 				this.hideResults();
-				this.showMessage(defaults.message);
+				this.showMessage(defaults.messages.main);
 				this.showTextInput();
 				break;
 		}

@@ -177,7 +177,7 @@ export default SplitView.extend({
 					this.searchAuthorsByName(name, params);
 				} else {
 					application.error({
-						message: "Search by name requires a first name and a last name."
+						message: defaults.messages.errors.name
 					});
 				}
 				break;
@@ -194,7 +194,7 @@ export default SplitView.extend({
 			},
 			error: () => {
 				application.error({
-					message: "Could not read PDF file."
+					message: defaults.messages.errors.file_read
 				});
 			}
 		});
@@ -222,7 +222,7 @@ export default SplitView.extend({
 			},
 			error: (response, textStatus, errorThrown) => {
 				application.error({
-					message: response.responseText || 'Could not connect to server.'
+					message: response.responseText || defaults.messages.errors.connection
 				});
 			}
 		});
@@ -294,7 +294,7 @@ export default SplitView.extend({
 			error: (response, textStatus, errorThrown) => {
 				this.hideSpinner();
 				application.error({
-					message: response.responseText || 'Could not connect to server.'
+					message: response.responseText || defaults.messages.errors.connection
 				});
 			}
 		});
@@ -328,7 +328,7 @@ export default SplitView.extend({
 			error: (response, textStatus, errorThrown) => {
 				this.hideSpinner();
 				application.error({
-					message: response.responseText || 'Could not connect to server.'
+					message: response.responseText || defaults.messages.errors.connection
 				});
 			}
 		});
@@ -377,7 +377,7 @@ export default SplitView.extend({
 			error: (response, textStatus, errorThrown) => {
 				this.hideSpinner();
 				application.error({
-					message: response.responseText || 'Could not connect to server.'
+					message: response.responseText || defaults.messages.errors.connection
 				});
 			}
 		});

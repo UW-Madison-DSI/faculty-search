@@ -74,11 +74,7 @@ export default BaseView.extend({
 
 				// show notification
 				//
-				application.notify({
-					icon: 'fa fa-envelope',
-					title: 'Message Sent',
-					message: "Your message has been sent. Thank you for your feedback."
-				});
+				application.notify(defaults.messages.message_sent);
 			},
 
 			error: () => {
@@ -86,7 +82,7 @@ export default BaseView.extend({
 				// show error
 				//
 				application.error({
-					message: "Your message could not be sent."
+					message: defaults.messages.errors.contact
 				});
 			}
 		});
