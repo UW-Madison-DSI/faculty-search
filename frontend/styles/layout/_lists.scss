@@ -31,6 +31,11 @@ $dark-list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 //
 
 .list {
+
+	// allow space for scrollbars
+	//
+	padding-right: 10px;
+
 	li {
 		padding: 10px;
 		border-radius: 10px;

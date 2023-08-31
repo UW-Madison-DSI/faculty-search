@@ -1510,7 +1510,7 @@ canvas {
 }
 
 a {
-  color: #9a9a9a;
+  color: #808080;
 }
 a:hover {
   color: black;
@@ -1590,6 +1590,9 @@ body.dark a:hover {
 |******************************************************************************|
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
+.list {
+  padding-right: 10px;
+}
 .list li {
   padding: 10px;
   border-radius: 10px;
@@ -2030,10 +2033,10 @@ body[device=phone] .page .section > .row > div + div {
 .sidebar .container {
   width: 100%;
   text-align: center;
-  padding: 10px;
 }
 .sidebar .container .logo {
   width: 100px;
+  margin: 10px;
 }
 .sidebar .container .credits {
   margin: 10px;

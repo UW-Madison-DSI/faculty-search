@@ -24,9 +24,10 @@ export default ListItemView.extend({
 	//
 
 	template: _.template(`
-		<div class="title"><%= title %></div>
 		<% if (typeof doi != 'undefined') { %>
-		<div class="doi"><%= doi %></div>
+		<a href="https://doi.org/<%= doi %>" class="doi" target="_blank"><%= title %></a>
+		<% } else { %>
+		<div class="title"><%= title %></div>
 		<% } %>
 	`)
 });
