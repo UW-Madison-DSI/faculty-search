@@ -1,0 +1,153 @@
+/******************************************************************************\
+|                                                                              |
+|                               _animation.scss                                |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+.blinking {
+	animation: blinking-keyframes 0.3s ease-in-out;
+}
+
+.bouncing {
+	animation: bouncing-keyframes 0.3s ease-in-out;
+}
+
+.contracting {
+	animation: contracting-keyframes 0.3s ease-in-out;
+}
+
+.expanding {
+	animation: expanding-keyframes 0.3s ease-in-out;
+}
+
+.uncontracted {
+	transform: scale(1.1);
+}
+
+.flipping {
+	animation: flipping-keyframes 0.3s ease-in-out;
+}
+
+.growing-bounce {
+	animation: growing-bounce-keyframes 0.3s ease-in-out;
+}
+
+.shimmying {
+	animation: shimmying-keyframes 0.3s ease-in-out;
+}
+
+.spinning {
+	animation: spinning-keyframes 2s linear infinite;
+}
+
+.squeezing {
+	animation: squeezing-keyframes 0.3s ease-in-out;
+}
+
+.shrinking-bounce {
+	animation: shrinking-bounce-keyframes 0.3s ease-in-out;
+}
+
+.tilting {
+	animation: tilting-keyframes 0.3s ease-in-out;
+}
+
+.wobbling {
+	animation: wobbling-keyframes 0.3s ease-in-out;
+}
+
+// .tile, .spinning3d, .profile.photo {
+// .tile, .item:not(.directory) .icon {
+
+.icon-spinning {
+	.icon, .tile, .spinning3d, .profile.photo {
+		animation-name: spinning3d-keyframes;
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
+		animation-duration: 5s;
+		-webkit-animation-name: spinning3d-keyframes;
+		-webkit-animation-timing-function: linear;
+		-webkit-animation-iteration-count: infinite;
+		-webkit-animation-duration: 5s;
+	}
+}
+
+//
+// randomize spinning
+//
+
+.icon-spinning {
+
+	.item, li {
+		&:nth-child(10n+0) {
+			.icon, .tile {
+				animation-delay: 0.0s;
+			}
+		}
+
+		&:nth-child(10n+1) {
+			.icon, .tile {
+				animation-delay: 0.3s;
+			}
+		}
+
+		&:nth-child(10n+2) {
+			.icon, .tile {
+				animation-delay: 0.6s;
+			}
+		}
+
+		&:nth-child(10n+3) {
+			.icon, .tile {
+				animation-delay: 0.9s;
+			}
+		}
+
+		&:nth-child(10n+4) {
+			.icon, .tile {
+				animation-delay: 1.2s;
+			}
+		}
+
+		&:nth-child(10n+5) {
+			.icon, .tile {
+				animation-delay: 1.5s;
+			}
+		}
+
+		&:nth-child(10n+6) {
+			.icon, .tile {
+				animation-delay: 1.8s;
+			}
+		}
+
+		&:nth-child(10n+7) {
+			.icon, .tile {
+				animation-delay: 2.1s;
+			}
+		}
+
+		&:nth-child(10n+8) {
+			.icon, .tile {
+				animation-delay: 2.4s;
+			}
+		}
+
+		&:nth-child(10n+9) {
+			.icon, .tile {
+				animation-delay: 2.7s;
+			}
+		}
+	}
+}

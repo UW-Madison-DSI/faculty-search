@@ -1,0 +1,215 @@
+/******************************************************************************\
+|                                                                              |
+|                         _animation-keyframes.scss                            |
+|                                                                              |
+|******************************************************************************|
+|                                                                              |
+|        This defines the visual styling rules used in this application.       |
+|                                                                              |
+|        Author(s): Abe Megahed                                                |
+|                                                                              |
+|        This file is subject to the terms and conditions defined in           |
+|        'LICENSE.txt', which is part of this source code distribution.        |
+|                                                                              |
+|******************************************************************************|
+|     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
+\******************************************************************************/
+
+@keyframes blinking-keyframes {
+	0% {
+		opacity: 1.0;
+	}
+	50% {
+		opacity: 0.0;
+	}
+	100% {
+		opacity: 1.0;
+	}
+}
+
+@keyframes bouncing-keyframes {
+	0% {
+		transform: translateY(0);
+	}
+	33% {
+		transform: translateY(-25%);
+	}
+	66% {
+		transform: translateY(0);
+	}
+	75% {
+		transform: translateY(-10%);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes contracting-keyframes {
+	0% {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes expanding-keyframes {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(1.1);
+	}
+}
+
+@keyframes flipping-keyframes {
+	0% {
+		transform: rotateY(0deg);
+		moz-transform: rotateY(0deg); 		// Firefox
+		ms-transform: rotateY(0deg); 		// Microsoft Browsers
+	}
+	50% {
+		transform: rotateY(90deg);
+		moz-transform: rotateY(90deg); 		// Firefox
+		ms-transform: rotateY(90deg); 		// Microsoft Browsers
+	}
+	100% {
+		transform: rotateY(0deg);
+		moz-transform: rotateY(0deg); 		// Firefox
+		ms-transform: rotateY(0deg); 		// Microsoft Browsers
+	}
+}
+
+@keyframes growing-keyframes {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes growing-bounce-keyframes {
+	0% {
+		transform: scale(0);
+	}
+	75% {
+		transform: scale(1.25);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes shimmying-keyframes {
+	0% {
+		transform: translateX(0);
+	}
+	33% {
+		transform: translateX(-5%);
+	}
+	66% {
+		transform: translateX(5%);
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
+@keyframes squeezing-keyframes {
+	0% {
+		transform: scaleX(1);
+	}
+	33% {
+		transform: scaleX(1.1);
+	}
+	66% {
+		transform: scaleX(0.9);
+	}
+	100% {
+		transform: scaleX(1);
+	}
+}
+
+@keyframes shrinking-keyframes {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0);
+	}
+}
+
+@keyframes shrinking-bounce-keyframes {
+	0% {
+		transform: scale(1);
+	}
+	25% {
+		transform: scale(1.25);
+	}
+	100% {
+		transform: scale(0);
+	}
+}
+
+@keyframes spinning-keyframes {
+	0% { 
+		transform: rotate(0deg); 
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes spinning3d-keyframes {
+	from {
+		transform: rotateY(0deg);
+		moz-transform: rotateY(0deg); 		// Firefox
+		ms-transform: rotateY(0deg); 		// Microsoft Browsers
+	}
+	to {
+		transform: rotateY(360deg);
+		moz-transform: rotateY(360deg); 	// Firefox
+		ms-transform: rotateY(360deg); 		// Microsoft Browsers
+	}
+}
+
+@-webkit-keyframes spinning3d-keyframes {
+	from {
+  		-webkit-transform: rotateY(0deg);
+  	}
+  	to {
+  		-webkit-transform: rotateY(360deg);
+  	}
+}
+
+@keyframes tilting-keyframes {
+	0% {
+		transform: rotate(0);
+	}
+	33% {
+		transform: rotate(-10deg);
+	}
+	66% {
+		transform: rotate(10deg);
+	}
+	100% {
+		transform: rotate(0);
+	}
+}
+
+@keyframes wobbling-keyframes {
+	0% {
+		transform: scale(1);
+	}
+	33% {
+		transform: scale(1.1);
+	}
+	66% {
+		transform: scale(0.9);
+	}
+	100% {
+		transform: scale(1);
+	}
+}

@@ -31,7 +31,7 @@ export default SplitView.extend({
 
 	orientation: $(window).width() < 960? 'vertical': 'horizontal',
 	flipped: false,
-	sizes: [40, 60],
+	sizes: [35, 65],
 
 	//
 	// getting methods
@@ -267,6 +267,7 @@ export default SplitView.extend({
 	},
 
 	searchAuthors: function(options) {
+		this.showSpinner();
 		$.ajax({
 			url: config.server + '/search_authors',
 			type: 'POST',
@@ -277,6 +278,7 @@ export default SplitView.extend({
 			// callbacks
 			//
 			success: (data) => {
+				this.hideSpinner();
 				if (data.authors && data.authors.length > 0) {
 					let authors = new Authors(data.authors);
 					let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
@@ -290,6 +292,7 @@ export default SplitView.extend({
 				}
 			},
 			error: (response, textStatus, errorThrown) => {
+				this.hideSpinner();
 				application.error({
 					message: response.responseText || 'Could not connect to server.'
 				});
@@ -298,6 +301,7 @@ export default SplitView.extend({
 	},
 
 	searchArticles: function(options) {
+		this.showSpinner();
 		$.ajax({
 			url: config.server + '/search_articles',
 			type: 'POST',
@@ -308,6 +312,7 @@ export default SplitView.extend({
 			// callbacks
 			//
 			success: (data) => {
+				this.hideSpinner();
 				if (data.articles && data.articles.length > 0) {
 					let articles = new Articles(data.articles);
 					let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
@@ -321,6 +326,7 @@ export default SplitView.extend({
 				}
 			},
 			error: (response, textStatus, errorThrown) => {
+				this.hideSpinner();
 				application.error({
 					message: response.responseText || 'Could not connect to server.'
 				});
@@ -329,6 +335,7 @@ export default SplitView.extend({
 	},
 
 	searchAuthorsByName: function(name, options) {
+		this.showSpinner();
 		$.ajax({
 			url: config.server + '/get_author',
 			type: 'POST',
@@ -339,6 +346,7 @@ export default SplitView.extend({
 			// callbacks
 			//
 			success: (data) => {
+				this.hideSpinner();
 				if (data.articles && data.articles.length > 0) {
 
 					// remove ids since they don't parse properly as integers
@@ -367,6 +375,7 @@ export default SplitView.extend({
 				}
 			},
 			error: (response, textStatus, errorThrown) => {
+				this.hideSpinner();
 				application.error({
 					message: response.responseText || 'Could not connect to server.'
 				});
@@ -401,6 +410,14 @@ export default SplitView.extend({
 	updateQueryString: function() {
 		let params = this.getSearchParams();
 		QueryString.setValues(params);
+	},
+
+	showSpinner: function() {
+		this.getChildView('mainbar').showSpinner();
+	},
+
+	hideSpinner: function() {
+		this.getChildView('mainbar').hideSpinner();
 	},
 
 	//
