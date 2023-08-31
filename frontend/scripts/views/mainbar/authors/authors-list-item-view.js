@@ -26,10 +26,14 @@ export default BaseView.extend({
 	tagName: 'li',
 
 	template: _.template(`
+		<% if (has_articles) { %>
 		<a class="name">
+		<% } %>
 			<span class="last"><%= last_name %></span>,
 			<span class="first"><%= first_name %></span>
+		<% if (has_articles) { %>
 		</a>
+		<% } %>
 
 		<div class="details">
 			<a href="<%= url %>" target="_blank">
@@ -82,7 +86,8 @@ export default BaseView.extend({
 		return {
 			url: this.getUrl(),
 			map_url: this.getMapUrl(),
-			search_url: this.getSearchUrl()
+			search_url: this.getSearchUrl(),
+			has_articles: this.model.get('articles').length != 0
 		}
 	},
 
