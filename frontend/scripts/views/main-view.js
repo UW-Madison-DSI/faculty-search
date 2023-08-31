@@ -153,6 +153,18 @@ export default SplitView.extend({
 	},
 
 	searchByText: function(query) {
+
+		// check for empty query
+		//
+		if (!query) {
+			application.error({
+				message: defaults.messages.errors.empty_text
+			});
+			return;
+		}
+
+		// search by text
+		//
 		let params = this.getQueryParams();
 		switch (this.getSearchTarget()) {
 			case 'authors':
@@ -169,6 +181,18 @@ export default SplitView.extend({
 	},
 
 	searchByName: function(query) {
+
+		// check for empty query
+		//
+		if (!query) {
+			application.error({
+				message: defaults.messages.errors.empty_name
+			});
+			return;
+		}
+
+		// search authors
+		//
 		let params = this.getQueryParams();
 		switch (this.getSearchTarget()) {
 			case 'authors':
@@ -205,6 +229,18 @@ export default SplitView.extend({
 	//
 
 	searchByUrl: function(url) {
+
+		// check for empty url
+		//
+		if (!url) {
+			application.error({
+				message: defaults.messages.errors.empty_url
+			});
+			return;
+		}
+
+		// search by url
+		//
 		$.ajax({
 			url: '/api/url',
 			type: 'POST',
