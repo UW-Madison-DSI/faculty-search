@@ -16,7 +16,7 @@
 \******************************************************************************/
 
 import BaseView from '../../../views/base-view.js';
-import ArticlesTableView from '../../../views/mainbar/articles/tables/articles-table-view.js';
+import ArticlesListView from '../../../views/mainbar/articles/lists/articles-list-view.js';
 import PlotView from '../../../views/mainbar/plots/plot-view.js';
 import '../../../../vendor/bootstrap/js/tab.js';
 
@@ -88,7 +88,7 @@ export default BaseView.extend({
 	},
 
 	showList: function() {
-		this.showChildView('list', new ArticlesTableView({
+		this.showChildView('list', new ArticlesListView({
 			collection: this.collection
 		}));
 	},
