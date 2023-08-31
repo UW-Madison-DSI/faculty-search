@@ -28,19 +28,10 @@ export default {
 	//
 
 	showDialog: function(dialogView, options) {
-		this.hideDialogs();
-		this.showDelayedDialog(dialogView, options);
-	},
-
-	showDelayedDialog: function(dialogView, options) {
-		this.pendingDialogView = dialogView;
-		window.setTimeout(() => {
-			if (this.pendingDialogView) {
-				this.pendingDialogView.show(options);
-				this.dialogView = this.pendingDialogView;
-				this.pendingDialogView = null;
-			}
-		}, 1000);
+		if (this.dialogView) {
+			this.dialogView.hide();
+		}
+		this.dialogView = dialogView.show();
 	},
 
 	error: function(options) {
@@ -61,21 +52,5 @@ export default {
 
 	download: function(options) {
 		this.showDialog(new DownloadDialogView(options));
-	},
-
-	destroyDialogs: function() {
-		if (this.dialogView) {
-			this.dialogView.destroy();
-			this.dialogView = null;
-		}
-		this.pendingDialogView = null;
-	},
-
-	hideDialogs: function() {
-		if (this.dialogView) {
-			this.dialogView.hide();
-			this.dialogView = null;
-		}
-		this.pendingDialogView = null;
 	}
 }
