@@ -30,6 +30,12 @@ Promise.all([
 	window.config = files[0];
 	window.defaults = files[1];
 
+	// set web page title
+	//
+	if (defaults.application.name) {
+		document.title = defaults.application.name;
+	}
+
 	// go!
 	//
 	$(document).ready(() => {
