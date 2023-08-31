@@ -121,13 +121,6 @@ export default BaseView.extend({
 			</div>
 		</div>
 
-		// <div class="with-evidence form-group">
-		// 	<label class="control-label">With evidence</label>
-		// 	<div class="controls">
-		// 		<input type="checkbox" />
-		// 	</div>
-		// </div>
-
 		<% } %>
 	`),
 
