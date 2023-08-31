@@ -121,12 +121,12 @@ export default BaseView.extend({
 			</div>
 		</div>
 
-		<div class="with-evidence form-group">
-			<label class="control-label">With evidence</label>
-			<div class="controls">
-				<input type="checkbox" />
-			</div>
-		</div>
+		// <div class="with-evidence form-group">
+		// 	<label class="control-label">With evidence</label>
+		// 	<div class="controls">
+		// 		<input type="checkbox" />
+		// 	</div>
+		// </div>
 
 		<% } %>
 	`),
@@ -141,7 +141,7 @@ export default BaseView.extend({
 	// querying methods
 	//
 
-	isAdvanced: function() {
+	isAdvanced: function () {
 		return localStorage.getItem('options') == 'advanced';
 	},
 
@@ -149,7 +149,7 @@ export default BaseView.extend({
 	// getting methods
 	//
 
-	getValue: function(key) {
+	getValue: function (key) {
 		switch (key) {
 			case 'kind':
 				return this.$el.find('.kind input:checked').val();
@@ -171,12 +171,12 @@ export default BaseView.extend({
 				return parseFloat(this.$el.find('.pow input').val());
 			case 'with_plot':
 				return this.$el.find('.with-plot input').is(':checked');
-			case 'with_evidence':
-				return this.$el.find('.with-evidence input').is(':checked');
+			// case 'with_evidence':
+			// 	return this.$el.find('.with-evidence input').is(':checked');
 		}
 	},
 
-	getNames: function() {
+	getNames: function () {
 		let names = [];
 		let formGroups = this.$el.find('.form-group');
 		for (let i = 0; i < formGroups.length; i++) {
@@ -185,7 +185,7 @@ export default BaseView.extend({
 		return names;
 	},
 
-	getAllValues: function() {
+	getAllValues: function () {
 		let values = {};
 		let names = this.getNames();
 		for (let i = 0; i < names.length; i++) {
@@ -195,7 +195,7 @@ export default BaseView.extend({
 		return values;
 	},
 
-	getValues: function(which) {
+	getValues: function (which) {
 		let values;
 
 		if (this.isAdvanced()) {
@@ -212,7 +212,7 @@ export default BaseView.extend({
 		// modify values
 		//
 		if (values.kind == 'name') {
-			delete(values.top_k);
+			delete (values.top_k);
 		}
 
 		return values;
@@ -222,7 +222,7 @@ export default BaseView.extend({
 	// setting methods
 	//
 
-	setValue: function(key, value) {
+	setValue: function (key, value) {
 		switch (key) {
 			case 'kind':
 				this.$el.find('.kind input[value="' + value + '"]').prop('checked', true);
@@ -254,13 +254,13 @@ export default BaseView.extend({
 			case 'with_plot':
 				this.$el.find('.with-plot input').prop('checked', value);
 				break;
-			case 'with_evidence':
-				this.$el.find('.with-evidence input').prop('checked', value);
-				break;
+			// case 'with_evidence':
+			// 	this.$el.find('.with-evidence input').prop('checked', value);
+			// 	break;
 		}
 	},
 
-	setValues: function(values) {
+	setValues: function (values) {
 		let keys = Object.keys(values);
 		for (let i = 0; i < keys.length; i++) {
 			let key = keys[i];
@@ -273,13 +273,13 @@ export default BaseView.extend({
 	// rendering methods
 	//
 
-	templateContext: function() {
+	templateContext: function () {
 		return {
 			options: localStorage.getItem('options')
 		};
 	},
 
-	onRender: function() {
+	onRender: function () {
 		if (!this.options.values) {
 			return;
 		}
@@ -293,7 +293,7 @@ export default BaseView.extend({
 		this.update();
 	},
 
-	update: function() {
+	update: function () {
 		let kind = this.getValue('kind');
 
 		// hide show limit
@@ -312,7 +312,7 @@ export default BaseView.extend({
 	// mouse event handling methods
 	//
 
-	onChangeKind: function() {
+	onChangeKind: function () {
 
 		// update views
 		//
@@ -320,7 +320,7 @@ export default BaseView.extend({
 		this.update();
 	},
 
-	onChange: function() {
+	onChange: function () {
 
 		// perform callback
 		//
