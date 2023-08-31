@@ -65,15 +65,15 @@ export default SplitView.extend({
 	},
 
 	getSearchKind: function() {
-		return this.getChildView('sidebar search').getValue('kind');
+		return this.getChildView('sidebar panels search').getValue('kind');
 	},
 
 	getSearchTarget: function() {
-		return this.getChildView('sidebar search').getValue('target');
+		return this.getChildView('sidebar panels search').getValue('target');
 	},
 
 	getSearchLimit: function() {
-		return this.getChildView('sidebar search').getValue('limit');
+		return this.getChildView('sidebar panels search').getValue('limit');
 	},
 
 	getFile: function() {
@@ -81,7 +81,7 @@ export default SplitView.extend({
 	},
 
 	getSearchParams: function() {
-		let params = this.getChildView('sidebar').getSearchParams();
+		let params = this.getChildView('sidebar panels').getSearchParams();
 
 		// add query to params
 		//

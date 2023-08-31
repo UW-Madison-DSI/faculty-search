@@ -316,7 +316,7 @@ export default BaseView.extend({
 
 		// update views
 		//
-		this.parent.parent.setSearchKind(this.getValue('kind'));
+		this.getParentView('split-view').setSearchKind(this.getValue('kind'));
 		this.update();
 	},
 

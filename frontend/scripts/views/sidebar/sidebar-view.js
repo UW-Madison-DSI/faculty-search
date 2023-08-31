@@ -15,48 +15,28 @@
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
-import PanelsView from '../../views/layout/panels-view.js';
-import SearchPanelView from '../../views/sidebar/panels/search-panel-view.js';
-import OptionsPanelView from '../../views/sidebar/panels/options-panel-view.js';
-import FooterView from '../../views/layout/footer-view.js';
+import BaseView from '../../views/base-view.js';
+import SidebarHeaderView from '../../views/sidebar/sidebar-header-view.js';
+import SidebarPanelsView from '../../views/sidebar/sidebar-panels-view.js';
+import SidebarFooterView from '../../views/sidebar/sidebar-footer-view.js';
 
-export default PanelsView.extend({
+export default BaseView.extend({
 
 	//
 	// attributes
 	//
 
-	panels: ['search', 'options'],
 
-	html: _.template(`
+	template: _.template(`
+		<div class="header"></div>
+		<div class="panels"></div>
 		<div class="footer"></div>
 	`),
 
-	//
-	// querying methods
-	//
-
-	visible: function() {
-		return {
-			search: true
-		}
-	},
-
-	regions: function() {
-		let regions = PanelsView.prototype.regions.call(this);
-		regions.footer = {
-			el: '.footer',
-			replaceElement: false
-		};
-		return regions;
-	},
-
-	//
-	// getting methods
-	//
-
-	getSearchParams: function() {
-		return this.getChildView('search').getValues();
+	regions: {
+		header: '.header',
+		panels: '.panels',
+		footer: '.footer'
 	},
 
 	//
@@ -64,56 +44,20 @@ export default PanelsView.extend({
 	//
 
 	onRender: function() {
-
-		// call superclass method
-		//
-		PanelsView.prototype.onRender.call(this);
-
-		// add page footer to sidebar
-		//
+		this.showHeader();
+		this.showPanels();
 		this.showFooter();
 	},
 
+	showHeader: function() {
+		this.showChildView('header', new SidebarHeaderView());
+	},
+
+	showPanels: function() {
+		this.showChildView('panels', new SidebarPanelsView(this.options));
+	},
+
 	showFooter: function() {
-		this.showChildView('footer', new FooterView());
+		this.showChildView('footer', new SidebarFooterView());
 	},
-
-	//
-	// panel rendering methods
-	//
-
-	showPanel: function(panel, options) {
-
-		// if panel has already been rendered, then show
-		//
-		if (this.hasChildView(panel)) {
-			this.getChildView(panel).show();
-			return;
-		}
-
-		// show specified panel
-		//
-		switch (panel) {
-			case 'search':
-				this.showSearchPanel();
-				break;
-			case 'options':
-				this.showOptionsPanel();
-				break;
-		}
-	},
-
-	showSearchPanel: function() {
-		this.showChildView('search', new SearchPanelView({
-			values: this.options.values,
-			onchange: this.options.onchange
-		}));
-	},
-
-	showOptionsPanel: function() {
-		this.showChildView('options', new OptionsPanelView({
-			values: this.options.values,
-			onchange: this.options.onchange
-		}));
-	}
 });

@@ -72,9 +72,6 @@ export default BaseView.extend({
 			html += '<div class="' + className + '"></div>';
 		}
 
-		if (this.html) {
-			html += this.html();
-		}
 		return template(html);	
 	},
 
