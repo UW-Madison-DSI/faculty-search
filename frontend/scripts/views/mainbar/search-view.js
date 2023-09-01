@@ -50,7 +50,9 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			<% if (icon) { %><%= icon %><% } %>
 			<h1><%= title %></h1>
 			<h3><%= subtitle %></h3>
+			<% if (typeof(body) != 'undefined') { %>
 			<div class="body"><%= body %></div>
+			<% } %>
 		</div>
 	`),
 
