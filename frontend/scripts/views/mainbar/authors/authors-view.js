@@ -39,14 +39,12 @@ export default BaseView.extend({
 				</a>
 			</li>
 
-			<% if (plot) { %>
-			<li role="presentation" class="plot-tab<% if (tab == 'plot') { %> active<% } %>">
+			<li role="presentation" class="plot-tab<% if (tab == 'plot') { %> active<% } %>"<% if (!plot) { %> style="display:none"<% } %>>
 				<a role="tab" data-toggle="tab" href=".plot">
 					<i class="fa fa-chart-line"></i>
 					<label>Plot</label>
 				</a>
 			</li>
-			<% } %>
 		</ul>
 
 		<div class="tab-content">
@@ -95,6 +93,13 @@ export default BaseView.extend({
 	},
 
 	showPlot: function(plot) {
+
+		// show plot tab
+		//
+		this.$el.find('.plot-tab').show();
+
+		// show plot child view
+		//
 		this.showChildView('plot', new PlotView({
 			json: plot
 		}));

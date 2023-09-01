@@ -196,7 +196,7 @@ export default BaseView.extend({
 				kind: this.getValue('kind'),
 				target: this.getValue('target'),
 				top_k: this.getValue('top_k'),
-				with_plot: true
+				with_plot: undefined
 			};
 		}
 

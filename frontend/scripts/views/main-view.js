@@ -319,6 +319,12 @@ export default SplitView.extend({
 					let authors = new Authors(data.authors);
 					let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
 					this.getChildView('mainbar').showAuthors(authors, plot);
+
+					// show plot
+					//
+					if (!plot && options.with_plot === undefined) {
+						this.showAuthorsPlot(options);
+					}
 				} else {
 					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
@@ -332,6 +338,24 @@ export default SplitView.extend({
 				application.error({
 					message: defaults.messages.errors.connection
 				});
+			}
+		});
+	},
+
+	showAuthorsPlot: function(options) {
+		options.with_plot = true;
+		$.ajax({
+			url: config.server + '/search_authors',
+			type: 'POST',
+			data: JSON.stringify(options),
+			contentType: 'application/json',
+			processData: false,
+
+			// callbacks
+			//
+			success: (data) => {
+				let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
+				this.getChildView('mainbar results').showPlot(plot);
 			}
 		});
 	},
@@ -353,6 +377,12 @@ export default SplitView.extend({
 					let articles = new Articles(data.articles);
 					let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
 					this.getChildView('mainbar').showArticles(articles, plot);
+
+					// show plot
+					//
+					if (!plot && options.with_plot === undefined) {
+						this.showArticlesPlot(options);
+					}
 				} else {
 					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
@@ -366,6 +396,24 @@ export default SplitView.extend({
 				application.error({
 					message: defaults.messages.errors.connection
 				});
+			}
+		});
+	},
+
+	showArticlesPlot: function(options) {
+		options.with_plot = true;
+		$.ajax({
+			url: config.server + '/search_articles',
+			type: 'POST',
+			data: JSON.stringify(options),
+			contentType: 'application/json',
+			processData: false,
+
+			// callbacks
+			//
+			success: (data) => {
+				let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
+				this.getChildView('mainbar results').showPlot(plot);
 			}
 		});
 	},
