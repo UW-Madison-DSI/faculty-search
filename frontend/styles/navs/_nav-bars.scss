@@ -34,6 +34,8 @@ $navbar-color: branding.$primary-color;
 
 		#brand {
 			display: flex;
+			flex-shrink: 0;
+			min-width: 300px;
 
 			.icon {
 				display: flex;

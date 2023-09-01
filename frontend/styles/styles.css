@@ -2754,6 +2754,8 @@ i.rotated.reversed {
 }
 #header .navbar #brand {
   display: flex;
+  flex-shrink: 0;
+  min-width: 300px;
 }
 #header .navbar #brand .icon {
   display: flex;
