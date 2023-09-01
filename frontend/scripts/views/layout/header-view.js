@@ -21,7 +21,7 @@ export default BaseView.extend({
 	className: 'navbar navbar-default navbar-fixed-top navbar-inverse',
 
 	template: _.template(`
-		<a id="brand" href="#" id="brand" class="active navbar-brand">
+		<a id="brand" href="/" id="brand" class="active navbar-brand">
 			<div class="icon">
 				<img src="<%= defaults.navbar.icon %>" />
 			</div>
