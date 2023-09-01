@@ -2755,14 +2755,17 @@ i.rotated.reversed {
 #header .navbar #brand {
   display: flex;
   flex-shrink: 0;
-  min-width: 300px;
 }
 #header .navbar #brand .icon {
   display: flex;
+  text-align: center;
+  height: inherit;
+  margin-right: 10px;
+}
+#header .navbar #brand .icon img {
   width: auto;
   height: 75%;
   margin: auto;
-  margin-right: 10px;
 }
 #header .navbar #brand .title {
   margin: auto 0;

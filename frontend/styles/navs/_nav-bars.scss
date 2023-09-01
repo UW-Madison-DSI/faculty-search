@@ -35,14 +35,18 @@ $navbar-color: branding.$primary-color;
 		#brand {
 			display: flex;
 			flex-shrink: 0;
-			min-width: 300px;
 
 			.icon {
 				display: flex;
-				width: auto;
-				height: 75%;
-				margin: auto;
+				text-align: center;
+				height: inherit;
 				margin-right: 10px;
+
+				img {
+					width: auto;
+					height: 75%;
+					margin: auto;
+				}
 			}
 
 			.title {
