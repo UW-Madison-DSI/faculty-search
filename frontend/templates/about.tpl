@@ -27,13 +27,13 @@
 	<h2><i class="fa fa-desktop"></i>Screen Shots</h2>
 
 	<div class="figure">
-		<a href="images/info/community-search.png" target="_blank" class="lightbox" title="<%= defaults.application.name %>"><img src="images/info/community-search.png" /></a>
+		<a href="images/info/desktop-search.png" target="_blank" class="lightbox" title="<%= defaults.application.name %>"><img src="images/info/desktop-search.png" /></a>
 		<div class="caption"><%= defaults.application.name %></div>
 	</div>
 
 	<div class="figure row">
 		<div class="figure">
-			<img src="images/info/iphone-community-search.png" style="border:none; width:300px" />
+			<img src="images/info/iphone-search.png" style="border:none; width:300px" />
 			<div class="caption"><%= defaults.application.name %> Mobile</div>
 		</div>
 	</div>
