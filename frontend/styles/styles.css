@@ -1663,12 +1663,15 @@ body.dark a:hover {
   height: 100%;
 }
 .mainbar .search .content {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   position: relative;
   padding: 20px;
   overflow: auto;
 }
 .mainbar .search .content .results {
+  display: block;
   position: relative;
   width: 100%;
   height: 100%;
@@ -1713,13 +1716,13 @@ body.dark a:hover {
   position: relative;
 }
 .mainbar .search .content .message.overlay .content {
-  width: 75%;
+  width: 80%;
   padding: 20px;
   border-radius: 20px;
   margin: auto;
   background-color: rgba(128, 128, 128, 0.1);
   text-align: center;
-  margin-top: 10%;
+  margin-top: 5%;
 }
 .mainbar .search .content .message.overlay .content > i {
   font-size: 500%;
@@ -1815,7 +1818,7 @@ body.dark a:hover {
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 .search-bar {
-  --search-placeholder: "Search terms or text";
+  --search-placeholder: "Enter a search terms or text (can be sentences or entire paragraphs)";
 }
 .search-bar .input {
   position: relative;
@@ -1876,6 +1879,9 @@ body.dark a:hover {
 }
 .search-bar.name {
   --search-placeholder: "Firstname Lastname";
+}
+.search-bar.url {
+  --search-placeholder: "Enter a URL. The search will be based on the contents of this webpage.";
 }
 
 body.dark .search-bar .input {

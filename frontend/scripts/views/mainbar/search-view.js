@@ -32,6 +32,9 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	template: template(`
 		<div class="content">
 			<div class="message overlay"></div>
+			<div class="notes well" style="display:none">
+				<%= defaults.messages.notes %>
+			</div>
 			<div class="results" style="display:none"></div>
 		</div>
 		<div class="search-bar">
@@ -86,7 +89,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		<ul>
 			<li>Discover experts from across campus for any topic</li>
 			<li>Find related research from your colleagues</li>
-			<li>Understand the research landscape at UW-Madison</li>
+			<li>Understand the research landscape at UW-Madison.</li>
 		</ul>
 	`,
 
@@ -114,11 +117,11 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// getting methods
 	//
 
-	getQuery: function () {
+	getQuery: function() {
 		return this.$el.find('.input').text().trim();
 	},
 
-	getFile: function () {
+	getFile: function() {
 		return this.$el.find('#file')[0].files[0];
 	},
 
@@ -126,13 +129,13 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// setting methods
 	//
 
-	setSearchKind: function (kind) {
+	setSearchKind: function(kind) {
 		this.kind = kind;
 		this.droppable = (kind == 'pdf');
 		this.update();
 	},
 
-	setFiles: function (files) {
+	setFiles: function(files) {
 		const fileInput = this.$el.find('#file')[0];
 
 		// set file input
@@ -150,7 +153,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.onChangeFile();
 	},
 
-	setFilename: function (filename) {
+	setFilename: function(filename) {
 		const fileInput = this.$el.find('#file')[0];
 
 		// Help Safari out
@@ -164,13 +167,13 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// rendering methods
 	//
 
-	templateContext: function () {
+	templateContext: function() {
 		return {
 			query: this.options.query
 		}
 	},
 
-	onRender: function () {
+	onRender: function() {
 		this.showIntroMessage();
 
 		// add button tooltip triggers
@@ -178,7 +181,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.addTooltips();
 	},
 
-	showAuthors: function (authors, plot) {
+	showAuthors: function(authors, plot) {
 		this.clearMessage();
 		this.showChildView('results', new AuthorsView({
 			collection: authors,
@@ -195,7 +198,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.showTextInput();
 	},
 
-	showArticles: function (articles, plot) {
+	showArticles: function(articles, plot) {
 		this.clearMessage();
 		this.showChildView('results', new ArticlesView({
 			collection: articles,
@@ -206,7 +209,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.showTextInput();
 	},
 
-	showAuthorProfile: function (author) {
+	showAuthorProfile: function(author) {
 		this.clearMessage();
 		this.showChildView('results', new AuthorProfileView({
 			model: author
@@ -216,7 +219,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.showTextInput();
 	},
 
-	showTextInput: function () {
+	showTextInput: function() {
 		this.$el.find('.search-bar').show();
 
 		// configure search bar
@@ -230,28 +233,30 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		}
 	},
 
-	showResults: function () {
+	showResults: function() {
 		this.$el.find('.message').hide();
 		this.$el.find('.results').show();
+		this.$el.find('.notes').show();
 	},
 
-	hideResults: function () {
+	hideResults: function() {
 		this.$el.find('.results').hide();
+		this.$el.find('.notes').hide();
 	},
 
-	hideTextInput: function () {
+	hideTextInput: function() {
 		this.$el.find('.search-bar').hide();
 	},
 
-	showClearResultsButton: function () {
+	showClearResultsButton: function() {
 		this.$el.find('.search-bar .clear').show();
 	},
 
-	hideClearResultsButton: function () {
+	hideClearResultsButton: function() {
 		this.$el.find('.search-bar .clear').hide();
 	},
 
-	clear: function () {
+	clear: function() {
 
 		// update search view
 		//
@@ -260,7 +265,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.update();
 	},
 
-	update: function () {
+	update: function() {
 		switch (this.kind) {
 			case 'pdf':
 				this.hideResults();
@@ -281,14 +286,23 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.parent.updateQueryString();
 	},
 
-	updatePlaceholder: function () {
+	updatePlaceholder: function() {
 
 		// update search placeholder text
 		//
-		if (this.kind == 'name') {
-			this.$el.find('.search-bar').addClass('name');
-		} else {
-			this.$el.find('.search-bar').removeClass('name');
+		switch (this.kind) {
+			case 'name':
+				this.$el.find('.search-bar').addClass('name');
+				this.$el.find('.search-bar').removeClass('url');
+				break;
+			case 'url':
+				this.$el.find('.search-bar').removeClass('name');
+				this.$el.find('.search-bar').addClass('url');
+				break;
+			default:
+				this.$el.find('.search-bar').removeClass('name');
+				this.$el.find('.search-bar').removeClass('url');
+				break;
 		}
 	},
 
@@ -296,11 +310,11 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// drag-n-drop rendering methods
 	//
 
-	highlight: function () {
+	highlight: function() {
 		this.$el.find('.results').addClass('dropzone');
 	},
 
-	unhighlight: function () {
+	unhighlight: function() {
 		this.$el.find('.results').removeClass('dropzone');
 	},
 
@@ -308,7 +322,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// message rendering methodsd
 	//
 
-	showHtmlMessage: function (html) {
+	showHtmlMessage: function(html) {
 
 		// clear previous message
 		//
@@ -322,17 +336,17 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.$el.find('.message').show();
 	},
 
-	showIntroMessage: function () {
+	showIntroMessage: function() {
 		let message = defaults.messages.main;
 		message.body = this.introText;
 		this.showMessage(message);
 	},
 
-	showMessage: function (options) {
+	showMessage: function(options) {
 		this.showHtmlMessage(this.messageTemplate(options));
 	},
 
-	clearMessage: function () {
+	clearMessage: function() {
 
 		// remove existing message from dom
 		//
@@ -345,19 +359,19 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// mouse event handling methods
 	//
 
-	onClickSubmitText: function () {
+	onClickSubmitText: function() {
 		this.parent.search();
 	},
 
-	onClickClearText: function () {
+	onClickClearText: function() {
 		this.parent.clear();
 	},
 
-	onClickSubmitFile: function () {
+	onClickSubmitFile: function() {
 		this.parent.search();
 	},
 
-	onClickClearFile: function () {
+	onClickClearFile: function() {
 		this.clear();
 	},
 
@@ -365,7 +379,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// keyboard event handling methods
 	//
 
-	onKeyDown: function (event) {
+	onKeyDown: function(event) {
 		if (event.keyCode == 13 && !event.shiftKey) {
 			this.onClickSubmitText();
 			event.preventDefault();
@@ -376,7 +390,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// file event handling methods
 	//
 
-	onChangeFile: function (event) {
+	onChangeFile: function(event) {
 
 		// update view
 		//
@@ -393,7 +407,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		}
 	},
 
-	onClickSelectFile: function () {
+	onClickSelectFile: function() {
 		this.$el.find('input[type="file"]').trigger('click');
 	},
 
@@ -401,7 +415,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// drag and drop event handling methods
 	//
 
-	onDrop: function (event) {
+	onDrop: function(event) {
 
 		// call mixin method
 		//
@@ -416,7 +430,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// window event handling methods
 	//
 
-	onResize: function () {
+	onResize: function() {
 		if (this.hasChildView('results') && this.getChildView('results').onResize) {
 			this.getChildView('results').onResize();
 		}

@@ -29,7 +29,7 @@ export default SplitView.extend({
 	// attributes
 	//
 
-	orientation: $(window).width() < 960? 'vertical': 'horizontal',
+	orientation: $(window).width() < 640? 'vertical': 'horizontal',
 	flipped: false,
 	sizes: [35, 65],
 

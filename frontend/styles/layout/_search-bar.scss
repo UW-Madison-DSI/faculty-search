@@ -25,7 +25,7 @@ $border-color: colors.$very-very-light-grey;
 //
 
 .search-bar {
-	--search-placeholder: "Search terms or text";
+	--search-placeholder: "Enter a search terms or text (can be sentences or entire paragraphs)";
 
 	.input {
 		position: relative;
@@ -101,6 +101,10 @@ $border-color: colors.$very-very-light-grey;
 
 	&.name {
 		--search-placeholder: "Firstname Lastname";
+	}
+
+	&.url {
+		--search-placeholder: "Enter a URL. The search will be based on the contents of this webpage.";
 	}
 }
 

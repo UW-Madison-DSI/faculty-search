@@ -49,12 +49,15 @@ $list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 		height: 100%;
 
 		.content {
+			display: flex;
+			flex-direction: column;
 			flex-grow: 1;
 			position: relative;
 			padding: 20px;
 			overflow: auto;
 
 			.results {
+				display: block;
 				position: relative;
 				width: 100%;
 				height: 100%;
@@ -109,13 +112,13 @@ $list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 				position: relative;
 
 				.content {
-					width: 75%;
+					width: 80%;
 					padding: 20px;
 					border-radius: 20px;
 					margin: auto;
 					background-color: $message-color;
 					text-align: center;
-					margin-top: 10%;
+					margin-top: 5%;
 
 					> i {
 						font-size: 500%;
