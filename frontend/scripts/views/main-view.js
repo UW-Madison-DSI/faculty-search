@@ -258,7 +258,7 @@ export default SplitView.extend({
 			},
 			error: (response, textStatus, errorThrown) => {
 				application.error({
-					message: response.responseText || defaults.messages.errors.connection
+					message: defaults.messages.errors.url_error
 				});
 			}
 		});
@@ -330,7 +330,7 @@ export default SplitView.extend({
 			error: (response, textStatus, errorThrown) => {
 				this.hideSpinner();
 				application.error({
-					message: response.responseText || defaults.messages.errors.connection
+					message: defaults.messages.errors.connection
 				});
 			}
 		});
@@ -364,7 +364,7 @@ export default SplitView.extend({
 			error: (response, textStatus, errorThrown) => {
 				this.hideSpinner();
 				application.error({
-					message: response.responseText || defaults.messages.errors.connection
+					message: defaults.messages.errors.connection
 				});
 			}
 		});
@@ -413,7 +413,7 @@ export default SplitView.extend({
 			error: (response, textStatus, errorThrown) => {
 				this.hideSpinner();
 				application.error({
-					message: response.responseText || defaults.messages.errors.connection
+					message: defaults.messages.errors.connection
 				});
 			}
 		});
