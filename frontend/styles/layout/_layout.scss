@@ -320,4 +320,13 @@ body.dark {
 			color: $dark-link-hover-color;
 		}
 	}
+
+	//
+	// wells
+	//
+
+	.well {
+		background-color: colors.$very-dark-grey;
+		border-color: colors.$dark-grey;
+	}
 }

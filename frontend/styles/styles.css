@@ -1578,6 +1578,10 @@ body.dark a {
 body.dark a:hover {
   color: white;
 }
+body.dark .well {
+  background-color: #4d4d4d;
+  border-color: #676767;
+}
 
 /******************************************************************************\
 |                                                                              |
@@ -1874,7 +1878,6 @@ body.dark a:hover {
 }
 .search-bar .input .buttons button i {
   margin: 0;
-  color: white;
 }
 .search-bar .input .buttons button + button {
   margin-left: 5px;
