@@ -114,6 +114,6 @@ export default BaseView.extend({
 		// update view
 		//
 		this.parent.getChildView('search').render();
-		this.parent.parent.updateQueryString();
+		this.getParentView('split-view').updateQueryString();
 	}
 });
