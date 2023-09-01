@@ -28,7 +28,8 @@ $border-radius: 5px;
 // colors
 //
 
-$btn-color: colors.$medium-grey;
+$btn-color: colors.$very-very-light-grey;
+$btn-label-color: black;
 $btn-primary-color: branding.$primary-color;
 $btn-primary-disabled-color: fade-in(branding.$primary-color, 0.5);
 $success-color: hsl(150, 60%, 50%);
@@ -40,10 +41,11 @@ $warning-color: hsl(0, 60%, 50%);
 
 .btn, .btn:focus {
 	outline: none !important;
-	background: $btn-color;
 	border: none;
 	border-radius: $border-radius;
 	padding: 5px 10px;
+	color: $btn-label-color;
+	background: $btn-color;
 
 	i {
 		margin-right: 5px;
@@ -56,6 +58,7 @@ $warning-color: hsl(0, 60%, 50%);
 }
 
 .btn-primary, .btn-primary:focus {
+	color: white;
 	background: $btn-primary-color;
 	border-color: $btn-primary-color;
 
