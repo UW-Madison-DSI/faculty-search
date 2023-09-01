@@ -53,11 +53,11 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		</div>
 	`),
 
-	pdfUploadMessage: `
+	pdfUploadMessageTemplate: template(`
 		<div class="content">
-			<i class="fa fa-file"></i>
-			<h1>Search By PDF</h1>
-			<h3>Drag and drop or select a PDF file to search for the contents of this file.</h3>
+			<%= defaults.messages.pdf_upload.icon %>
+			<h1><%= defaults.messages.pdf_upload.title %></h1>
+			<h3><%= defaults.messages.pdf_upload.message %></h3>
 
 			<button class="select-file btn btn-primary"><i class="fa fa-mouse-pointer"></i>Select File</button>
 			<input type="file" id="file" class="form-control" style="display:none" />
@@ -67,7 +67,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 				<button class="clear btn" ><i class="fa fa-xmark"></i>Clear</button>
 			</div>
 		</div>
-	`,
+	`),
 
 	regions: {
 		results: '.results',
@@ -243,7 +243,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		switch (this.kind) {
 			case 'pdf':
 				this.hideResults();
-				this.showHtmlMessage(this.pdfUploadMessage);
+				this.showHtmlMessage(this.pdfUploadMessageTemplate());
 				this.hideTextInput();
 				break;
 			default:
