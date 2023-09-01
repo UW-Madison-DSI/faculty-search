@@ -121,6 +121,11 @@ $list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 						font-size: 500%;
 						color: $icon-color;
 					}
+
+					.body {
+						margin-top: 20px;
+						text-align: left;
+					}
 				}
 
 				button {

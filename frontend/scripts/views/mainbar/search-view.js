@@ -50,6 +50,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			<% if (icon) { %><%= icon %><% } %>
 			<h1><%= title %></h1>
 			<h3><%= subtitle %></h3>
+			<div class="body"><%= body %></div>
 		</div>
 	`),
 
@@ -68,6 +69,24 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			</div>
 		</div>
 	`),
+
+	introText: `
+		<p>Unlike a standard search engine, you don’t need to use keywords or exact phrases. Instead, our AI-powered search is based on semantics. So your search can be based on entire paragraphs or documents. </p>
+
+		<p>Your search can be based on: </p>
+		<ul>
+			<li>a few words or an entire paragraph</li>
+			<li>the content of a webpage, just provide the URL</li>
+			<li>the contents of a document, just drag and drop a PDF</li>
+		</ul>
+
+		<label>Benefits:</label>
+		<ul>
+			<li>Discover experts from across campus for any topic</li>
+			<li>Find related research from your colleagues</li>
+			<li>Understand the research landscape at UW-Madison.</li>
+		</ul>
+	`,
 
 	regions: {
 		results: '.results',
@@ -150,7 +169,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	},
 
 	onRender: function() {
-		this.showMessage(defaults.messages.main);
+		this.showIntroMessage();
 
 		// add button tooltip triggers
 		//
@@ -248,7 +267,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 				break;
 			default:
 				this.hideResults();
-				this.showMessage(defaults.messages.main);
+				this.showIntroMessage();
 				this.showTextInput();
 				break;
 		}
@@ -299,6 +318,12 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		//
 		this.$el.find('.message').html(html);
 		this.$el.find('.message').show();
+	},
+
+	showIntroMessage: function() {
+		let message = defaults.messages.main;
+		message.body = this.introText;
+		this.showMessage(message);
 	},
 
 	showMessage: function(options) {

@@ -1725,6 +1725,10 @@ body.dark a:hover {
   font-size: 500%;
   color: #808080;
 }
+.mainbar .search .content .message.overlay .content .body {
+  margin-top: 20px;
+  text-align: left;
+}
 .mainbar .search .content .message.overlay button {
   margin-top: 10px;
   pointer-events: auto;
@@ -1977,7 +1981,7 @@ body[device=phone] .page .section > .row > div + div {
 \******************************************************************************/
 .sidebar {
   overflow: auto;
-  color: #808080;
+  color: #9a9a9a;
   background-color: #f3f3f3;
   word-break: break-word;
 }
@@ -2000,6 +2004,9 @@ body[device=phone] .page .section > .row > div + div {
 }
 .sidebar .panel .header input[type=checkbox] {
   margin-right: 15px;
+}
+.sidebar .panel p, .sidebar .panel ul {
+  color: #676767;
 }
 .sidebar .panel > .radio-buttons {
   text-align: center;

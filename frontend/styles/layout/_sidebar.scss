@@ -24,8 +24,9 @@ $panel-min-width: 200px;
 // colors
 //
 
+$color: colors.$light-grey;
 $background-color: colors.$ultra-light-grey;
-$text-color: colors.$medium-grey;
+$text-color: colors.$dark-grey;
 
 $dark-background-color: colors.$very-dark-grey;
 $dark-text-color: colors.$very-very-very-light-grey;
@@ -38,7 +39,7 @@ $dark-label-color: white;
 
 .sidebar {
 	overflow: auto;
-	color: $text-color;
+	color: $color;
 	background-color: $background-color;
 	word-break: break-word;
 
@@ -65,6 +66,10 @@ $dark-label-color: white;
 			input[type="checkbox"] {
 				margin-right: 15px;
 			}
+		}
+
+		p, ul {
+			color: $text-color;
 		}
 
 		> .radio-buttons {
