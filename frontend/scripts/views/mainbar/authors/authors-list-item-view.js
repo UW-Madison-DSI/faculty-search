@@ -61,21 +61,15 @@ export default BaseView.extend({
 	},
 
 	getUrl: function() {
-		let url = 'https://wisc.discovery.academicanalytics.com/search/stack';
-		let queryString = 'query=' + this.getName() + '&searchType=Name';
-		return url + '?' + queryString;
+		return config.profile_url + this.getName();
 	},
 
 	getSearchUrl: function() {
-		let url = 'https://www.wisc.edu/search/';
-		let queryString = 'q=' + this.getName();
-		return url + '?' + queryString;
+		return config.search_url + this.getName();
 	},
 
 	getMapUrl: function() {
-		let url = 'https://datascience.sharedigm.com/cmap/';
-		let queryString = 'query=' + this.getName() + '&category=people';
-		return url + '?' + queryString;
+		return config.map_url + this.getName();
 	},
 
 	//
