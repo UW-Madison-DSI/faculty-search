@@ -14,4 +14,4 @@ docker compose cp cert.pem flask:/app
 docker compose cp privkey.pem flask:/app
 
 # Start the frontend container
-docker compose up flask
+docker compose up -d flask
