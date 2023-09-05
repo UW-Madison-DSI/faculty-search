@@ -7,7 +7,7 @@ sudo su lcmjlo
 # Pull the latest image
 docker compose down flask
 docker compose pull flask
-docker compose build flask
+docker compose up flask --build -d
 
 # Copy the certificates to frontend container
 docker compose cp cert.pem flask:/app

@@ -13,7 +13,7 @@
 ################################################################################
 
 import os
-from flask import Flask, request
+from flask import Flask, request, redirect
 
 # from flask_mail import Mail, Message
 from controllers.contact_controller import ContactController
@@ -33,6 +33,12 @@ load_dotenv()
 
 # create new Flask app
 app = Flask(__name__, static_folder="../", static_url_path="/")
+
+
+@app.before_request
+def redirect_https():
+    if not request.is_secure:
+        return redirect(request.url.replace("http://", "https://"))
 
 
 # try to get app config from config.py
