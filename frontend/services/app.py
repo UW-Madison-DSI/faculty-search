@@ -191,4 +191,4 @@ def post_create():
 
 if __name__ == "__main__":
     logging.info(HOST, PORT)
-    app.run(debug=DEBUG, host=HOST, port=PORT)
+    app.run(debug=DEBUG, host=HOST, port=PORT, ssl_context=("cert.pem", "privkey.pem"))
