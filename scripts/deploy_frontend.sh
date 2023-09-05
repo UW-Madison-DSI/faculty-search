@@ -5,6 +5,7 @@ cd /community-search
 sudo su lcmjlo
 
 # Pull the latest image
+docker compose down flask
 docker compose pull flask
 docker compose build flask
 
