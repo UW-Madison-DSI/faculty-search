@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO=UW-Madison-DSI/community-search
+REPO=UW-Madison-DSI/faculty-search
 API_URL=https://api.github.com/repos/$REPO/releases/latest
 RELEASE_VERSION=`curl --silent $API_URL | jq -r .tag_name`
 DOWNLOAD_URL=https://github.com/$REPO/releases/download/$RELEASE_VERSION/embedding_search-$RELEASE_VERSION-py3-none-any.whl
