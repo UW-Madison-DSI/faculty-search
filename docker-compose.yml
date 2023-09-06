@@ -90,7 +90,8 @@ services:
     #   dockerfile: Dockerfile
     ports:
       - "443:443"
-    command: [ python, ./services/app.py ]
+    # command: [ python, ./services/app.py ]
+    command: [ gunicorn, app:main ]
     environment:
       - DEBUG=1
       - PORT=443

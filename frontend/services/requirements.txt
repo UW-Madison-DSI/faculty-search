@@ -4,3 +4,5 @@ flask_mail
 langchain
 python-dotenv
 bs4
+gunicorn
+```
