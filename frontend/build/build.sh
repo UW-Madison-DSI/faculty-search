@@ -26,7 +26,7 @@ bundle_scripts() {
 compress_scripts() {
 	for filename in $1/*.js; do
 		echo "minifying script $filename"
-		terser --compress --mangle --ecma 6 $filename -o $filename 
+		sudo terser --compress --mangle --ecma 6 $filename -o $filename 
 	done
 }
 
@@ -59,7 +59,7 @@ compress_styles() {
 		elif [ -f "$item" ]; then
 			if [[ "$item" = *.css ]]; then
 				echo "minifying styles $item"
-				cssmin "$item" > temp
+				sudo cssmin "$item" > temp
 				sudo rm "$item" -f
 				sudo mv temp "$item"
 			fi
