@@ -63,7 +63,11 @@ services:
         "--host",
         "0.0.0.0",
         "--port",
-        "8765"
+        "8765",
+        "--ssl-keyfile",
+        "privkey.pem",
+        "--ssl-certfile",
+        "cert.pem"
       ]
     environment:
       OPENAI_API_KEY: '${OPENAI_API_KEY}'
@@ -85,10 +89,10 @@ services:
     #   context: ./frontend
     #   dockerfile: Dockerfile
     ports:
-      - "80:5000"
+      - "443:443"
     command: [ python, ./services/app.py ]
     environment:
       - DEBUG=1
-      - PORT=5000
+      - PORT=443
       - HOST=0.0.0.0
       - UPLOAD_FOLDER=/tmp_pdfs

@@ -14,6 +14,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Build website
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.17.1'
+    - run: sh frontend/build/build.sh
+
     - name: Build and Push Docker image
       id: build
       env:
