@@ -194,7 +194,10 @@ def post_create():
 ################################################################################
 #                                     main                                     #
 ################################################################################
-
-if __name__ == "__main__":
+def main():
     logging.info(HOST, PORT)
     app.run(debug=DEBUG, host=HOST, port=PORT, ssl_context=("cert.pem", "privkey.pem"))
+
+
+if __name__ == "__main__":
+    main()
