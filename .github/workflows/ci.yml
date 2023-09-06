@@ -18,7 +18,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18.17.1'
-    - run: sh frontend/build/build.sh
+    - run: bash frontend/build/install.sh
+    - run: bash frontend/build/build.sh
 
     - name: Build and Push Docker image
       id: build

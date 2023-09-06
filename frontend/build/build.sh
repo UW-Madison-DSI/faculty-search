@@ -8,8 +8,9 @@ dest=../../frontend-built
 #
 
 make_copy() {
-	rm -rf $2
-	cp -r $1 $2
+	sudo rm -rf $2
+	sudo cp -r $1 $2
+	sudo chmod -R 777 $2
 }
 
 #
@@ -17,9 +18,9 @@ make_copy() {
 #
 
 bundle_scripts() {
-	rm -rf $1
-	mkdir $1
-	rollup --config rollup.config.js --bundleConfigAsCjs
+	sudo rm -rf $1
+	sudo mkdir $1
+	sudo rollup --config rollup.config.js --bundleConfigAsCjs
 }
 
 compress_scripts() {
@@ -37,14 +38,14 @@ clean_styles() {
 	# remove unused less folders
 	for item in "$1"/*; do
 		if [ -d "$item" ]; then
-			if [[ $item != *themes ]]; then
-				rm -rf "$item"
+			if [[ "$item" != *themes ]]; then
+				sudo rm -rf "$item"
 			fi
 		fi
 	done
 
 	# remove all less files and makefiles
-	for file in $(find $1 -name '*.less' -or -name 'makefile'); do rm $file; done
+	for file in $(find $1 -name '*.less' -or -name 'makefile'); do sudo rm -f $file; done
 
 	# remove all empty directories
 	find $1 -name ".DS_Store" -depth -exec rm {} \;
@@ -53,14 +54,14 @@ clean_styles() {
 
 compress_styles() {
 	for item in "$1"/*;do
-		if [ -d "$item" ];then
+		if [ -d "$item" ]; then
 			compress_styles "$item"
 		elif [ -f "$item" ]; then
-			if [[ $item = *.css ]]; then
+			if [[ "$item" = *.css ]]; then
 				echo "minifying styles $item"
-				cssmin $item > temp
-				rm $item
-				mv temp $item
+				cssmin "$item" > temp
+				sudo rm "$item" -f
+				sudo mv temp "$item"
 			fi
 		fi
 	done
@@ -75,9 +76,15 @@ cd frontend/build
 make_copy $src $dest
 
 # process scripts
+echo "run bundle scripts"
 bundle_scripts "$dest/scripts"
+
+echo "run compress scripts"
 compress_scripts "$dest/scripts"
 
 # process styles
+echo "run clean styles"
 clean_styles "$dest/styles"
+
+echo "run compress styles"
 compress_styles "$dest/styles"
