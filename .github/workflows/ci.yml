@@ -27,7 +27,7 @@ jobs:
         GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
       run: |
         echo $GHCR_TOKEN | docker login ghcr.io -u USERNAME --password-stdin &&
-        cd frontend &&
+        cd frontend-built &&
         docker build . -t ghcr.io/jasonlo/community-search-frontend:latest &&
         docker push ghcr.io/jasonlo/community-search-frontend:latest
 
