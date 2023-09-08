@@ -1,7 +1,7 @@
 #! /bin/bash
 # This is suppose to be run on GCP 
 
-cd /community-search
+cd /faculty-search
 sudo su lcmjlo
 
 # Pull the latest image
