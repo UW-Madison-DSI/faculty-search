@@ -71,7 +71,6 @@ services:
       ]
     environment:
       OPENAI_API_KEY: '${OPENAI_API_KEY}'
-      OPENAI_ORGANIZATION: '${OPENAI_ORGANIZATION}'
       AUTHOR_DIR: ./data/raw/campus_users
       MILVUS_ALIAS: default
       MILVUS_HOST: milvus-standalone
@@ -90,8 +89,8 @@ services:
     #   dockerfile: Dockerfile
     ports:
       - "443:443"
+      - "80:80"
     command: [ python, ./services/app.py ]
-    # command: [ gunicorn, --bind, 0.0.0.0:443, --certfile=cert.pem, --keyfile=privkey.pem, app:main]
     environment:
       - DEBUG=1
       - PORT=443

@@ -5,7 +5,7 @@ from pydantic import BaseModel, validator
 
 
 class Article(BaseModel):
-    author_id: Optional[str] = None
+    author_id: Optional[str | int] = None
     doi: Optional[str] = None
     publication_year: Optional[int] = None
     title: Optional[str] = None
@@ -36,7 +36,7 @@ class Article(BaseModel):
 class Author(BaseModel):
     """An author object."""
 
-    id: Optional[str] = None
+    id: Optional[str | int] = None
     unit_id: Optional[int] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
