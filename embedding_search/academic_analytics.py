@@ -16,6 +16,11 @@ def get_units(institution_id: int = 14) -> list[dict]:
     response = requests.post(
         url, headers=headers, json={"InstitutionIds": [institution_id]}
     )
+
+    if response.status_code != 200:
+        raise Exception(
+            f"Error getting units from academic analytics API: {response.status_code}"
+        )
     return response.json()
 
 
@@ -25,6 +30,11 @@ def get_faculties(unit_id: int, institution_id: int = 14) -> list[dict]:
 
     url = f"https://wisc.discovery.academicanalytics.com/api/people/getbyunitids/{institution_id}/{unit_id}"
     response = requests.get(url)
+
+    if response.status_code != 200:
+        raise Exception(
+            f"Error getting faculties from academic analytics API: {response.status_code}"
+        )
     return response.json()
 
 
@@ -34,4 +44,9 @@ def get_author(id: int) -> dict:
 
     url = f"https://wisc.discovery.academicanalytics.com/api/people/{id}"
     response = requests.get(url)
+
+    if response.status_code != 200:
+        raise Exception(
+            f"Error getting author from academic analytics API: {response.status_code}"
+        )
     return response.json()

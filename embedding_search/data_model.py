@@ -71,7 +71,7 @@ class Author(BaseModel):
 
     def save(self, path: str) -> None:
         with open(path, "w") as f:
-            json.dump(self.dict(skip_defaults=False), f, indent=4)
+            f.write(self.model_dump_json(exclude_defaults=False, indent=4))
 
     @classmethod
     def load(cls, path: str) -> "Author":

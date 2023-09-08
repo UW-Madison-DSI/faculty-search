@@ -10,3 +10,4 @@ beautifulsoup4
 fastapi
 uvicorn
 pymilvus
+google-cloud-storage

@@ -1,4 +1,5 @@
 import logging
+import json
 from langchain.embeddings import OpenAIEmbeddings
 from embedding_search.crossref import batch_query_cited_by
 from embedding_search.academic_analytics import get_units, get_faculties, get_author
@@ -40,6 +41,9 @@ def parse_article(article: dict) -> Article:
 def download_one_author(id: int) -> None:
     """Parse an author from the academic analytics API."""
 
+    if isinstance(id, str):
+        id = int(id)
+
     raw_author = get_author(id)
     author = Author(
         id=id,
@@ -62,9 +66,7 @@ def download_one_author(id: int) -> None:
 
     # Append cited by count
     article_dois = [article.doi for article in author.articles]
-    print(article_dois)
     cited_by_data = batch_query_cited_by(article_dois)
-    print(cited_by_data)
 
     for article in author.articles:
         article.cited_by = cited_by_data.get(parsed_article.doi, None)
@@ -82,12 +84,16 @@ def download_authors(overwrite: bool = False, resume_from: int = 0) -> None:
     downloaded = [] if overwrite else list_downloaded_authors()
 
     units = get_units()
-    units = units[resume_from:]
+
+    if resume_from:
+        units = units[resume_from:]
+
     logging.info(f"Found {len(units)} units.")
 
     for i, unit in enumerate(units):
-        faculties = get_faculties(unit["unitId"])
+        faculties = get_faculties(int(unit["unitId"]))
         for j, faculty in enumerate(faculties):
+            print(faculty)
             print(
                 f"Processing unit {i+1}/{len(units)}; faculty {j+1}/{len(faculties)}: {faculty['id']}"
             )
@@ -99,6 +105,23 @@ def download_authors(overwrite: bool = False, resume_from: int = 0) -> None:
             except Exception as e:
                 print(f"Error downloading {faculty['id']}: {e}")
                 continue
+
+
+def repair_authors() -> None:
+    """Repair corrupted author files."""
+
+    author_files = list(AUTHORS_DIR.glob("*.json"))
+
+    for author_file in tqdm(author_files):
+        try:
+            with open(author_file) as f:
+                _ = json.load(f)
+        except json.decoder.JSONDecodeError:
+            print(f"{author_file} is not a valid json file")
+            author_file.unlink()
+            print(f"{author_file} deleted and redownload...")
+            download_one_author(author_file.stem)
+            continue
 
 
 def main():

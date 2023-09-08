@@ -40,6 +40,9 @@ def query_crossref(doi: str, fields: list[str]) -> dict | None:
 def batch_query_cited_by(dois: list[str], batch_size: int = 80) -> dict:
     """Query crossref in batches."""
 
+    # Clean DOIs
+    dois = [doi for doi in dois if not doi.startswith("nodoi")]
+
     @timeout
     def query_cited_by(batch: list[str]) -> dict:
         url = "https://api.crossref.org/works"
@@ -48,6 +51,11 @@ def batch_query_cited_by(dois: list[str], batch_size: int = 80) -> dict:
             "filter": ",".join([f"doi:{doi}" for doi in batch]),
         }
         response = requests.get(url, params=params)
+        if response.status_code != 200:
+            raise Exception(
+                f"Crossref API returned status code {response.status_code}. {params}"
+            )
+
         data = response.json()
 
         cited_by = {}
