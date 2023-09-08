@@ -893,6 +893,11 @@ form.highlighted::after {
 |******************************************************************************|
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
+form i.fa-info-circle {
+  font-size: 14px;
+  margin-left: 5px;
+}
+
 input {
   outline: none;
 }
@@ -1106,6 +1111,8 @@ body.dark input, body.dark textarea, body.dark select {
   font-size: 16px;
   font-weight: bold;
   padding: 10px;
+  color: white;
+  background-color: #c5050c;
 }
 .popover .popover-title i, .popover .popover-title .icon {
   margin-right: 5px;
@@ -1271,8 +1278,8 @@ input[type=range]::-moz-range-thumb {
 }
 .nav-tabs > li > a:hover {
   color: #676767 !important;
-  background-color: #e6e6e6 !important;
-  border-color: #e6e6e6 !important;
+  background-color: #f3f3f3 !important;
+  border-color: #f3f3f3 !important;
 }
 .nav-tabs > li.active > a {
   color: black !important;

@@ -10,6 +10,19 @@
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
+@use "../colors/branding";
+
+//
+// colors
+//
+
+$header-color: white;
+$header-background-color: branding.$primary-color;
+
+//
+// styles
+//
+
 .popover {
 	max-width: 500px;
 	border-color: lighten(lightgrey, 10%);
@@ -23,6 +36,8 @@
 		font-size: 16px;
 		font-weight: bold;
 		padding: 10px;
+		color: $header-color;
+		background-color: $header-background-color;
 
 		i, .icon {
 			margin-right: 5px;

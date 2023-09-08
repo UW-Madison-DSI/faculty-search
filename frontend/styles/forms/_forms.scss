@@ -29,6 +29,13 @@ $legend-color: branding.$primary-color;
 // styles
 //
 
+form {
+	i.fa-info-circle {
+		font-size: 14px;
+		margin-left: 5px;
+	}
+}
+
 input {
 	outline: none;
 }

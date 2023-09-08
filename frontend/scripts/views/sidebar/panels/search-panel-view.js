@@ -15,9 +15,9 @@
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
-import BaseView from '../../../views/base-view.js';
+import FormView from '../../../views/forms/form-view.js';
 
-export default BaseView.extend({
+export default FormView.extend({
 
 	//
 	// attributes
@@ -34,19 +34,16 @@ export default BaseView.extend({
 			<label class="control-label">Search By</label>
 			<div class="controls">
 				<div class="radio-inline">
-					<label><input type="radio" name="search-by" value="text" checked>Text</label>
+					<label><input type="radio" name="search-by" value="text" checked>Text</label><i class="active fa fa-info-circle" data-toggle="popover" title="Search By Text" data-content="Search using the intended meaning of the given text."></i>
 				</div>
 				<div class="radio-inline">
-					<label><input type="radio" name="search-by" value="name">Name</label>
-				</div>
-				<div class="radio-inline" style="display:none">
-					<label><input type="radio" name="search-by" value="doi">DOI</label>
+					<label><input type="radio" name="search-by" value="name">Name</label><i class="active fa fa-info-circle" data-toggle="popover" title="Search By Name" data-content="Search using the author's name."></i>
 				</div>
 				<div class="radio-inline">
-					<label><input type="radio" name="search-by" value="url">URL</label>
+					<label><input type="radio" name="search-by" value="url">URL</label><i class="active fa fa-info-circle" data-toggle="popover" title="Search By URL" data-content="Search using the information found in the specified URL."></i>
 				</div>
 				<div class="radio-inline">
-					<label><input type="radio" name="search-by" value="pdf">PDF</label>
+					<label><input type="radio" name="search-by" value="pdf">PDF</label><i class="active fa fa-info-circle" data-toggle="popover" title="Search By PDF" data-content="Search using the content within the first two pages of the provided PDF."></i>
 				</div>
 			</div>
 		</div>
@@ -55,10 +52,10 @@ export default BaseView.extend({
 			<label class="control-label">Search For</label>
 			<div class="controls">
 				<div class="authors radio-inline">
-					<label><input type="radio" name="search-for" value="authors" checked>Authors</label>
+					<label><input type="radio" name="search-for" value="authors" checked>Authors</label><i class="active fa fa-info-circle" data-toggle="popover" title="Search For Authors" data-content="Get a list of authors, sorted by the relevance of their papers and the frequency of citations for those papers."></i>
 				</div>
 				<div class="articles radio-inline">
-					<label><input type="radio" name="search-for" value="articles">Articles</label>
+					<label><input type="radio" name="search-for" value="articles">Articles</label><i class="active fa fa-info-circle" data-toggle="popover" title="Search For Articles" data-content="Get a list of articles, sorted by their relevance."></i>
 				</div>
 			</div>
 		</div>
