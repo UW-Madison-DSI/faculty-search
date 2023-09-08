@@ -14,6 +14,7 @@
 
 import os
 from flask import Flask, request, redirect
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # from flask_mail import Mail, Message
 from controllers.contact_controller import ContactController
@@ -33,6 +34,10 @@ load_dotenv()
 
 # create new Flask app
 app = Flask(__name__, static_folder="../", static_url_path="/")
+app.wsgi_app = ProxyFix(app.wsgi, x_for=1, x_proto=1, x_host=1, x_port=1)
+
+app.config["APPLICATION_ROOT"] = "/"
+app.config["PREFERRED_URL_SCHEME"] = "https"
 
 
 @app.before_request
