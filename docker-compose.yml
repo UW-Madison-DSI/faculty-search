@@ -55,6 +55,20 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
+    environment:
+      OPENAI_API_KEY: '${OPENAI_API_KEY}'
+      AUTHOR_DIR: ./data/raw/campus_users
+      MILVUS_ALIAS: default
+      MILVUS_HOST: milvus-standalone
+      MILVUS_PORT: 19530
+      DEBUG: 1
+    ports:
+      - "8765:8765"
+    depends_on:
+      - "milvus"
+    volumes:
+      - ./cert.pem:/app/cert.pem
+      - ./privkey.pem:/app/privkey.pem
     command:
       [
         "uvicorn",
@@ -68,17 +82,6 @@ services:
         "--ssl-certfile",
         "cert.pem"
       ]
-    environment:
-      OPENAI_API_KEY: '${OPENAI_API_KEY}'
-      AUTHOR_DIR: ./data/raw/campus_users
-      MILVUS_ALIAS: default
-      MILVUS_HOST: milvus-standalone
-      MILVUS_PORT: 19530
-      DEBUG: 1
-    ports:
-      - "8765:8765"
-    depends_on:
-      - "milvus"
 
   flask:
     container_name: flask
@@ -88,10 +91,26 @@ services:
     #   dockerfile: Dockerfile
     ports:
       - "443:443"
-      - "80:80"
-    command: [ python, ./services/app.py ]
     environment:
       - DEBUG=1
       - PORT=443
       - HOST=0.0.0.0
       - UPLOAD_FOLDER=/tmp_pdfs
+    volumes:
+      - ./cert.pem:/app/cert.pem
+      - ./privkey.pem:/app/privkey.pem
+    command: [ python, ./services/app.py ]
+
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./cert.pem:/etc/nginx/ssl/cert.pem
+      - ./privkey.pem:/etc/nginx/ssl/privkey.pem
+    ports:
+      - "80:80"
+
+
+
