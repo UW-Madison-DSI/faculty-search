@@ -1608,6 +1608,11 @@ body.dark .well {
   padding: 10px;
   border-radius: 10px;
   margin-top: 0;
+  /*
+  &:hover {
+  	background-color: $list-item-hover-color;
+  }
+  */
 }
 .list li a, .list li a:focus {
   color: #808080;
@@ -1630,10 +1635,14 @@ body.dark .well {
 .list li i:hover {
   color: black;
 }
-.list li:hover {
-  background-color: color-mix(in srgb, #b3b3b3 25%, transparent);
-}
 
+.dark .list li {
+  /*
+  &:hover {
+  	background-color: $dark-list-item-hover-color;
+  }
+  */
+}
 .dark .list li a, .dark .list li a:focus {
   color: #b3b3b3;
 }
@@ -1642,9 +1651,6 @@ body.dark .well {
 }
 .dark .list li i:hover {
   color: white;
-}
-.dark .list li:hover {
-  background-color: color-mix(in srgb, #b3b3b3 25%, transparent);
 }
 
 /******************************************************************************\
@@ -2039,9 +2045,6 @@ body[device=phone] .page .section > .row > div + div {
 }
 .sidebar .panel .list table {
   width: 100%;
-}
-.sidebar .panel .params {
-  overflow: auto;
 }
 .sidebar .buttons {
   text-align: center;

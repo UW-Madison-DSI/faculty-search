@@ -68,9 +68,11 @@ $dark-list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 			}
 		}
 
+		/*
 		&:hover {
 			background-color: $list-item-hover-color;
 		}
+		*/
 	}
 }
 
@@ -91,9 +93,11 @@ $dark-list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 				}
 			}
 
+			/*
 			&:hover {
 				background-color: $dark-list-item-hover-color;
 			}
+			*/
 		}
 	}
 }
