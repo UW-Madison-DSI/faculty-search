@@ -97,9 +97,9 @@ services:
       HOST: 0.0.0.0
       UPLOAD_FOLDER: '/tmp_pdfs'
       MAIL_SERVER: '${MAIL_SERVER}'
-      MAIL_USERNAME: '${MAIL_USERNAME}'
-      MAIL_PASSWORD: '${MAIL_PASSWORD}'
-      MAIL_PORT: 587
+      # MAIL_USERNAME: '${MAIL_USERNAME}'
+      # MAIL_PASSWORD: '${MAIL_PASSWORD}'
+      MAIL_PORT: '${MAIL_PORT}'
       MAIL_SENDER: '${MAIL_SENDER}'
       MAIL_RECIPIENT: '${MAIL_RECIPIENT}'
     volumes:
