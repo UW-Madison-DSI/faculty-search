@@ -36,10 +36,12 @@ class ContactController:
         try:
             MAIL_SENDER = app.config["MAIL_SENDER"]
             MAIL_RECIPIENT = app.config["MAIL_RECIPIENT"]
+            MAIL_ANOTHER_RECIPIENT = app.config["MAIL_ANOTHER_RECIPIENT"]
         except Exception:
             # Get from environment variables (docker workflow)
             MAIL_SENDER = os.getenv("MAIL_SENDER")
             MAIL_RECIPIENT = os.getenv("MAIL_RECIPIENT")
+            MAIL_ANOTHER_RECIPIENT = os.getenv("MAIL_ANOTHER_RECIPIENT")
             pass
 
         # parse parameters
@@ -52,7 +54,11 @@ class ContactController:
         mail = Mail(app)
 
         # create new mail message
-        msg = Message(subject, sender=MAIL_SENDER, recipients=[MAIL_RECIPIENT])
+        msg = Message(
+            subject,
+            sender=MAIL_SENDER,
+            recipients=[MAIL_RECIPIENT, MAIL_ANOTHER_RECIPIENT],
+        )
         msg.body = (
             "Contact form submitted: "
             + "\r\n"

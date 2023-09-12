@@ -102,6 +102,7 @@ services:
       MAIL_PORT: '${MAIL_PORT}'
       MAIL_SENDER: '${MAIL_SENDER}'
       MAIL_RECIPIENT: '${MAIL_RECIPIENT}'
+      MAIL_ANOTHER_RECIPIENT: '${MAIL_ANOTHER_RECIPIENT}'
     volumes:
       - ./cert.pem:/app/cert.pem
       - ./privkey.pem:/app/privkey.pem
