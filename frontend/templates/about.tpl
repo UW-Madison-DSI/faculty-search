@@ -8,8 +8,8 @@
 			<div class="col-sm-6">
 				<h2><i class="fa fa-check"></i>Features</h2>
 				<ul>
-					<li>Search by text, DOI, or URL.</li>
-					<li>Search author profiles or articles .</li>
+					<li>Search by text, URL, or PDF file.</li>
+					<li>Search for authors or articles .</li>
 					<li>Weight results by # of relevant publications.</li>
 				</ul>
 			</div>
