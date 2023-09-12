@@ -37,7 +37,7 @@ class ContactController:
 		msg = Message(
 			subject,
 			sender = app.config['MAIL_SENDER'],
-			recipients = ["abem@tds.net"]
+			recipients = app.config['MAIL_RECIPIENT']
 		)
 		msg.body = "Contact form submitted: " + '\r\n' + \
 			"Name: " + name + '\r\n' + \
