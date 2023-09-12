@@ -25,6 +25,12 @@ class ContactController:
     def post_create():
         # get current app
         app = flask.current_app
+        app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
+        app.config["MAIL_PORT"] = os.getenv("MAIL_PORT")
+        app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+        app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+        app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS")
+        app.config["MAIL_USE_SSL"] = os.getenv("MAIL_USE_SSL")
 
         # try to get app config from config.py
         try:
@@ -32,8 +38,8 @@ class ContactController:
             MAIL_RECIPIENT = app.config["MAIL_RECIPIENT"]
         except Exception:
             # Get from environment variables (docker workflow)
-            MAIL_SENDER = os.getenv("DEBUG")
-            MAIL_RECIPIENT = os.getenv("PORT")
+            MAIL_SENDER = os.getenv("MAIL_SENDER")
+            MAIL_RECIPIENT = os.getenv("MAIL_RECIPIENT")
             pass
 
         # parse parameters
