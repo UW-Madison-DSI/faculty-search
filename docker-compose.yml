@@ -92,10 +92,16 @@ services:
     ports:
       - "443:443"
     environment:
-      - DEBUG=1
-      - PORT=443
-      - HOST=0.0.0.0
-      - UPLOAD_FOLDER=/tmp_pdfs
+      DEBUG: 1
+      PORT: 443
+      HOST: 0.0.0.0
+      UPLOAD_FOLDER: '/tmp_pdfs'
+      MAIL_SERVER: '${MAIL_SERVER}'
+      MAIL_USERNAME: '${MAIL_USERNAME}'
+      MAIL_PASSWORD: '${MAIL_PASSWORD}'
+      MAIL_PORT: 587
+      MAIL_USE_TLS: False
+      MAIL_USE_SSL: False
     volumes:
       - ./cert.pem:/app/cert.pem
       - ./privkey.pem:/app/privkey.pem
