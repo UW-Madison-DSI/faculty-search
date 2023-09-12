@@ -52,7 +52,7 @@ class ContactController:
         mail = Mail(app)
 
         # create new mail message
-        msg = Message(subject, sender=MAIL_SENDER, recipients=MAIL_RECIPIENT)
+        msg = Message(subject, sender=MAIL_SENDER, recipients=[MAIL_RECIPIENT])
         msg.body = (
             "Contact form submitted: "
             + "\r\n"
