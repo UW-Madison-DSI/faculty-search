@@ -343,6 +343,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	},
 
 	showMessage: function(options) {
+		this.hideResults();
 		this.showHtmlMessage(this.messageTemplate(options));
 	},
 
