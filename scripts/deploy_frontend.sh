@@ -9,9 +9,5 @@ docker compose down flask
 docker compose pull flask
 docker compose up flask --build -d
 
-# Copy the certificates to frontend container
-docker compose cp cert.pem flask:/app
-docker compose cp privkey.pem flask:/app
-
 # Start the frontend container
 docker compose up -d flask
