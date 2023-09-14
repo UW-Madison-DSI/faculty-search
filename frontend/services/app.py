@@ -16,9 +16,9 @@ import os
 from flask import Flask, request, redirect
 
 # from flask_mail import Mail, Message
-from .controllers.contact_controller import ContactController
-from .controllers.pdf_controller import PDFController
-from .controllers.url_controller import URLController
+from services.controllers.contact_controller import ContactController
+from services.controllers.pdf_controller import PDFController
+from services.controllers.url_controller import URLController
 from dotenv import load_dotenv
 import logging
 
