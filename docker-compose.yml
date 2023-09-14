@@ -104,7 +104,6 @@ services:
     volumes:
       - ./cert.pem:/etc/ssl/cert.pem
       - ./privkey.pem:/etc/ssl/privkey.pem
-    command: gunicorn -w "2" -b 0.0.0.0:443 --certfile=/etc/ssl/cert.pem --keyfile=/etc/ssl/privkey.pem services.app:app
 
 
 
