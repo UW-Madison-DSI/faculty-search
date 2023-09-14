@@ -1,4 +1,4 @@
-name: Build and Deploy Frontend to GCP
+name: Build and Deploy Frontend to GCP (DEV)
 
 on:
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
       if: steps.build.outputs.exit_code == 0
       env:
         ZONE: 'us-central1-a'
-        INSTANCE_NAME: 'community-search'
+        INSTANCE_NAME: 'faculty-search-dev'
         GCE_USERNAME: 'ci'
         GCE_SSH_KEY: ${{ secrets.GCE_SSH_KEY }}
         GCE_HOST: ${{ secrets.GCE_HOST_DEV }}
