@@ -16,6 +16,7 @@
 \******************************************************************************/
 
 import BaseView from '../../views/base-view.js';
+import Author from '../../models/author.js';
 import Loadable from '../../views/behaviors/effects/loadable.js';
 import Droppable from '../../views/behaviors/drag-and-drop/droppable.js';
 import AuthorsView from '../../views/mainbar/authors/authors-view.js';
@@ -190,7 +191,14 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			// callbacks
 			//
 			onclick: (author) => {
-				this.showAuthorProfile(author);
+				Author.fetchById(author.get('id'), {
+
+					// callbacks
+					//
+					success: (author) => {
+						this.showAuthorProfile(author);
+					}
+				});
 			}
 		}));
 		this.showResults();

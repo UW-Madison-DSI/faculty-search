@@ -46,4 +46,41 @@ export default Backbone.Model.extend({
 
 		return data;
 	}
+}, {
+
+	//
+	// static methods
+	//
+
+	fetchById: function(id, options) {
+		$.ajax(_.extend({
+			url: config.server + '/get_author_by_id',
+			type: 'POST',
+			data: JSON.stringify({
+				author_id: id.toString()
+			}),
+			contentType: 'application/json',
+			processData: false,
+			cache: false,
+
+			// callbacks
+			//
+			success: (data) => {
+				if (options.success) {
+					let object = data.author;
+					object.articles = data.articles;
+					let author = new this(object, {
+						parse: true
+					});
+					options.success(author);
+				}
+			},
+
+			error: () => {
+				if (options.error) {
+					options.error();
+				}
+			}
+		}));
+	}
 });

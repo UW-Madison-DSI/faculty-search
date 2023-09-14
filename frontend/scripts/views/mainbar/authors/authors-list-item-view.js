@@ -26,14 +26,10 @@ export default BaseView.extend({
 	tagName: 'li',
 
 	template: _.template(`
-		<% if (has_articles) { %>
 		<a class="name">
-		<% } %>
 			<span class="last"><%= last_name %></span>,
 			<span class="first"><%= first_name %></span>
-		<% if (has_articles) { %>
 		</a>
-		<% } %>
 
 		<div class="details">
 			<a href="<%= url %>" target="_blank">

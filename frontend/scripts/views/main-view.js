@@ -354,8 +354,11 @@ export default SplitView.extend({
 			// callbacks
 			//
 			success: (data) => {
-				let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
-				this.getChildView('mainbar results').showPlot(plot);
+				let resultsView = this.getChildView('mainbar results');
+				if (resultsView.showPlot) {
+					let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
+					resultsView.showPlot(plot);
+				}
 			}
 		});
 	},

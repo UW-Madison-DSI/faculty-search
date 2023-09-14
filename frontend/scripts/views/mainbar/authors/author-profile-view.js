@@ -43,19 +43,23 @@ export default FormView.extend({
 			</div>
 		</div>
 
+		<% if (community) { %>
 		<div class="form-group" id="community">
 			<label class="control-label">Community</label>
 			<div class="controls">
 				<%= community || 'none' %>
 			</div>
 		</div>
+		<% } %>
 
+		<% if (score) { %>
 		<div class="form-group" id="score">
 			<label class="control-label">Score</label>
 			<div class="controls">
 				<%= score || 'none' %>
 			</div>
 		</div>
+		<% } %>
 
 		<div class="form-group" id="articles">
 			<label class="control-label">Articles</label>
