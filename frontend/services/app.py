@@ -200,7 +200,12 @@ def post_create():
 ################################################################################
 def main():
     logging.info(HOST, PORT)
-    app.run(debug=DEBUG, host=HOST, port=PORT, ssl_context=("cert.pem", "privkey.pem"))
+    app.run(
+        debug=DEBUG,
+        host=HOST,
+        port=PORT,
+        ssl_context=("/etc/ssl/cert.pem", "/etc/ssl/privkey.pem"),
+    )
     # app.run(debug=DEBUG, host=HOST, port=PORT)
 
 

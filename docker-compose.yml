@@ -104,8 +104,8 @@ services:
       MAIL_RECIPIENT: '${MAIL_RECIPIENT}'
       MAIL_ANOTHER_RECIPIENT: '${MAIL_ANOTHER_RECIPIENT}'
     volumes:
-      - ./cert.pem:/app/cert.pem
-      - ./privkey.pem:/app/privkey.pem
+      - ./cert.pem:/etc/ssl/cert.pem
+      - ./privkey.pem:/etc/ssl/privkey.pem
     command: [ python, ./services/app.py ]
 
 
