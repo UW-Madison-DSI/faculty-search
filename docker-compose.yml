@@ -93,7 +93,7 @@ services:
       - "443:443"
     environment:
       DEBUG: 0
-      UPLOAD_FOLDER: '/tmp_pdfs'
+      UPLOAD_FOLDER: '/tmp'
       MAIL_SERVER: '${MAIL_SERVER}'
       MAIL_USERNAME: '${MAIL_USERNAME}'
       MAIL_PASSWORD: '${MAIL_PASSWORD}'

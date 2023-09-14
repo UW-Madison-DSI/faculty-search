@@ -14,7 +14,7 @@ RUN chmod +x /tmp/install_latest_release.sh
 RUN /tmp/install_latest_release.sh
 
 # Cron job to remove tmp files
-RUN echo "* 0 * * * rm -rf $UPLOAD_FOLDER/*" > /etc/cron.d/clean_tmp
+RUN echo "* 0 * * * rm -rf /tmp/*" > /etc/cron.d/clean_tmp
 RUN chmod 0644 /etc/cron.d/clean_tmp
 RUN crontab /etc/cron.d/clean_tmp
 
