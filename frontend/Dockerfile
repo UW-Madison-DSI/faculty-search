@@ -12,4 +12,3 @@ RUN chmod +x /tmp/install_latest_release.sh
 RUN /tmp/install_latest_release.sh
 
 COPY . .
-EXPOSE 5000

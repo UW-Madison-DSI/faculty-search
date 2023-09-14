@@ -14,12 +14,11 @@
 
 import os
 from flask import Flask, request, redirect
-from werkzeug.middleware.proxy_fix import ProxyFix
 
 # from flask_mail import Mail, Message
-from controllers.contact_controller import ContactController
-from controllers.pdf_controller import PDFController
-from controllers.url_controller import URLController
+from .controllers.contact_controller import ContactController
+from .controllers.pdf_controller import PDFController
+from .controllers.url_controller import URLController
 from dotenv import load_dotenv
 import logging
 

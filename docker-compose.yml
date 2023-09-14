@@ -92,9 +92,7 @@ services:
     ports:
       - "443:443"
     environment:
-      DEBUG: 1
-      PORT: 443
-      HOST: 0.0.0.0
+      DEBUG: 0
       UPLOAD_FOLDER: '/tmp_pdfs'
       MAIL_SERVER: '${MAIL_SERVER}'
       MAIL_USERNAME: '${MAIL_USERNAME}'
@@ -106,7 +104,8 @@ services:
     volumes:
       - ./cert.pem:/etc/ssl/cert.pem
       - ./privkey.pem:/etc/ssl/privkey.pem
-    command: [ python, ./services/app.py ]
+    command: gunicorn -w "2" -b 0.0.0.0:443 --certfile=/etc/ssl/cert.pem --keyfile=/etc/ssl/privkey.pem services.app:app
+
 
 
   nginx:
