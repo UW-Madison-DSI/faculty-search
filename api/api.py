@@ -162,6 +162,10 @@ class GetAuthorInput(BaseModel):
         return v
 
 
+class GetAuthorByIdInput(BaseModel):
+    author_id: str
+
+
 class APIPlotData(BaseModel):
     """Plot data model."""
 
@@ -212,14 +216,25 @@ def get_author(query: GetAuthorInput) -> dict[str, APIAuthor | list[dict]]:
     return results
 
 
+@app.post("/get_author_by_id/")
+def get_author(query: GetAuthorByIdInput) -> dict[str, APIAuthor | list[dict]]:
+    """Search author by name."""
+
+    try:
+        results = cached_resources["engine"].get_author_by_id(author_id=query.author_id)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Author not found.")
+    return results
+
+
 @app.post("/search_authors/")
 def search_authors(
     query: SearchAuthorsInputs,
 ) -> dict[str, list[APIAuthor] | str | list]:
     """Search an author."""
 
-    logging.debug(f"Search authors: {query.dict()}")
-    data = cached_resources["engine"].search_authors(**query.dict())
+    logging.debug(f"Search authors: {query.model_dump()}")
+    data = cached_resources["engine"].search_authors(**query.model_dump())
 
     # Unpack data
     author_ids, scores = data["authors"]["author_ids"], data["authors"]["scores"]
@@ -249,7 +264,7 @@ def search_authors(
 def search_articles(query: SearchArticlesInputs) -> dict[str, list[APIArticle] | str]:
     """Search an article."""
 
-    data = cached_resources["engine"].search_articles(**query.dict())
+    data = cached_resources["engine"].search_articles(**query.model_dump())
 
     output = {}
     output["articles"] = [APIArticle(**result) for result in data["articles"]]

@@ -70,6 +70,20 @@ def get_author_by_name(
     return authors[0]
 
 
+def get_author_by_id(author_id: str, author_collection: Collection) -> dict:
+    """Get author details from Milvus."""
+
+    authors = author_collection.query(
+        expr=f"id == {str(author_id)}",
+        output_fields=["id", "first_name", "last_name"],
+        limit=1,
+    )
+
+    if not authors:
+        raise ValueError(f"Author with id: {author_id} not found")
+    return authors[0]
+
+
 def get_author_articles(
     author_id: int, since_year: int, article_collection: Collection
 ) -> dict:
@@ -461,6 +475,18 @@ class Engine:
         output["articles"] = get_author_articles(
             author_id=output["author"]["id"],
             since_year=since_year,
+            article_collection=self.article_collection,
+        )
+        return output
+
+    def get_author_by_id(self, author_id: str) -> dict:
+        """Get author details from Milvus."""
+
+        output = {}
+        output["author"] = get_author_by_id(author_id, self.author_collection)
+        output["articles"] = get_author_articles(
+            author_id=output["author"]["id"],
+            since_year=1900,
             article_collection=self.article_collection,
         )
         return output
