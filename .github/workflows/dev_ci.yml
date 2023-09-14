@@ -1,0 +1,46 @@
+name: Build and Deploy Frontend to GCP
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build website
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.17.1'
+    - run: bash frontend/build/install.sh
+    - run: bash frontend/build/build.sh
+
+    - name: Build and Push Docker image
+      id: build
+      env:
+        GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+      run: |
+        echo $GHCR_TOKEN | docker login ghcr.io -u USERNAME --password-stdin &&
+        cd frontend-built &&
+        docker build . -t ghcr.io/jasonlo/community-search-frontend:latest &&
+        docker push ghcr.io/jasonlo/community-search-frontend:latest
+
+    - name: Deploy to GCP
+      if: steps.build.outputs.exit_code == 0
+      env:
+        ZONE: 'us-central1-a'
+        INSTANCE_NAME: 'community-search'
+        GCE_USERNAME: 'ci'
+        GCE_SSH_KEY: ${{ secrets.GCE_SSH_KEY }}
+        GCE_HOST: ${{ secrets.GCE_HOST_DEV }}
+      run: |
+        echo "$GCE_SSH_KEY" > gce_ssh_key.pem
+        chmod 600 gce_ssh_key.pem
+        ssh -i gce_ssh_key.pem -o StrictHostKeyChecking=no $GCE_USERNAME@$GCE_HOST_DEV 'bash -s' < ./scripts/deploy_frontend.sh
+    
