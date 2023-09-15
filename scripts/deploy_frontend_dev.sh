@@ -12,4 +12,5 @@ docker compose up flask --build -d
 # Start the frontend container
 docker compose up -d flask
 
+sleep 5 # Wait for the container to start properly
 docker cp ./frontend/config/config.dev.json flask:/app/config/config.json
