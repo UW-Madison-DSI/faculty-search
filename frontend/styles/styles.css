@@ -1450,6 +1450,10 @@ svg {
   margin-top: 0;
 }
 
+.well {
+  overflow: auto;
+}
+
 canvas {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
