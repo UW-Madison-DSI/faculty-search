@@ -1733,6 +1733,11 @@ body.dark .well {
 .mainbar .search .content .results .author h1 {
   text-align: center;
 }
+.mainbar .search .content .voting {
+  position: absolute;
+  top: 130px;
+  right: 20px;
+}
 .mainbar .search .content .message.overlay {
   display: flex;
   pointer-events: none;
@@ -1880,7 +1885,6 @@ body.dark .well {
   display: none;
 }
 .search-bar .input .buttons {
-  display: flex;
   position: absolute;
   right: 0;
   bottom: 0;
@@ -2698,8 +2702,13 @@ body[device=phone] h3 {
   border-color: #930409;
 }
 
+.buttons .btn + .btn {
+  margin-left: 5px;
+}
+
 .btn.btn-sm {
-  width: 25px;
+  width: 30px;
+  height: 30px;
   padding: 0;
 }
 .btn.btn-sm i {
@@ -2709,7 +2718,7 @@ body[device=phone] h3 {
 button {
   /*
   &.clear, &.clear:focus {
-  	color: white;
+  	color: white !important;
   	background-color: $warning-color;
 
   	&:hover {
@@ -2727,10 +2736,36 @@ button.submit, button.submit:focus {
   background-color: hsl(150, 60%, 50%);
 }
 button.submit:hover, button.submit:focus:hover {
+  color: white;
   background-color: #29a366;
 }
-button.submit:active, button.submit:focus:active {
+button.submit:active, button.submit:active:hover, button.submit:focus:active, button.submit:focus:active:hover {
+  color: white;
   background-color: #1f7a4d;
+}
+button.success, button.success:focus {
+  color: white;
+  background-color: hsl(150, 60%, 50%);
+}
+button.success:hover, button.success:focus:hover {
+  color: white;
+  background-color: #29a366;
+}
+button.success:active, button.success:active:hover, button.success:focus:active, button.success:focus:active:hover {
+  color: white;
+  background-color: #1f7a4d;
+}
+button.warning, button.warning:focus {
+  color: white;
+  background-color: hsl(0, 60%, 50%);
+}
+button.warning:hover, button.warning:focus:hover {
+  color: white;
+  background-color: #a32929;
+}
+button.warning:active, button.warning:active:hover, button.warning:focus:active, button.warning:focus:active:hover {
+  color: white;
+  background-color: #7a1f1f;
 }
 
 /******************************************************************************\
@@ -2854,9 +2889,6 @@ i.rotated.reversed {
   width: 100%;
   color: #c5050c;
 }
-#header .navbar .mobile-navbar li a:hover {
-  background: lightgrey;
-}
 #header .navbar .mobile-navbar li a i {
   margin-right: 10px;
 }
@@ -2877,10 +2909,6 @@ body.dark #header .mobile-navbar li {
 }
 body.dark #header .mobile-navbar li a {
   color: #cdcdcd;
-}
-body.dark #header .mobile-navbar li a:hover {
-  color: white;
-  background-color: #343434;
 }
 
 /******************************************************************************\

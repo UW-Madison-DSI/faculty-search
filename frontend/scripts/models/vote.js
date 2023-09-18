@@ -1,10 +1,10 @@
 /******************************************************************************\
 |                                                                              |
-|                                  article.js                                  |
+|                                   vote.js                                    |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a model of a journal article.                            |
+|        This defines a model of a vote for ranking search results.            |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -23,9 +23,5 @@ export default BaseModel.extend({
 	// attributes
 	//
 
-	defaults: {
-		id: undefined,
-		title: undefined,
-		doi: undefined
-	}
+	urlRoot: '/api/votes'
 });

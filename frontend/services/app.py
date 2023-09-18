@@ -19,6 +19,7 @@ from flask import Flask, request, redirect
 from services.controllers.contact_controller import ContactController
 from services.controllers.pdf_controller import PDFController
 from services.controllers.url_controller import URLController
+from services.controllers.vote_controller import VoteController
 from dotenv import load_dotenv
 import logging
 
@@ -146,6 +147,37 @@ def catch_all(path):
     """
 
     return app.send_static_file("index.html")
+
+
+################################################################################
+#                            results voting routes                             #
+################################################################################
+
+
+@app.post('/api/votes')
+def post_vote():
+
+    """
+    Save a vote.
+
+    Return
+        response: success.
+    """
+
+    return VoteController.post_create()
+
+
+@app.get('/api/votes')
+def get_votes():
+
+    """
+    Get all votes.
+
+    Return
+        response: success.
+    """
+
+    return VoteController.get_all()
 
 
 ################################################################################

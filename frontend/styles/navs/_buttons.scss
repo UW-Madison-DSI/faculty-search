@@ -78,12 +78,19 @@ $warning-color: hsl(0, 60%, 50%);
 	}
 }
 
+.buttons {
+	.btn + .btn {
+		margin-left: 5px;
+	}
+}
+
 //
 // small buttons
 //
 
 .btn.btn-sm {
-	width: 25px;
+	width: 30px;
+	height: 30px;
 	padding: 0;
 
 	i {
@@ -96,22 +103,54 @@ $warning-color: hsl(0, 60%, 50%);
 //
 
 button {
-	&.submit , &.submit:focus {
+	&.submit, &.submit:focus {
 		color: white;
 		background-color: $success-color;
 
 		&:hover {
+			color: white;
 			background-color: darken($success-color, 10%);
 		}
 
-		&:active {
+		&:active, &:active:hover {
+			color: white;
 			background-color: darken($success-color, 20%);
+		}
+	}
+
+	&.success, &.success:focus {
+		color: white;
+		background-color: $success-color;
+
+		&:hover {
+			color: white;
+			background-color: darken($success-color, 10%);
+		}
+
+		&:active, &:active:hover {
+			color: white;
+			background-color: darken($success-color, 20%);
+		}
+	}
+
+	&.warning, &.warning:focus {
+		color: white;
+		background-color: $warning-color;
+
+		&:hover {
+			color: white;
+			background-color: darken($warning-color, 10%);
+		}
+
+		&:active, &:active:hover {
+			color: white;
+			background-color: darken($warning-color, 20%);
 		}
 	}
 
 	/*
 	&.clear, &.clear:focus {
-		color: white;
+		color: white !important;
 		background-color: $warning-color;
 
 		&:hover {

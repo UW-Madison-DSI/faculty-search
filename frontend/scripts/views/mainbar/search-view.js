@@ -17,6 +17,7 @@
 
 import BaseView from '../../views/base-view.js';
 import Author from '../../models/author.js';
+import Vote from '../../models/vote.js';
 import Loadable from '../../views/behaviors/effects/loadable.js';
 import Droppable from '../../views/behaviors/drag-and-drop/droppable.js';
 import AuthorsView from '../../views/mainbar/authors/authors-view.js';
@@ -37,6 +38,15 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 				<%= defaults.messages.notes %>
 			</div>
 			<div class="results" style="display:none"></div>
+			<div class="voting buttons" style="display:none">
+				Results quality: &nbsp;
+				<button class="success upvote btn btn-sm" data-toggle="tooltip" title="Upvote">
+					<i class="fa fa-thumbs-up"></i>
+				</button>
+				<button class="warning downvote btn btn-sm" data-toggle="tooltip" title="Downvote">
+					<i class="fa fa-thumbs-down"></i>
+				</button>
+			</div>
 		</div>
 		<div class="search-bar">
 			<div class="input">
@@ -109,6 +119,9 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		'click .search-for-file .submit': 'onClickSubmitFile',
 		'click .search-for-file .clear': 'onClickClearFile',
 
+		'click .upvote': 'onClickUpvote',
+		'click .downvote': 'onClickDownvote',
+
 		'keydown': 'onKeyDown'
 	}),
 
@@ -162,6 +175,15 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		if (fileInput.webkitEntries.length) {
 			fileInput.dataset.file = filename;
 		}
+	},
+
+	//
+	// voting methods
+	//
+
+	vote: function(attributes) {
+		new Vote().save(attributes);
+		this.disableVoting();
 	},
 
 	//
@@ -245,11 +267,13 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.$el.find('.message').hide();
 		this.$el.find('.results').show();
 		this.$el.find('.notes').show();
+		this.$el.find('.voting').show();
 	},
 
 	hideResults: function() {
 		this.$el.find('.results').hide();
 		this.$el.find('.notes').hide();
+		this.$el.find('.voting').hide();
 	},
 
 	hideTextInput: function() {
@@ -364,6 +388,10 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		}
 	},
 
+	disableVoting: function() {
+		this.$el.find('.voting').hide();
+	},
+
 	//
 	// mouse event handling methods
 	//
@@ -382,6 +410,24 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 
 	onClickClearFile: function() {
 		this.clear();
+	},
+
+	onClickUpvote: function() {
+		this.vote({
+			kind: this.parent.getSearchKind(),
+			target: this.parent.getSearchTarget(),
+			query: this.parent.getSearchQuery(),
+			vote: 'up'
+		});
+	},
+
+	onClickDownvote: function() {
+		this.vote({
+			kind: this.parent.getSearchKind(),
+			target: this.parent.getSearchTarget(),
+			query: this.parent.getSearchQuery(),
+			vote: 'down'
+		});
 	},
 
 	//

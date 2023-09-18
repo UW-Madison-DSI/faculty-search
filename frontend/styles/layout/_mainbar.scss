@@ -108,6 +108,12 @@ $list-item-hover-color: colors.fade(colors.$very-light-grey, 25%);
 				}
 			}
 
+			.voting {
+				position: absolute;
+				top: 130px;
+				right: 20px;
+			}
+
 			.message.overlay {
 				display: flex;
 				pointer-events: none;

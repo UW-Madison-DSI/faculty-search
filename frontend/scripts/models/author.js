@@ -15,10 +15,10 @@
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
-import '../../library/backbone/backbone.js';
+import BaseModel from './base-model.js';
 import Articles from '../collections/articles.js';
 
-export default Backbone.Model.extend({
+export default BaseModel.extend({
 
 	//
 	// attributes

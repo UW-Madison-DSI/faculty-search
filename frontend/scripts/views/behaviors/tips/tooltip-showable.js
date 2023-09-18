@@ -19,7 +19,6 @@ export default {
 	//
 	tooltip_title: 'Tooltip',
 	tooltip_trigger: 'hover',
-	tooltip_placement: 'top',
 	tooltip_container: 'body',
 
 	//
