@@ -2769,7 +2769,7 @@ i.rotated.reversed {
 
 /******************************************************************************\
 |                                                                              |
-|                                _nav-bars.scss                                |
+|                                _navbars.scss                                 |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
@@ -2830,12 +2830,59 @@ i.rotated.reversed {
 #header .navbar .navbar-nav > li > a i + span {
   margin-left: 5px;
 }
+#header .navbar .navbar-toggle .icon-bar {
+  width: 15px;
+  background-color: grey;
+}
+#header .navbar .mobile-navbar {
+  position: absolute;
+  top: 40px;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  width: 100%;
+  list-style-type: none;
+  padding-inline-start: 0;
+  background-color: #f3f3f3;
+}
+#header .navbar .mobile-navbar li {
+  padding: 10px;
+  border-bottom: 1px solid #cdcdcd;
+}
+#header .navbar .mobile-navbar li a {
+  display: block;
+  width: 100%;
+  color: #c5050c;
+}
+#header .navbar .mobile-navbar li a:hover {
+  background: lightgrey;
+}
+#header .navbar .mobile-navbar li a i {
+  margin-right: 10px;
+}
+#header .navbar .mobile-navbar.collapsed {
+  display: none;
+}
 
 @media (max-width: 991px) {
   #header .navbar .navbar-nav > li {
     display: none;
   }
 }
+body.dark #header .mobile-navbar {
+  background-color: #343434;
+}
+body.dark #header .mobile-navbar li {
+  border-bottom: 1px solid #808080;
+}
+body.dark #header .mobile-navbar li a {
+  color: #cdcdcd;
+}
+body.dark #header .mobile-navbar li a:hover {
+  color: white;
+  background-color: #343434;
+}
+
 /******************************************************************************\
 |                                                                              |
 |                                  _index.scss                                 |

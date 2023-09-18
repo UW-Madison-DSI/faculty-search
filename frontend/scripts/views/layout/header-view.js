@@ -29,7 +29,7 @@ export default BaseView.extend({
 		</a>
 
 		<% if (defaults.navbar.navs) { %>
-		<ul class="nav navbar-nav">
+		<ul class="nav navbar-nav hidden-xs">
 			<% let keys = Object.keys(defaults.navbar.navs); %>
 			<% for (let i = 0; i < keys.length; i++) { %>
 			<% let key = keys[i]; %>
@@ -43,10 +43,41 @@ export default BaseView.extend({
 			<% } %>
 		</ul>
 		<% } %>
+
+		<ul class="mobile-navbar collapsed" id="navbar-collapse">
+			<% let keys = Object.keys(defaults.navbar.navs); %>
+			<% for (let i = 0; i < keys.length; i++) { %>
+			<% let key = keys[i]; %>
+			<% let item = defaults.navbar.navs[key]; %>
+			<li<% if (nav == key) {%> class="active" <% } %>>
+				<a href="#<%= key %>">
+					<i class="<%= item.icon %>"></i>
+					<span><%= item.text %></span>
+				</a>
+			</li>
+			<% } %>
+		</ul>
+
+		<button type="button" id="navbar-toggle" class="btn navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
 	`),
 
 	events: {
+		'click #navbar-toggle': 'onClickNavbarToggle',
+		'click .mobile-navbar a': 'onClickNavbarLink',
 		'click #brand': 'onClickBrand'
+	},
+
+	//
+	// querying methods
+	//
+
+	isCollapsed: function() {
+		return this.$el.find('.mobile-navbar').hasClass('collapsed');
 	},
 
 	//
@@ -61,8 +92,36 @@ export default BaseView.extend({
 	},
 
 	//
+	// collapsing methods
+	//
+
+	collapse: function() {
+		this.$el.find('.mobile-navbar').addClass('collapsed');
+	},
+
+	expand: function() {
+		this.$el.find('.mobile-navbar').removeClass('collapsed');
+	},
+
+	toggle: function() {
+		if (this.isCollapsed()) {
+			this.expand();
+		} else {
+			this.collapse();
+		}
+	},
+
+	//
 	// event handling methods
 	//
+
+	onClickNavbarToggle: function() {
+		this.toggle();
+	},
+
+	onClickNavbarLink: function() {
+		this.collapse();
+	},
 
 	onClickBrand: function() {
 

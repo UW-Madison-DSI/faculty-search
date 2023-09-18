@@ -1,6 +1,6 @@
 /******************************************************************************\
 |                                                                              |
-|                                _nav-bars.scss                                |
+|                                _navbars.scss                                 |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
@@ -11,6 +11,7 @@
 \******************************************************************************/
 
 @use "../bootstrap/variables";
+@use "../colors/colors";
 @use "../colors/branding";
 
 //
@@ -84,6 +85,45 @@ $navbar-color: branding.$primary-color;
 				}
 			}
 		}
+
+		.navbar-toggle {
+			.icon-bar {
+				width: 15px;
+				background-color: grey;
+			}
+		}
+
+		.mobile-navbar {
+			position: absolute;
+			top: 40px;
+			display: flex;
+			flex-direction: column;
+			background: white;
+			width: 100%;
+			list-style-type: none;
+			padding-inline-start: 0;
+			background-color: colors.$ultra-light-grey;
+
+			li {
+				padding: 10px;
+				border-bottom: 1px solid colors.$very-very-light-grey;
+
+				a {
+					display: block;
+					width: 100%;
+					color: branding.$primary-color;
+
+					i {
+						margin-right: 10px;
+					}
+				}
+			}
+
+
+			&.collapsed {
+				display: none;
+			}
+		}
 	}
 }
 
@@ -97,6 +137,26 @@ $navbar-color: branding.$primary-color;
 			.navbar-nav {
 				> li {
 					display: none;
+				}
+			}
+		}
+	}
+}
+
+//
+// dark mode
+//
+
+body.dark {
+	#header {
+		.mobile-navbar {
+			background-color: colors.$very-very-dark-grey;
+
+			li {
+				border-bottom: 1px solid colors.$medium-grey;
+
+				a {
+					color: colors.$very-very-light-grey;
 				}
 			}
 		}
