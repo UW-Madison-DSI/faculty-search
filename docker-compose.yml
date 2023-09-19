@@ -92,7 +92,7 @@ services:
     ports:
       - "443:443"
     environment:
-      DEBUG: 0
+      DEBUG: 1
       UPLOAD_FOLDER: '/tmp'
       MAIL_SERVER: '${MAIL_SERVER}'
       MAIL_USERNAME: '${MAIL_USERNAME}'
