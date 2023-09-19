@@ -4,7 +4,6 @@ pdfs/
 .ssh/
 .DS_Store
 data/
-database.db
 volumes/
 .streamlit/secrets.toml
 tmp/
