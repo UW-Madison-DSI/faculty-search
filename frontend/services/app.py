@@ -180,8 +180,22 @@ def get_votes():
     return VoteController.get_all()
 
 
+
+@app.delete('/api/votes')
+def delete_votes():
+
+    """
+    Delete all votes.
+
+    Return
+        response: success.
+    """
+
+    return VoteController.delete_all()
+
+
 ################################################################################
-#                            contact form routes                               #
+#                           url / file reading routes                          #
 ################################################################################
 
 

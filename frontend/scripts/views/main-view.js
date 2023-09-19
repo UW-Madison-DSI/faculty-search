@@ -72,8 +72,8 @@ export default SplitView.extend({
 		return this.getChildView('sidebar panels search').getValue('target');
 	},
 
-	getSearchLimit: function() {
-		return this.getChildView('sidebar panels search').getValue('limit');
+	getParamValue: function(key) {
+		return this.getChildView('sidebar panels search').getValue(key);
 	},
 
 	getFile: function() {

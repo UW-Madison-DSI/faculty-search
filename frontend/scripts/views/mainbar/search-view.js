@@ -139,6 +139,28 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		return this.$el.find('#file')[0].files[0];
 	},
 
+	getParams: function() {
+		return {
+
+			// query params
+			//
+			kind: this.parent.getSearchKind(),
+			target: this.parent.getSearchTarget(),
+			query: this.parent.getSearchQuery(),
+
+			// hyper params
+			//
+			top_k: this.parent.getParamValue('top_k'),
+			weight_results: this.parent.getParamValue('weight_results'),
+			n: this.parent.getParamValue('n'),
+			m: this.parent.getParamValue('m'),
+			since_year: this.parent.getParamValue('since_year'),
+			distance_threshold: this.parent.getParamValue('distance_threshold'),
+			pow: this.parent.getParamValue('pow'),
+			with_plot: this.parent.getParamValue('with_plot')
+		};
+	},
+
 	//
 	// setting methods
 	//
@@ -181,8 +203,10 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	// voting methods
 	//
 
-	vote: function(attributes) {
-		new Vote().save(attributes);
+	vote: function(vote) {
+		new Vote().save(_.extend(this.getParams(), {
+			vote: vote
+		}));
 		this.disableVoting();
 	},
 
@@ -413,21 +437,11 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	},
 
 	onClickUpvote: function() {
-		this.vote({
-			kind: this.parent.getSearchKind(),
-			target: this.parent.getSearchTarget(),
-			query: this.parent.getSearchQuery(),
-			vote: 'up'
-		});
+		this.vote('up');
 	},
 
 	onClickDownvote: function() {
-		this.vote({
-			kind: this.parent.getSearchKind(),
-			target: this.parent.getSearchTarget(),
-			query: this.parent.getSearchQuery(),
-			vote: 'down'
-		});
+		this.vote('down');
 	},
 
 	//
