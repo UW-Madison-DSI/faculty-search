@@ -28,15 +28,15 @@ class VoteController:
 		vote = request.json.get('vote');
 
 		# create new database
-		if not os.path.isfile('database/database.db'):
-			connection = sqlite3.connect('database/database.db')
-			with open('database/schema.sql') as file:
+		if not os.path.isfile('services/database/database.db'):
+			connection = sqlite3.connect('services/database/database.db')
+			with open('services/database/schema.sql') as file:
 				connection.executescript(file.read())
 				connection.commit()
 				connection.close()
 
 		# connect to database
-		connection = sqlite3.connect('database/database.db')
+		connection = sqlite3.connect('services/database/database.db')
 
 		# save vote
 		query = "INSERT INTO votes ('kind', 'target', 'query', 'vote') VALUES ('{kind}', '{target}', '{query}', '{vote}')".format(kind = kind, target = target, query = query, vote = vote)
@@ -48,10 +48,10 @@ class VoteController:
 
 	@staticmethod
 	def get_all():
-		if os.path.isfile('database/database.db'):
+		if os.path.isfile('services/database/database.db'):
 
 			# connect to database
-			connection = sqlite3.connect('database/database.db')
+			connection = sqlite3.connect('services/database/database.db')
 
 			# query database
 			votes = connection.execute('SELECT * FROM votes').fetchall()
