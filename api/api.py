@@ -1,6 +1,7 @@
 import os
 import logging
 import requests
+import random
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from dotenv import load_dotenv
@@ -91,6 +92,38 @@ def get_units() -> dict[int, str]:
         for unit in all_units
         if not unit["unit"]["isAdministrator"]
     }
+
+
+@app.get("/draw_search_authors_settings/")
+def get_default_settings() -> dict:
+    """Get settings for AB testing."""
+
+    ab_test_config = {
+        "A": {
+            "m": 500,
+            "n": 5,
+            "since_year": 1900,
+            "distance_threshold": 0.2,
+            "pow": 3.0,
+            "ks": 1.0,
+            "ka": 1.0,
+            "kr": 0.0,
+        },
+        "B": {
+            "m": 500,
+            "n": 5,
+            "since_year": 1900,
+            "distance_threshold": 0.2,
+            "pow": 3.0,
+            "ks": 1.0,
+            "ka": 1.0,
+            "kr": 1.0,
+        },
+    }
+
+    # Draw a random setting
+    setting = random.choice(["A", "B"])
+    return ab_test_config[setting]
 
 
 @app.post("/get_author/")
