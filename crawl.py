@@ -29,6 +29,7 @@ def parse_article(article: dict) -> Article:
     """
 
     article = Article(
+        journal=article["journalName"],
         doi=article["digitalObjectIdentifier"],
         title=article["title"],
         abstract=article["abstract"],

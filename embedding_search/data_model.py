@@ -6,6 +6,7 @@ from pydantic import BaseModel, validator
 
 class Article(BaseModel):
     author_id: Optional[str | int] = None
+    journal: Optional[str] = None
     doi: Optional[str] = None
     publication_year: Optional[int] = None
     title: Optional[str] = None
@@ -27,8 +28,11 @@ class Article(BaseModel):
         if self.title:
             text += self.title
 
+        if self.journal:
+            text += f" published in: {self.journal}"
+
         if self.abstract:
-            text += " " + self.abstract
+            text += f" abstract: {self.abstract}"
 
         return text
 

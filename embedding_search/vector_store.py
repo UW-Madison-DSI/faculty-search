@@ -40,6 +40,7 @@ def create_article_collection() -> Collection:
             FieldSchema(
                 name="author_id", dtype=DataType.INT64
             ),  # Only 1-1 mapping for now
+            FieldSchema(name="journal", dtype=DataType.VARCHAR, max_length=2048),
             FieldSchema(name="publication_year", dtype=DataType.INT32),
             FieldSchema(name="title", dtype=DataType.VARCHAR, max_length=2048),
             FieldSchema(name="abstract", dtype=DataType.VARCHAR, max_length=65535),
@@ -75,7 +76,7 @@ def make_author_data_package(author_id: str) -> dict:
     """Convert into data package that fits Milvus schema."""
 
     author = get_author(author_id)
-    data = author.dict(
+    data = author.model_dump(
         include={"id", "unit_id", "first_name", "last_name", "community_name"}
     ).copy()
 
