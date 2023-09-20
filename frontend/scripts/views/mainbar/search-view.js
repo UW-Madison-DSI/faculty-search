@@ -160,6 +160,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			ks: this.parent.getParamValue('ks'),
 			ka: this.parent.getParamValue('ka'),
 			kr: this.parent.getParamValue('kr'),
+			filter_unit: this.parent.getParamValue('filter_unit'),
 			with_plot: this.parent.getParamValue('with_plot')
 		};
 	},

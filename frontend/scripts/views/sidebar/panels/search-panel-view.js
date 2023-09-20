@@ -15,6 +15,7 @@
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
+import Departments from '../../../collections/departments.js';
 import FormView from '../../../views/forms/form-view.js';
 
 export default FormView.extend({
@@ -132,6 +133,14 @@ export default FormView.extend({
 			</div>
 		</div>
 
+		<div class="filter-unit form-group">
+			<label class="control-label">Department</label>
+			<div class="controls">
+				<select>
+				</select>
+			</div>
+		</div>
+
 		<div class="with-plot form-group">
 			<label class="control-label">With plot</label>
 			<div class="controls">
@@ -186,6 +195,8 @@ export default FormView.extend({
 				return parseFloat(this.$el.find('.ka input').val());
 			case 'kr':
 				return parseFloat(this.$el.find('.kr input').val());
+			case 'filter_unit':
+				return this.$el.find('.filter-unit select').val();
 			case 'with_plot':
 				return this.$el.find('.with-plot input').is(':checked');
 		}
@@ -205,7 +216,10 @@ export default FormView.extend({
 		let names = this.getNames();
 		for (let i = 0; i < names.length; i++) {
 			let name = names[i];
-			values[name] = this.getValue(name);
+			let value = this.getValue(name);
+			if (value !== undefined) {
+				values[name] = value;
+			}
 		}
 		return values;
 	},
@@ -278,6 +292,9 @@ export default FormView.extend({
 			case 'with_plot':
 				this.$el.find('.with-plot input').prop('checked', value);
 				break;
+			case 'filter_unit':
+				this.$el.find('.filter-unit select').val(value);
+				break;
 			case 'with_evidence':
 				this.$el.find('.with-evidence input').prop('checked', value);
 				break;
@@ -299,7 +316,8 @@ export default FormView.extend({
 
 	templateContext: function() {
 		return {
-			options: localStorage.getItem('options')
+			options: localStorage.getItem('options'),
+			departments: this.options.departments
 		};
 	},
 
@@ -308,13 +326,35 @@ export default FormView.extend({
 			return;
 		}
 
-		// set initial state
+		// fetch departments from server
 		//
-		this.setValues(this.options.values);
+		new Departments().fetch({
 
-		// update panel
-		//
-		this.update();
+			// callbacks
+			//
+			success: (departments) => {
+				this.showDepartmentSelector(departments);
+
+				// set initial state
+				//
+				this.setValues(this.options.values);
+
+				// update panel
+				//
+				this.update();
+			}
+		})
+	},
+
+	showDepartmentSelector: function(departments) {
+		let $selector = this.$el.find('.filter-unit select');
+		for (let i = 0; i < departments.length; i++) {
+			let department = departments.at(i);
+			let id = department.get('id');
+			let name = department.get('name');
+			let option = $('<option>' + name + '</option>').attr('value', id);
+			$selector.append(option);
+		}
 	},
 
 	update: function() {

@@ -2054,6 +2054,10 @@ body[device=phone] .page .section > .row > div + div {
 .sidebar .panel .list table {
   width: 100%;
 }
+.sidebar .panel select {
+  padding: 5px;
+  max-width: 100%;
+}
 .sidebar .buttons {
   text-align: center;
   margin-top: 5px;
