@@ -34,6 +34,9 @@ class VoteController:
 		since_year = request.json.get('since_year')
 		distance_threshold = request.json.get('distance_threshold')
 		relevance_weighting = request.json.get('pow')
+		ks = request.json.get('ks')
+		ka = request.json.get('ka')
+		kr = request.json.get('kr')
 		with_plot = request.json.get('with_plot')
 		vote = request.json.get('vote');
 
@@ -60,6 +63,9 @@ class VoteController:
 			'since_year', \
 			'distance_threshold', \
 			'pow', \
+			'ks', \
+			'ka', \
+			'kr', \
 			'with_plot', \
 			'vote') VALUES ( \
 			'{kind}', \
@@ -72,6 +78,9 @@ class VoteController:
 			'{since_year}', \
 			'{distance_threshold}', \
 			'{pow}', \
+			'{ks}', \
+			'{ka}', \
+			'{kr}', \
 			'{with_plot}', \
 			'{vote}')".format( \
 			kind = kind,
@@ -84,6 +93,9 @@ class VoteController:
 			since_year = since_year,
 			distance_threshold = distance_threshold,
 			pow = relevance_weighting,
+			ks = ks,
+			ka = ka,
+			kr = kr,
 			with_plot = with_plot,
 			vote = vote)
 		connection.executescript(query)
@@ -107,7 +119,10 @@ class VoteController:
 			'since_year': vote[9],
 			'distance_threshold': vote[10],
 			'relevance_weighting': vote[11],
-			'with_plot': vote[12]
+			'ks': vote[12],
+			'ka': vote[13],
+			'kr': vote[14],
+			'with_plot': vote[15]
 		}
 
 	@staticmethod

@@ -157,6 +157,9 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 			since_year: this.parent.getParamValue('since_year'),
 			distance_threshold: this.parent.getParamValue('distance_threshold'),
 			pow: this.parent.getParamValue('pow'),
+			ks: this.parent.getParamValue('ks'),
+			ka: this.parent.getParamValue('ka'),
+			kr: this.parent.getParamValue('kr'),
 			with_plot: this.parent.getParamValue('with_plot')
 		};
 	},

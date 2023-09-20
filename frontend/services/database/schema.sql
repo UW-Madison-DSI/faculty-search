@@ -13,6 +13,9 @@ CREATE TABLE 'votes' (
   'since_year' INTEGER,
   'distance_threshold' REAL,
   'pow' REAL,
+  'ks' REAL,
+  'ka' REAL,
+  'kr' REAL,
   'with_plot' INTEGER,
   'created_at' TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP
 );

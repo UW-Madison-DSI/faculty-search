@@ -111,6 +111,27 @@ export default FormView.extend({
 			</div>
 		</div>
 
+		<div class="ks form-group">
+			<label class="control-label">ks</label>
+			<div class="controls">
+				<input type="number" class="form-control" value="1" step="0.1" />
+			</div>
+		</div>
+
+		<div class="ka form-group">
+			<label class="control-label">ka</label>
+			<div class="controls">
+				<input type="number" class="form-control" value="1" step="0.1" />
+			</div>
+		</div>
+
+		<div class="kr form-group">
+			<label class="control-label">kr</label>
+			<div class="controls">
+				<input type="number" class="form-control" value="1" step="0.1" />
+			</div>
+		</div>
+
 		<div class="with-plot form-group">
 			<label class="control-label">With plot</label>
 			<div class="controls">
@@ -159,6 +180,12 @@ export default FormView.extend({
 				return parseFloat(this.$el.find('.distance-threshold input').val());
 			case 'pow':
 				return parseFloat(this.$el.find('.pow input').val());
+			case 'ks':
+				return parseFloat(this.$el.find('.ks input').val());
+			case 'ka':
+				return parseFloat(this.$el.find('.ka input').val());
+			case 'kr':
+				return parseFloat(this.$el.find('.kr input').val());
 			case 'with_plot':
 				return this.$el.find('.with-plot input').is(':checked');
 		}
@@ -238,6 +265,15 @@ export default FormView.extend({
 				break;
 			case 'pow':
 				this.$el.find('.pow input').val(value);
+				break;
+			case 'ks':
+				this.$el.find('.ks input').val(value);
+				break;
+			case 'ka':
+				this.$el.find('.ka input').val(value);
+				break;
+			case 'kr':
+				this.$el.find('.kr input').val(value);
 				break;
 			case 'with_plot':
 				this.$el.find('.with-plot input').prop('checked', value);
