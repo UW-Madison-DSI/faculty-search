@@ -107,6 +107,7 @@ class SearchAuthorsInputs(BaseModel):
     ks: float = 1.0
     ka: float = 1.0
     kr: float = 1.0
+    filter_unit: str | None = None
     with_plot: bool = False
     with_evidence: bool = False
 
