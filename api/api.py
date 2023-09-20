@@ -1,5 +1,6 @@
 import os
 import logging
+import requests
 from datetime import datetime
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
@@ -203,6 +204,33 @@ class APIArticle(BaseModel):
 def root():
     """Root endpoint (for health check)."""
     return {"api": "is running."}
+
+
+@app.get("/get_units/")
+def get_units() -> dict[int, str]:
+    """Get all units from the academic analytics API.
+
+    returns:
+        dict[int, str]: unit_id -> unit_name
+    """
+    headers = {
+        "Content-Type": "application/json",
+    }
+    url = "https://wisc.discovery.academicanalytics.com/api/units/GetInstitutionUnitsForInstitutions"
+    uw_id = 14
+    response = requests.post(url, headers=headers, json={"InstitutionIds": [uw_id]})
+
+    if response.status_code != 200:
+        raise Exception(
+            f"Error getting units from academic analytics API: {response.status_code}"
+        )
+
+    all_units = response.json()
+    return {
+        unit["unitId"]: unit["unit"]["name"]
+        for unit in all_units
+        if not unit["unit"]["isAdministrator"]
+    }
 
 
 @app.post("/get_author/")
