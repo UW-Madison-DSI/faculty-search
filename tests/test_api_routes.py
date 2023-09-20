@@ -54,6 +54,15 @@ def test_search_authors_with_plot(search_authors_route):
     assert isinstance(plot_json, str)
 
 
+def test_search_authors_with_unit_filter(search_authors_route):
+    data = {"query": "mushroom and farming", "top_k": 3, "filter_unit": "28626"}
+    response = requests.post(search_authors_route, json=data, verify=False)
+    assert response.status_code == 200
+
+    data = response.json()
+    assert "authors" in data
+
+
 def test_get_author(get_author_route):
     data = {"first_name": "Kyle", "last_name": "Cranmer"}
     response = requests.post(get_author_route, json=data, verify=False)

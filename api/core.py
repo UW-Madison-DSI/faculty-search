@@ -75,7 +75,7 @@ def get_author_by_id(author_id: str, author_collection: Collection) -> dict:
 
     authors = author_collection.query(
         expr=f"id == {str(author_id)}",
-        output_fields=["id", "first_name", "last_name"],
+        output_fields=["id", "first_name", "last_name", "unit_id"],
         limit=1,
     )
 
@@ -104,7 +104,7 @@ def get_author_by_id(author_id: str, author_collection: Collection) -> dict:
 
     authors = author_collection.query(
         expr=f"id == {author_id}",
-        output_fields=["first_name", "last_name"],
+        output_fields=["first_name", "last_name", "unit_id"],
         limit=1,
     )
 
@@ -120,7 +120,7 @@ def get_authors_names(
 
     authors = author_collection.query(
         expr=f"id in {authors_ids}",
-        output_fields=["first_name", "last_name", "id"],
+        output_fields=["first_name", "last_name", "id", "unit_id"],
     )
 
     # Sort by the original order of authors_ids
@@ -389,6 +389,7 @@ class Engine:
         kr: float = 1.0,
         with_plot: bool = False,
         with_evidence: bool = False,
+        filter_unit: str | None = None,
     ) -> dict:
         """Search for author by a query.
 
@@ -407,6 +408,9 @@ class Engine:
             ks (float, optional): Linear scaling of similarity $S$ . Defaults to 1.0.
             ka (float, optional): Linear scaling of authority $A$ = log10(cited_by + 1). Defaults to 1.0.
             kr (float, optional): Linear scaling of recency $R$ = 1 / log10(year_now - published_year + 2). Defaults to 1.0.
+            with_plot (bool, optional): Whether to return plot json. Defaults to False.
+            with_evidence (bool, optional): Whether to return evidence. Defaults to False.
+            filter_unit (str | None, optional): Unit id to filter by. Defaults to None.
 
         Returns:
             list[dict]: key: author_id; value: their scores.
@@ -447,6 +451,21 @@ class Engine:
 
             # Calculate author score
             author_scores[author_id] = np.sum(top_m_weights)
+
+        if filter_unit is not None:
+            # Get all author ids in the unit
+            filter_unit = str(filter_unit)
+            in_unit_author_ids = self.author_collection.query(
+                expr=f"unit_id == {filter_unit}",
+                output_fields=["id"],
+            )
+            # Unpack
+            in_unit_author_ids = [str(x["id"]) for x in in_unit_author_ids]
+
+            # Filter
+            author_scores = {
+                k: v for k, v in author_scores.items() if k in in_unit_author_ids
+            }
 
         top_ids, top_scores = sort_dict_by_value(author_scores, reversed=True)
         top_ids, top_scores = top_ids[:top_k], top_scores[:top_k]

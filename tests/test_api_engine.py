@@ -63,3 +63,17 @@ def test_engine_get_author(author_collection, article_collection, embeddings):
     assert author["id"] == 106927
     assert isinstance(articles, list)
     assert len(articles) > 100
+
+
+def test_filter_unit(author_collection, article_collection, embeddings):
+    engine = Engine(author_collection, article_collection, embeddings)
+    result = engine.search_authors(
+        f"mushroom and farming", top_k=3, filter_unit="28626"
+    )
+
+    authors = result["authors"]
+    author_ids = authors["author_ids"]
+
+    for author_id in author_ids:
+        author = get_author_by_id(author_id, author_collection)
+        assert str(author["unit_id"]) == "28626"
