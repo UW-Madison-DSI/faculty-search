@@ -18,7 +18,7 @@ from flask import request
 
 class VoteController:
 
-	database = 'database/database.db'
+	database = 'services/database/database.db'
 
 	@staticmethod
 	def post_create():
