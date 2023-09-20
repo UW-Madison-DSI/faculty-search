@@ -7,11 +7,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 API_URL = os.getenv("API_URL", "http://localhost:8000")
+print(API_URL)
 MILVUS_HOST = os.getenv("MILVUS_HOST", "localhost")
 MILVUS_PORT = os.getenv("MILVUS_PORT", "19530")
 MILVUS_ALIAS = os.getenv("MILVUS_ALIAS", "default")
 
-sys.path.append("/community-search")
+sys.path.append("/faculty-search")
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -48,3 +49,8 @@ def search_authors_route():
 @pytest.fixture
 def get_author_route():
     return f"{API_URL}/get_author"
+
+
+@pytest.fixture
+def get_author_by_id_route():
+    return f"{API_URL}/get_author_by_id"

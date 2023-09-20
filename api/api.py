@@ -26,7 +26,7 @@ async def lifespan(app: FastAPI):
 
     connections.connect(
         alias=os.getenv("MILVUS_ALIAS", "default"),
-        host=os.getenv("MILVUS_HOST", "localhost"),
+        host=os.getenv("MILVUS_HOST", "127.0.0.1"),
         port=os.getenv("MILVUS_PORT", "19530"),
     )
 
@@ -46,8 +46,8 @@ app = FastAPI(title="Scholar Search API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins
     allow_credentials=True,
+    allow_origins=["*"],  # Allow all origins
     allow_methods=["*"],  # Allow all methods
     allow_headers=["*"],  # Allow all headers
 )
@@ -103,6 +103,9 @@ class SearchAuthorsInputs(BaseModel):
     since_year: int = 1900
     distance_threshold: float = 0.2
     pow: float = 3.0
+    ks: float = 1.0
+    ka: float = 1.0
+    kr: float = 1.0
     with_plot: bool = False
     with_evidence: bool = False
 

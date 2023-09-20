@@ -1,5 +1,5 @@
 from functools import cache, partial
-
+from datetime import datetime
 import altair as alt
 import numpy as np
 import pandas as pd
@@ -368,7 +368,6 @@ class Engine:
 
         # Add plot data
         more_results = _search(limit=VISUALIZATION_MAX_ARTICLES)
-        print(more_results)
 
         dois = [result["doi"] for result in more_results]
         plot_data = self.plot_maker.make_plot_data(query_embedding, dois)
@@ -387,13 +386,14 @@ class Engine:
         pow: float = 3.0,
         ks: float = 1.0,
         ka: float = 1.0,
+        kr: float = 1.0,
         with_plot: bool = False,
         with_evidence: bool = False,
     ) -> dict:
         """Search for author by a query.
 
-        Each author is given by a score, defined as the linear combination of similarity $S$ and authority $A$:
-        $$ Score_j = ks * S_j + ka * A_j $$
+        Each author is given by a score, defined as the linear combination of similarity $S$, authority $A$, and recency $R$:
+        $$ Score_j = k_s * S_j + k_a * A_j + k_r * R_j $$
         See [documentation](https://docs.google.com/presentation/d/1OAPVU8E7c4vmPQZMqdPGDd37FOjUigm8nU135m1gkR4) for details.
 
         Args:
@@ -406,6 +406,7 @@ class Engine:
             pow (float, optional): Power in weighting function $p$. Defaults to 3.0.
             ks (float, optional): Linear scaling of similarity $S$ . Defaults to 1.0.
             ka (float, optional): Linear scaling of authority $A$ = log10(cited_by + 1). Defaults to 1.0.
+            kr (float, optional): Linear scaling of recency $R$ = 1 / log10(year_now - published_year + 2). Defaults to 1.0.
 
         Returns:
             list[dict]: key: author_id; value: their scores.
@@ -423,14 +424,17 @@ class Engine:
         # Calculate author scores by their relevant articles
         # Similarity $S$: (1 - distance) ** pow
         # Authority $A$ = log(cited_by + 1)
+        # Recency $R$ = 1 / log(year_now - published_year + 2)
         # Weight $W$ = S * A
 
         author_ids = [article["author_id"] for article in results["articles"]]
         c = np.array([article["cited_by"] for article in results["articles"]])
         d = np.array([article["distance"] for article in results["articles"]])
+        y = np.array([article["publication_year"] for article in results["articles"]])
         s = (1 - d) ** pow
         a = np.log10(c + 1)
-        w = ks * s + ka * a
+        r = 1 / np.log10(datetime.now().year - y + 2)
+        w = ks * s + ka * a + kr * r
 
         unique_author_ids, idx = np.unique(author_ids, return_inverse=True)
 
