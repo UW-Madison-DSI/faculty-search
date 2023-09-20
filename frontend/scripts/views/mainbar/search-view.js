@@ -207,7 +207,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		new Vote().save(_.extend(this.getParams(), {
 			vote: vote
 		}));
-		this.disableVoting();
+		this.hideVoting();
 	},
 
 	//
@@ -271,6 +271,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.showResults();
 		this.showClearResultsButton();
 		this.showTextInput();
+		this.hideVoting();
 	},
 
 	showTextInput: function() {
@@ -412,7 +413,7 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		}
 	},
 
-	disableVoting: function() {
+	hideVoting: function() {
 		this.$el.find('.voting').hide();
 	},
 
