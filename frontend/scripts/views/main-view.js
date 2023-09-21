@@ -16,8 +16,10 @@
 \******************************************************************************/
 
 import Author from '../models/author.js';
+import Settings from '../models/settings.js';
 import Articles from '../collections/articles.js';
 import Authors from '../collections/authors.js';
+import Departments from '../collections/departments.js';
 import SplitView from '../views/layout/split-view.js';
 import SearchView from '../views/mainbar/search-view.js';
 import SideBarView from '../views/sidebar/sidebar-view.js';
@@ -195,7 +197,7 @@ export default SplitView.extend({
 		//
 		let params = this.getQueryParams();
 		switch (this.getSearchTarget()) {
-			case 'authors':
+			case 'authors': {
 				let name = this.stringToName(query);
 				if (name) {
 					this.searchAuthorsByName(name, params);
@@ -205,6 +207,7 @@ export default SplitView.extend({
 					});
 				}
 				break;
+			}
 		}
 	},
 
@@ -256,7 +259,7 @@ export default SplitView.extend({
 			success: (data) => {
 				this.searchByText(data);
 			},
-			error: (response, textStatus, errorThrown) => {
+			error: () => {
 				application.error({
 					message: defaults.messages.errors.url_error
 				});
@@ -333,7 +336,7 @@ export default SplitView.extend({
 					});
 				}
 			},
-			error: (response, textStatus, errorThrown) => {
+			error: () => {
 				this.hideSpinner();
 				application.error({
 					message: defaults.messages.errors.connection
@@ -394,7 +397,7 @@ export default SplitView.extend({
 					});
 				}
 			},
-			error: (response, textStatus, errorThrown) => {
+			error: () => {
 				this.hideSpinner();
 				application.error({
 					message: defaults.messages.errors.connection
@@ -421,7 +424,7 @@ export default SplitView.extend({
 		});
 	},
 
-	searchAuthorsByName: function(name, options) {
+	searchAuthorsByName: function(name) {
 		this.showSpinner();
 		$.ajax({
 			url: config.server + '/get_author',
@@ -449,10 +452,10 @@ export default SplitView.extend({
 					author = new Author(author, {
 						parse: true
 					});
-					let authors = new Authors([author]);
 
-					this.getChildView('mainbar').showAuthors(authors);
-					// this.getChildView('mainbar').showAuthorProfile(author);
+					// show list of authors
+					//
+					this.getChildView('mainbar').showAuthors(new Authors([author]));
 				} else {
 					this.getChildView('mainbar').showMessage({
 						icon: '<i class="fa fa-search"></i>',
@@ -461,7 +464,7 @@ export default SplitView.extend({
 					});
 				}
 			},
-			error: (response, textStatus, errorThrown) => {
+			error: () => {
 				this.hideSpinner();
 				application.error({
 					message: defaults.messages.errors.connection
@@ -474,7 +477,41 @@ export default SplitView.extend({
 	// rendering methods
 	//
 
-	onAttach: function() {
+	onRender: function() {
+
+		// call superclass
+		//
+		SplitView.prototype.onRender.call(this);
+
+		// fetch default settings
+		//
+		new Settings().fetch({
+
+			// callbacks
+			//
+			success: (settings) => {
+				application.settings = settings;
+
+				// fetch departments from server
+				//
+				new Departments().fetch({
+
+					// callbacks
+					//
+					success: (departments) => {
+						application.departments = departments;
+
+						// update
+						//
+						this.onLoad();
+					}
+				});
+			}
+		});
+	},
+
+	onLoad: function() {
+		this.getChildView('sidebar panels search').onLoad();
 
 		// set initial state
 		//

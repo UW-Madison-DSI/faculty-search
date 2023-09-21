@@ -15,8 +15,6 @@
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
-import Settings from '../../../models/settings.js';
-import Departments from '../../../collections/departments.js';
 import FormView from '../../../views/forms/form-view.js';
 
 export default FormView.extend({
@@ -219,14 +217,14 @@ export default FormView.extend({
 		for (let i = 0; i < names.length; i++) {
 			let name = names[i];
 			let value = this.getValue(name);
-			if (value !== undefined) {
+			if (value !== undefined && value != 'None') {
 				values[name] = value;
 			}
 		}
 		return values;
 	},
 
-	getValues: function(which) {
+	getValues: function() {
 		let values;
 
 		if (this.isAdvanced()) {
@@ -323,40 +321,20 @@ export default FormView.extend({
 		};
 	},
 
-	onRender: function() {
-		if (!this.options.values) {
-			return;
-		}
+	onLoad: function() {
 
-		// fetch default settings
+		// show child views
 		//
-		new Settings().fetch({
+		this.showDepartmentSelector(application.departments);
 
-			// callbacks
-			//
-			success: (settings) => {
-				this.setValues(settings.attributes);
-			}
-		})
-
-		// fetch departments from server
+		// set initial state
 		//
-		new Departments().fetch({
+		this.setValues(application.settings.attributes);
+		this.setValues(this.options.values);
 
-			// callbacks
-			//
-			success: (departments) => {
-				this.showDepartmentSelector(departments);
-
-				// set initial state
-				//
-				this.setValues(this.options.values);
-
-				// update panel
-				//
-				this.update();
-			}
-		})
+		// update panel
+		//
+		this.update();
 	},
 
 	showDepartmentSelector: function(departments) {

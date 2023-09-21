@@ -16,7 +16,6 @@
 \******************************************************************************/
 
 import BaseView from '../../../views/base-view.js';
-import Browser from '../../../utilities/web/browser.js';
 
 export default BaseView.extend({
 
@@ -59,7 +58,7 @@ export default BaseView.extend({
 		}
 	},
 
-	showPlot: function(json) {
+	showPlot: function() {
 		let width = this.getWidth();
 		let height = this.getHeight();
 
@@ -68,7 +67,7 @@ export default BaseView.extend({
 			actions: false,
 			width: width - 10,
 			height: height - 100
-		}).then(function (result) { }).catch(console.error);
+		}).then(function () {}).catch(console.error);
 	},
 
 	//

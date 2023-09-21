@@ -69,7 +69,7 @@ export default Marionette.Application.extend(_.extend({}, Alertable, {
 		// listen for color scheme changes
 		//
 		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
-			this.onThemeChange();
+			this.onThemeChange(event);
 		});
 
 		// create routers
@@ -104,7 +104,7 @@ export default Marionette.Application.extend(_.extend({}, Alertable, {
 	// getting methods
 	//
 
-	getTheme: function(key) {
+	getTheme: function() {
 		return this.getView().getChildView('content sidebar options').getValue('theme');
 	},
 

@@ -31,7 +31,7 @@ export default {
 		if (this.dialogView) {
 			this.dialogView.hide();
 		}
-		this.dialogView = dialogView.show();
+		this.dialogView = dialogView.show(options);
 	},
 
 	error: function(options) {

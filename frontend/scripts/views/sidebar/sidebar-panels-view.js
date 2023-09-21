@@ -18,7 +18,6 @@
 import PanelsView from '../../views/layout/panels-view.js';
 import SearchPanelView from '../../views/sidebar/panels/search-panel-view.js';
 import OptionsPanelView from '../../views/sidebar/panels/options-panel-view.js';
-import FooterView from '../../views/layout/footer-view.js';
 
 export default PanelsView.extend({
 
@@ -50,7 +49,7 @@ export default PanelsView.extend({
 	// panel rendering methods
 	//
 
-	showPanel: function(panel, options) {
+	showPanel: function(panel) {
 
 		// if panel has already been rendered, then show
 		//

@@ -60,7 +60,7 @@ export default {
 		}
 	},
 
-	getValue: function(name, options) {
+	getValue: function(name) {
 		let queryString = this.get();
 
 		if (!queryString) {
@@ -143,7 +143,7 @@ export default {
 			//
 			let equalSign = term.indexOf('=');
 			let key = term.substr(0, equalSign);
-			let value = stringToValue(term.substr(equalSign + 1, term.length));
+			let value = this.stringToValue(term.substr(equalSign + 1, term.length));
 
 			// check if key matches name
 			//
@@ -241,7 +241,7 @@ export default {
 				//
 				let equalSign = term.indexOf('=');
 				let key = term.substr(0, equalSign);
-				let value = stringToValue(term.substr(equalSign + 1, term.length));
+				let value = this.stringToValue(term.substr(equalSign + 1, term.length));
 
 				// check for array values
 				//

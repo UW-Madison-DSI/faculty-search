@@ -40,7 +40,7 @@ export default Backbone.Router.extend({
 	// main route handlers
 	//
 
-	showMain: function(id) {
+	showMain: function() {
 		import(
 			'./views/main-view.js'
 		).then((MainView) => {
