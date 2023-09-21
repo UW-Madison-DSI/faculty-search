@@ -37,6 +37,7 @@ class VoteController:
 		ks = request.json.get('ks')
 		ka = request.json.get('ka')
 		kr = request.json.get('kr')
+		filter_unit = request.json.get('filter_unit')
 		with_plot = request.json.get('with_plot')
 		vote = request.json.get('vote');
 
@@ -66,6 +67,7 @@ class VoteController:
 			'ks', \
 			'ka', \
 			'kr', \
+			'filter_unit', \
 			'with_plot', \
 			'vote') VALUES ( \
 			'{kind}', \
@@ -81,6 +83,7 @@ class VoteController:
 			'{ks}', \
 			'{ka}', \
 			'{kr}', \
+			'{filter_unit}', \
 			'{with_plot}', \
 			'{vote}')".format( \
 			kind = kind,
@@ -96,6 +99,7 @@ class VoteController:
 			ks = ks,
 			ka = ka,
 			kr = kr,
+			filter_unit = filter_unit,
 			with_plot = with_plot,
 			vote = vote)
 		connection.executescript(query)

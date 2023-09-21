@@ -16,6 +16,7 @@ CREATE TABLE 'votes' (
   'ks' REAL,
   'ka' REAL,
   'kr' REAL,
+  'filter_unit' VARCHAR(255),
   'with_plot' INTEGER,
   'created_at' TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP
 );
