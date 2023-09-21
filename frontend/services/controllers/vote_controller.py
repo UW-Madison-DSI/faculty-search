@@ -57,6 +57,7 @@ class VoteController:
 			'kind', \
 			'target', \
 			'query', \
+			'vote', \
 			'top_k', \
 			'weight_results', \
 			'n', \
@@ -68,11 +69,12 @@ class VoteController:
 			'ka', \
 			'kr', \
 			'filter_unit', \
-			'with_plot', \
-			'vote') VALUES ( \
+			'with_plot' \
+			) VALUES ( \
 			'{kind}', \
 			'{target}', \
 			'{query}', \
+			'{vote}', \
 			'{top_k}', \
 			'{weight_results}', \
 			'{n}', \
@@ -84,11 +86,11 @@ class VoteController:
 			'{ka}', \
 			'{kr}', \
 			'{filter_unit}', \
-			'{with_plot}', \
-			'{vote}')".format( \
+			'{with_plot}')".format( \
 			kind = kind,
 			target = target,
 			query = query,
+			vote = vote,
 			top_k = top_k,
 			weight_results = weight_results,
 			n = n,
@@ -100,8 +102,7 @@ class VoteController:
 			ka = ka,
 			kr = kr,
 			filter_unit = filter_unit,
-			with_plot = with_plot,
-			vote = vote)
+			with_plot = with_plot)
 		connection.executescript(query)
 		connection.commit()
 		connection.close()
@@ -126,7 +127,9 @@ class VoteController:
 			'ks': vote[12],
 			'ka': vote[13],
 			'kr': vote[14],
-			'with_plot': vote[15]
+			'filter_unit': vote[15],
+			'with_plot': vote[16],
+			'created_at': vote[17]
 		}
 
 	@staticmethod
