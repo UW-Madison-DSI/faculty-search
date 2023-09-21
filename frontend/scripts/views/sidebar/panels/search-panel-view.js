@@ -137,6 +137,7 @@ export default FormView.extend({
 			<label class="control-label">Department</label>
 			<div class="controls">
 				<select>
+					<option>None</option>
 				</select>
 			</div>
 		</div>
