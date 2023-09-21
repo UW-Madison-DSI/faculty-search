@@ -15,6 +15,7 @@
 |     Copyright (C) 2023, Data Science Institute, University of Wisconsin      |
 \******************************************************************************/
 
+import Settings from '../../../models/settings.js';
 import Departments from '../../../collections/departments.js';
 import FormView from '../../../views/forms/form-view.js';
 
@@ -326,6 +327,17 @@ export default FormView.extend({
 		if (!this.options.values) {
 			return;
 		}
+
+		// fetch default settings
+		//
+		new Settings().fetch({
+
+			// callbacks
+			//
+			success: (settings) => {
+				this.setValues(settings.attributes);
+			}
+		})
 
 		// fetch departments from server
 		//
