@@ -74,81 +74,79 @@ export default FormView.extend({
 			</div>
 		</div>
 
-		<% if (options == 'advanced') { %>
+		<div class="advanced"<% if (!is_advanced) { %> style="display:none"<% } %>>
+			<div class="n form-group">
+				<label class="control-label">n</label>
+				<div class="controls">
+					<input type="number" class="form-control" value="500" step="100" />
+				</div>
+			</div>
 
-		<div class="n form-group">
-			<label class="control-label">n</label>
-			<div class="controls">
-				<input type="number" class="form-control" value="500" step="100" />
+			<div class="m form-group">
+				<label class="control-label">m</label>
+				<div class="controls">
+					<input type="number" class="form-control" value="5" />
+				</div>
+			</div>
+
+			<div class="since-year form-group">
+				<label class="control-label">Since year</label>
+				<div class="controls">
+					<input type="number" class="form-control" value="1900" step="10" />
+				</div>
+			</div>
+
+			<div class="distance-threshold form-group">
+				<label class="control-label">Distance threshold</label>
+				<div class="controls">
+					<input type="number" class="form-control" value="0.2" step="0.1" />
+				</div>
+			</div>
+
+			<div class="pow form-group">
+				<label class="control-label">Relevance weighting (>1)</label>
+				<div class="controls">
+					<input type="number" class="form-control" value="3" step="0.5" />
+				</div>
+			</div>
+
+			<div class="ks form-group">
+				<label class="control-label">ks</label>
+				<div class="controls">
+					<input type="number" class="form-control" value="1" step="0.1" />
+				</div>
+			</div>
+
+			<div class="ka form-group">
+				<label class="control-label">ka</label>
+				<div class="controls">
+					<input type="number" class="form-control" value="1" step="0.1" />
+				</div>
+			</div>
+
+			<div class="kr form-group">
+				<label class="control-label">kr</label>
+				<div class="controls">
+					<input type="number" class="form-control" value="1" step="0.1" />
+				</div>
+			</div>
+
+			<div class="filter-unit form-group">
+				<label class="control-label">Department</label>
+				<div class="controls">
+					<select>
+						<option>None</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="with-plot form-group">
+				<label class="control-label">With plot</label>
+				<div class="controls">
+					<input type="checkbox" checked />
+				</div>
 			</div>
 		</div>
-
-		<div class="m form-group">
-			<label class="control-label">m</label>
-			<div class="controls">
-				<input type="number" class="form-control" value="5" />
-			</div>
-		</div>
-
-		<div class="since-year form-group">
-			<label class="control-label">Since year</label>
-			<div class="controls">
-				<input type="number" class="form-control" value="1900" step="10" />
-			</div>
-		</div>
-
-		<div class="distance-threshold form-group">
-			<label class="control-label">Distance threshold</label>
-			<div class="controls">
-				<input type="number" class="form-control" value="0.2" step="0.1" />
-			</div>
-		</div>
-
-		<div class="pow form-group">
-			<label class="control-label">Relevance weighting (>1)</label>
-			<div class="controls">
-				<input type="number" class="form-control" value="3" step="0.5" />
-			</div>
-		</div>
-
-		<div class="ks form-group">
-			<label class="control-label">ks</label>
-			<div class="controls">
-				<input type="number" class="form-control" value="1" step="0.1" />
-			</div>
-		</div>
-
-		<div class="ka form-group">
-			<label class="control-label">ka</label>
-			<div class="controls">
-				<input type="number" class="form-control" value="1" step="0.1" />
-			</div>
-		</div>
-
-		<div class="kr form-group">
-			<label class="control-label">kr</label>
-			<div class="controls">
-				<input type="number" class="form-control" value="1" step="0.1" />
-			</div>
-		</div>
-
-		<div class="filter-unit form-group">
-			<label class="control-label">Department</label>
-			<div class="controls">
-				<select>
-					<option>None</option>
-				</select>
-			</div>
-		</div>
-
-		<div class="with-plot form-group">
-			<label class="control-label">With plot</label>
-			<div class="controls">
-				<input type="checkbox" checked />
-			</div>
-		</div>
-
-		<% } %>
 	`),
 
 	events: {
@@ -310,6 +308,14 @@ export default FormView.extend({
 		}
 	},
 
+	setAdvanced: function(isAdvanced) {
+		if (isAdvanced) {
+			this.$el.find('.advanced').show();
+		} else {
+			this.$el.find('.advanced').hide();
+		}
+	},
+
 	//
 	// rendering methods
 	//
@@ -317,6 +323,7 @@ export default FormView.extend({
 	templateContext: function() {
 		return {
 			options: localStorage.getItem('options'),
+			is_advanced: this.isAdvanced(),
 			departments: this.options.departments
 		};
 	},

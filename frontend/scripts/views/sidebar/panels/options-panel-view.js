@@ -105,15 +105,15 @@ export default BaseView.extend({
 	},
 
 	onChangeOptions: function() {
-		let advanced = this.getValue('options');
+		let isAdvanced = this.getValue('options');
 
 		// save value for later
 		//
-		localStorage.setItem('options', advanced? 'advanced' : 'standard');
+		localStorage.setItem('options', isAdvanced? 'advanced' : 'standard');
 
 		// update view
 		//
-		this.parent.getChildView('search').render();
+		this.parent.getChildView('search').setAdvanced(isAdvanced);
 		this.getParentView('split-view').updateQueryString();
 	}
 });
