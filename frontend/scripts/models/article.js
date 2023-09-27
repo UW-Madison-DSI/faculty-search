@@ -27,5 +27,18 @@ export default BaseModel.extend({
 		id: undefined,
 		title: undefined,
 		doi: undefined
+	},
+
+	//
+	// parsing methods
+	//
+
+	parse: function(attributes) {
+
+		// string id since it's too long to be parsed as an integer
+		//
+		delete(attributes.id);
+
+		return attributes;
 	}
 });

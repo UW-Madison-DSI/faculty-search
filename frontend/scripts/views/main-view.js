@@ -380,7 +380,9 @@ export default SplitView.extend({
 			success: (data) => {
 				this.hideSpinner();
 				if (data.articles && data.articles.length > 0) {
-					let articles = new Articles(data.articles);
+					let articles = new Articles(data.articles, {
+						parse: true
+					});
 					let plot = data.plot_json? JSON.parse(data.plot_json) : undefined;
 					this.getChildView('mainbar').showArticles(articles, plot);
 

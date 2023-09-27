@@ -41,7 +41,9 @@ export default BaseModel.extend({
 		// parse attributes
 		//
 		if (data.articles) {
-			data.articles = new Articles(data.articles);
+			data.articles = new Articles(data.articles, {
+				parse: true
+			});
 		}
 
 		return data;
