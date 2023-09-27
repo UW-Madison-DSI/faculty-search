@@ -45,7 +45,7 @@ def get_author_by_name(
 
     _query = partial(
         author_collection.query,
-        output_fields=["id", "first_name", "last_name"],
+        output_fields=["id", "first_name", "last_name", "unit_id"],
         limit=1,
     )
 
@@ -67,20 +67,6 @@ def get_author_by_name(
 
     if not authors:
         raise ValueError(f"Author with name {first_name} {last_name} not found")
-    return authors[0]
-
-
-def get_author_by_id(author_id: str, author_collection: Collection) -> dict:
-    """Get author details from Milvus."""
-
-    authors = author_collection.query(
-        expr=f"id == {str(author_id)}",
-        output_fields=["id", "first_name", "last_name", "unit_id"],
-        limit=1,
-    )
-
-    if not authors:
-        raise ValueError(f"Author with id: {author_id} not found")
     return authors[0]
 
 
