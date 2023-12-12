@@ -2,9 +2,6 @@ name: Build and Deploy Frontend to GCP (PROD)
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - deploy
 
 env:
   GCE_HOST: ${{ secrets.GCE_HOST_PROD }}
@@ -29,11 +26,15 @@ jobs:
       id: build
       env:
         GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+        DOCKER_IMG: ghcr.io/jasonlo/community-search-frontend
       run: |
         echo $GHCR_TOKEN | docker login ghcr.io -u USERNAME --password-stdin &&
         cd frontend-built &&
-        docker build . -t ghcr.io/jasonlo/community-search-frontend:latest &&
-        docker push ghcr.io/jasonlo/community-search-frontend:latest
+        tag=$(date +%Y%m%d-%H%M) &&
+        docker build . -t $DOCKER_IMG:$tag &&
+        docker push $DOCKER_IMG:$tag &&
+        docker tag $DOCKER_IMG:$tag $DOCKER_IMG:latest &&
+        docker push $DOCKER_IMG:latest
 
     - name: Deploy to GCP
       if: steps.build.outputs.exit_code == 0
