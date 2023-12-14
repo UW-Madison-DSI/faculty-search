@@ -1,0 +1,27 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "compose reload api",
+            "type": "shell",
+            "command": "docker compose stop fastapi && docker compose up --build -d fastapi && docker compose logs -f fastapi",
+        },
+        {
+            "label": "pytest",
+            "type": "shell",
+            "command": "pytest --cov=api --cov-report=term-missing tests/",
+        },
+        {
+            "label": "compose up",
+            "type": "shell",
+            "command": "docker compose up --build -d",
+        },
+        {
+            "label": "inject js config",
+            "type": "shell",
+            "command": "docker cp ./frontend/config/config.dev.json flask:/app/config/config.json"
+        }
+    ]
+}

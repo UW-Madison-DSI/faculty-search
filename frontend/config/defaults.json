@@ -1,0 +1,81 @@
+{
+	"application": {
+		"name": "UW Faculty Search",
+		"year": "2023",
+
+		"author": {
+			"name": "Data Science Institute",
+			"url": "http://datascience.wisc.edu"
+		},
+
+		"organization": {
+			"name": "University of Wisconsin-Madison",
+			"url": "http://wisc.edu"
+		}
+	},
+
+	"navbar": {
+		"icon": "images/logos/uw-crest.png",
+		"title": "UW Faculty Search <i>(Beta)</i>",
+		"navs": {
+			"about": {
+				"text": "About",
+				"icon": "fa fa-info-circle",
+				"href": "#about"
+			},
+			"questions": {
+				"text": "FAQ",
+				"icon": "fa fa-question-circle",
+				"href": "#questions"
+			},
+			"contact": {
+				"text": "Contact",
+				"icon": "fa fa-envelope",
+				"href": "#contact"
+			}
+		}
+	},
+
+	"messages": {
+		"main": {
+			"icon": "",
+			"title": "Faculty Search",
+			"subtitle": "Discover UW-Madison faculty and their research"
+		},
+		"message_sent": {
+			"icon": "fa fa-envelope",
+			"title": "Message Sent",
+			"message": "Your message has been sent. Thank you for your feedback."
+		},
+		"pdf_upload": {
+			"icon": "<i class=\"fa fa-file\"></i>",
+			"title": "Search By PDF",
+			"message": "Drag and drop or select a PDF file to perform a search based on the contents of this file."
+		},
+		"errors": {
+			"connection": "Could not connect to server. Please try again.",
+			"name": "Search by name requires a first name and a last name.",
+			"file_read": "Could not read PDF file.",
+			"contact": "Your message could not be sent.",
+			"empty_name": "Please provide a name to search for.",
+			"empty_url": "Please provide a URL to search.",
+			"empty_text": "Please provide text to search for.",
+			"url_error": "Cannot reach URL."
+		},
+		"notes": "This repository indexes papers written by faculty, sourced from <a href=\"https://academicanalytics.com/\" target=\"_blank\">Academic Analytics</a>.  Note that the collection may not be comprehensive."
+	},
+
+	"footer": {
+		"image": "images/logos/logo.svg"
+	},
+
+	"contact": {
+		"subjects": [
+			"Question",
+			"Comment",
+			"Feature Request",
+			"Bug Report",
+			"Other"
+		]
+	}
+}

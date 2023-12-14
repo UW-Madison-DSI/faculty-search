@@ -1,0 +1,35 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.formatting.provider": "none",
+    "cSpell.words": [
+        "anns",
+        "autouse",
+        "cdist",
+        "devcontainer",
+        "devcontainers",
+        "dois",
+        "dotenv",
+        "dtype",
+        "fastapi",
+        "gcloud",
+        "Higgs",
+        "jasonlo",
+        "keepdims",
+        "langchain",
+        "milvus",
+        "nlist",
+        "nprobe",
+        "ORCID",
+        "pydantic",
+        "pymilvus",
+        "pypdf",
+        "rangav",
+        "SERP",
+        "serpapi",
+        "sklearn",
+        "tsne"
+    ],
+    "python.analysis.typeCheckingMode": "off"
+}
