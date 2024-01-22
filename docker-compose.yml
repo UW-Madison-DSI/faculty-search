@@ -36,7 +36,7 @@ services:
 
   milvus:
     container_name: milvus-standalone
-    image: milvusdb/milvus:v2.2.11
+    image: milvusdb/milvus:2.3-latest
     command: [ "milvus", "run", "standalone" ]
     environment:
       ETCD_ENDPOINTS: etcd:2379
@@ -85,7 +85,7 @@ services:
 
   flask:
     container_name: flask
-    image: ghcr.io/jasonlo/community-search-frontend:latest  # pull from ghcr for CI
+    image: ghcr.io/jasonlo/community-search-frontend:latest # pull from ghcr for CI
     # build:
     #   context: ./frontend
     #   dockerfile: Dockerfile
@@ -105,8 +105,6 @@ services:
       - ./cert.pem:/etc/ssl/cert.pem
       - ./privkey.pem:/etc/ssl/privkey.pem
 
-
-
   nginx:
     container_name: nginx
     image: nginx:latest
@@ -116,6 +114,3 @@ services:
       - ./privkey.pem:/etc/nginx/ssl/privkey.pem
     ports:
       - "80:80"
-
-
-
