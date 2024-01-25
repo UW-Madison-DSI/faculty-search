@@ -79,33 +79,35 @@ def download_one_author(id: int) -> None:
         logging.info(f"Skipping {author.id} because they have no articles.")
 
 
-def download_authors(overwrite: bool = False, resume_from: int = 0) -> None:
-    """Download authors from ORCID and their papers from CrossRef."""
+def download_all_authors_in_unit(unit: int, overwrite: bool = False) -> None:
+    """Download all authors in a list of units."""
 
     downloaded = [] if overwrite else list_downloaded_authors()
 
-    units = get_units()
+    faculties = get_faculties(unit)
+    for i, faculty in enumerate(faculties):
+        # Overwrite protection
+        if (not overwrite) and (int(faculty["id"]) in downloaded):
+            print(f"Skipping {faculty['id']} because it's already downloaded.")
+            continue
+        try:
+            print(f"Processing faculty {i+1}/{len(faculties)}: {faculty['id']}")
+            download_one_author(faculty["id"])
+        except Exception as e:
+            print(f"Error downloading {faculty['id']}: {e}")
+            continue
 
+
+def download_authors(overwrite: bool = False, resume_from: int = 0) -> None:
+    """Download authors from ORCID and their papers from CrossRef."""
+
+    units = get_units()
     if resume_from:
         units = units[resume_from:]
-
     logging.info(f"Found {len(units)} units.")
-
     for i, unit in enumerate(units):
-        faculties = get_faculties(int(unit["unitId"]))
-        for j, faculty in enumerate(faculties):
-            print(faculty)
-            print(
-                f"Processing unit {i+1}/{len(units)}; faculty {j+1}/{len(faculties)}: {faculty['id']}"
-            )
-            if int(faculty["id"]) in downloaded:
-                print(f"Skipping {faculty['id']} because it's already downloaded.")
-                continue
-            try:
-                download_one_author(id=faculty["id"])
-            except Exception as e:
-                print(f"Error downloading {faculty['id']}: {e}")
-                continue
+        print(f"Processing unit {i+1}/{len(units)}: {unit['unitId']}")
+        download_all_authors_in_unit(int(unit["unitId"]))
 
 
 def repair_authors() -> None:
