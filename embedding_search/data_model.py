@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Optional
 
 import numpy as np
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, Field, validator
 from tqdm import tqdm
 from langchain.embeddings import OpenAIEmbeddings
 
@@ -73,8 +73,8 @@ class Author(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     community_name: Optional[str] = None
-    articles: Optional[list[Article]] = None
-    articles_embeddings: Optional[list[list[float]]] = None
+    articles: list[Article] = Field(default_factory=list)
+    articles_embeddings: list[list[float]] = Field(default_factory=list)
     similarity: Optional[float] = None
 
     @validator("first_name", pre=True)
