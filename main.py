@@ -1,18 +1,24 @@
+import argparse
 import logging
 import os
-import argparse
-
 from pathlib import Path
+
 from dotenv import load_dotenv
-from embedding_search.vector_store import connect_milvus, init_milvus, push_data
-from pymilvus import Collection
+from pymilvus import utility, Collection
 from tqdm import tqdm
 
+from embedding_search.vector_store import (
+    connect_milvus,
+    create_article_collection,
+    create_author_collection,
+    init_milvus,
+    push_data,
+    print_collections,
+)
 
 load_dotenv()
 
 AUTHORS_DIR = os.getenv("AUTHORS_DIR")
-DEBUG = int(os.getenv("DEBUG", 0))
 MILVUS_ALIAS = os.getenv("MILVUS_ALIAS", "default")
 AUTHORS_DIR = Path(AUTHORS_DIR)
 print(f"{AUTHORS_DIR=}")
@@ -20,7 +26,7 @@ print(f"{AUTHORS_DIR=}")
 logging.basicConfig(filename="main.log", level=logging.INFO)
 
 
-def ingest(init: bool = False) -> None:
+def ingest(init: bool = False, debug: bool = False) -> None:
     """Ingest data to Milvus."""
 
     connect_milvus()
@@ -29,10 +35,13 @@ def ingest(init: bool = False) -> None:
         init_milvus()
 
     author_ids = [file.stem for file in AUTHORS_DIR.glob("*.json")]
-    author_collection = Collection("authors")
-    article_collection = Collection("articles")
 
-    if DEBUG:
+    # Create new staging collections
+    author_collection = create_author_collection(name="staging_authors")
+    article_collection = create_article_collection(name="staging_articles")
+
+    # Ingest data
+    if debug:
         author_ids = author_ids[:100]
 
     for author_id in tqdm(author_ids):
@@ -45,12 +54,24 @@ def ingest(init: bool = False) -> None:
     author_collection.flush()
     article_collection.flush()
 
+    # Swap staging collections with production collections
+    utility.rename_collection("authors", "old_authors")
+    utility.rename_collection("articles", "old_articles")
+    utility.rename_collection("staging_authors", "authors")
+    utility.rename_collection("staging_articles", "articles")
+
+    # Reload collections
+    Collection("authors").load()
+    Collection("articles").load()
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--init", action="store_true", help="Initialize Milvus")
+    parser.add_argument("--debug", action="store_true", help="Debug mode")
     args = parser.parse_args()
-    ingest(init=args.init)
+    ingest(init=args.init, debug=args.debug)
+    print_collections()
 
 
 if __name__ == "__main__":

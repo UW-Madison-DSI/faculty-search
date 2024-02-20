@@ -21,6 +21,13 @@ MILVUS_ALIAS = os.getenv("MILVUS_ALIAS", "default")
 MILVUS_HOST = os.getenv("MILVUS_HOST", "localhost")
 MILVUS_PORT = os.getenv("MILVUS_PORT", "19530")
 
+# Embedding specific index settings
+INDEX_PARAMS = {
+    "metric_type": "IP",  # inner-product
+    "index_type": "IVF_FLAT",
+    "params": {"nlist": 1024},
+}
+
 
 @cache
 def get_author(id: str) -> Author:
@@ -28,8 +35,8 @@ def get_author(id: str) -> Author:
     return Author.load(AUTHORS_DIR / f"{id}.json")
 
 
-def create_article_collection() -> Collection:
-    """Create a collection named articles in Milvus."""
+def create_article_collection(name: str = "articles") -> Collection:
+    """Create a articles collection in Milvus."""
 
     schema = CollectionSchema(
         fields=[
@@ -51,11 +58,13 @@ def create_article_collection() -> Collection:
         auto_id=True,
     )
 
-    return Collection(name="articles", schema=schema)
+    collection = Collection(name=name, schema=schema)
+    collection.create_index("embedding", INDEX_PARAMS)
+    return collection
 
 
-def create_author_collection() -> Collection:
-    """Create a collection named authors in Milvus."""
+def create_author_collection(name: str = "authors") -> Collection:
+    """Create a authors collection in Milvus."""
 
     schema = CollectionSchema(
         fields=[
@@ -68,8 +77,9 @@ def create_author_collection() -> Collection:
         ],
         description="Authors",
     )
-
-    return Collection(name="authors", schema=schema)
+    collection = Collection(name=name, schema=schema)
+    collection.create_index("embedding", INDEX_PARAMS)
+    return collection
 
 
 def make_author_data_package(author_id: str) -> dict:
@@ -98,10 +108,12 @@ def make_articles_data_packages(author_id: str) -> list[dict]:
         if article.doi is None:
             continue
 
-        data = article.dict().copy()
+        data = article.model_dump().copy()
         data["author_id"] = author.id
         if data["abstract"] is None:
             data["abstract"] = ""
+        if data["journal"] is None:
+            data["journal"] = ""
         if data["publication_year"] is None:
             data["publication_year"] = 0
         if data["cited_by"] is None:
@@ -123,18 +135,8 @@ def init_milvus() -> None:
 
     # Create collections
     logging.info("Creating collections...")
-    article_collection = create_article_collection()
-    author_collection = create_author_collection()
-
-    # Create index setting
-    index_params = {
-        "metric_type": "IP",  # inner-product
-        "index_type": "IVF_FLAT",
-        "params": {"nlist": 1024},
-    }
-
-    article_collection.create_index("embedding", index_params)
-    author_collection.create_index("embedding", index_params)
+    create_article_collection()
+    create_author_collection()
 
 
 def push_data(
@@ -145,14 +147,6 @@ def push_data(
     Note. Remember to call collection.flush() after ingestion session.
     """
 
-    author_collection.load()
-
-    author = author_collection.query(expr=f"id == {author_id}", limit=1)
-
-    if author:
-        logging.info(f"Author {author_id} already exists in Milvus. Skipping...")
-        return
-
     # Ingest authors
     logging.info(f"Ingesting author {author_id}...")
     author_data_package = make_author_data_package(author_id)
@@ -161,3 +155,11 @@ def push_data(
     # Ingest articles (can be quite large)
     articles_data_package = make_articles_data_packages(author_id)
     article_collection.insert(articles_data_package)
+
+
+def print_collections() -> None:
+    """Print collections and their number of entities."""
+
+    for collection_name in utility.list_collections():
+        collection = Collection(collection_name)
+        print(collection_name, collection.num_entities)
