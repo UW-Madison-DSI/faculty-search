@@ -1,15 +1,11 @@
-FROM python:3.11
+FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y jq curl cron git gcc build-essential
-
+RUN apt-get update && apt-get install -y jq curl cron
 # Frontend dependencies
 COPY services/requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt
-
-# Backend dependencies
-RUN pip install git+https://github.com/UW-Madison-DSI/faculty-search.git@0.1.3
 
 # Cron job to remove tmp files
 RUN echo "* 0 * * * rm -rf /tmp/*" > /etc/cron.d/clean_tmp
