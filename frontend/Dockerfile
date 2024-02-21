@@ -2,7 +2,7 @@ FROM python:slim-bullseye
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y jq curl cron
+RUN apt-get update && apt-get install -y jq curl cron git
 
 # Frontend dependencies
 COPY services/requirements.txt /tmp/requirements.txt
