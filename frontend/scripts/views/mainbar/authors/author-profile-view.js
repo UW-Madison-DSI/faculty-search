@@ -27,6 +27,10 @@ export default FormView.extend({
 	className: 'author form-horizontal panel',
 
 	template: _.template(`
+		<div class="buttons" style="float:right">
+			<button class="close warning btn btn-sm" data-toggle="tooltip" title="Close" style="opacity:1"><i class="fa fa-close"></i></button>
+		</div>
+
 		<h1><%= first_name %> <%= last_name %></h1>
 
 		<div class="form-group" id="first-name" style="display:none">
@@ -73,6 +77,10 @@ export default FormView.extend({
 		articles: '.articles-list'
 	},
 
+	events: {
+		'click .close': 'onClickClose'
+	},
+
 	//
 	// rendering methods
 	//
@@ -81,5 +89,18 @@ export default FormView.extend({
 		this.showChildView('articles', new ArticlesListView({
 			collection: this.model.get('articles')
 		}));
+	},
+
+	//
+	// mouse event handing methods
+	//
+
+	onClickClose: function() {
+
+		// perform callback
+		//
+		if (this.options.onclose) {
+			this.options.onclose();
+		}
 	}
 });

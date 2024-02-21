@@ -254,6 +254,11 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 		this.showResults();
 		this.showClearResultsButton();
 		this.showTextInput();
+
+		// save for later use
+		//
+		this.authors = authors;
+		this.plot = plot;
 	},
 
 	showArticles: function(articles, plot) {
@@ -270,7 +275,13 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	showAuthorProfile: function(author) {
 		this.clearMessage();
 		this.showChildView('results', new AuthorProfileView({
-			model: author
+			model: author,
+
+			// callbacks
+			//
+			onclose: () => {
+				this.showAuthors(this.authors, this.plot);
+			}
 		}));
 		this.showResults();
 		this.showClearResultsButton();
