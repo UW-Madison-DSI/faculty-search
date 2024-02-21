@@ -1,9 +1,13 @@
 #!/bin/bash
 
+
 if [ "$1" = "" ]; then
     echo "Usage: release.sh major/minor/patch... (see hatch version --help for details)"
     exit 1
 fi
+
+# Make sure we have the latest version of hatchling and build
+pip install -U hatch build
 
 ### Verison control ###
 # Bump version with hatchling
