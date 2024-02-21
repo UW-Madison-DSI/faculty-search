@@ -89,6 +89,10 @@ export default FormView.extend({
 		this.showChildView('articles', new ArticlesListView({
 			collection: this.model.get('articles')
 		}));
+
+		// add tooltip triggers
+		//
+		this.addTooltips();
 	},
 
 	//
