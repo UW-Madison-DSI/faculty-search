@@ -9,10 +9,17 @@ authors = [
     { name = "Jason Lo", email = "jason.lo@wisc.edu" }
 ]
 dependencies = [
-    "langchain",
-    "openai",
-    "pypdf",
-    "tiktoken"
+    "langchain==0.0.308",
+    "altair==5.1.1",
+    "python-dotenv==1.0.0",
+    "openai==0.28.1",
+    "scikit-learn==1.3.0",
+    "streamlit==1.26.0",
+    "beautifulsoup4==4.12.2",
+    "fastapi==0.103.1",
+    "uvicorn==0.23.2",
+    "pymilvus==2.3.0",
+    "google-cloud-storage==2.10.0"
 ]
 
 [build-system]

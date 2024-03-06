@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 env:
-  GCE_HOST: ${{ secrets.GCE_HOST_PROD }}
   INSTANCE_NAME: 'community-search-prod-1'
 
 jobs:
@@ -41,9 +40,9 @@ jobs:
       env:
         ZONE: 'us-central1-a'
         GCE_USERNAME: 'ci'
+        GCE_HOST: ${{ secrets.GCE_HOST_PROD }}
         GCE_SSH_KEY: ${{ secrets.GCE_SSH_KEY }}
       run: |
         echo "$GCE_SSH_KEY" > gce_ssh_key.pem
         chmod 600 gce_ssh_key.pem
         ssh -i gce_ssh_key.pem -o StrictHostKeyChecking=no $GCE_USERNAME@$GCE_HOST 'bash -s' < ./scripts/deploy_frontend.sh
-    

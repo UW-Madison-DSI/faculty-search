@@ -85,10 +85,10 @@ services:
 
   flask:
     container_name: flask
-    image: ghcr.io/jasonlo/community-search-frontend:latest # pull from ghcr for CI
-    # build:
-    #   context: ./frontend
-    #   dockerfile: Dockerfile
+    # image: ghcr.io/jasonlo/community-search-frontend:20230927-2022 # pull from ghcr for CI
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "443:443"
     environment:
