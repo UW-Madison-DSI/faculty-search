@@ -110,6 +110,8 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 	},
 
 	events: _.extend({}, Droppable.events, {
+		'paste .text': 'onPasteText',
+
 		'click .search-bar .submit': 'onClickSubmitText',
 		'click .search-bar .clear': 'onClickClearText',
 
@@ -430,6 +432,16 @@ export default BaseView.extend(_.extend({}, Loadable, Droppable, {
 
 	hideVoting: function() {
 		this.$el.find('.voting').hide();
+	},
+
+	//
+	// event handling methods
+	//
+
+	onPasteText: function(event) {
+		event.preventDefault();
+		var text = event.originalEvent.clipboardData.getData("text/plain");
+		document.execCommand("insertHTML", false, text);
 	},
 
 	//
