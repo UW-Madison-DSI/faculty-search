@@ -423,7 +423,8 @@ class Engine:
         y = np.array([article["publication_year"] for article in results["articles"]])
         s = (1 - d) ** pow
         a = np.log10(c + 1)
-        r = 1 / np.log10(datetime.now().year - y + 2)
+        safe_year = np.max(2, datetime.now().year - y)  # For some reason, the raw data contains future publications... need a safe way to avoid division by zero error.
+        r = 1 / np.log10(safe_year)
         w = ks * s + ka * a + kr * r
 
         unique_author_ids, idx = np.unique(author_ids, return_inverse=True)
