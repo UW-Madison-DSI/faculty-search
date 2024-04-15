@@ -1,5 +1,5 @@
 from functools import cache, partial
-from datetime import datetime
+
 import altair as alt
 import numpy as np
 import pandas as pd
@@ -420,11 +420,18 @@ class Engine:
         author_ids = [article["author_id"] for article in results["articles"]]
         c = np.array([article["cited_by"] for article in results["articles"]])
         d = np.array([article["distance"] for article in results["articles"]])
-        y = np.array([article["publication_year"] for article in results["articles"]])
+
+        y = []
+        for article in results["articles"]:
+            if article["publication_year"]:
+                y.append(article["publication_year"])
+            else:
+                y.append(1900)
+        y = np.array(y)
+        
         s = (1 - d) ** pow
         a = np.log10(c + 1)
-        safe_year = np.max(2, datetime.now().year - y)  # For some reason, the raw data contains future publications... need a safe way to avoid division by zero error.
-        r = 1 / np.log10(safe_year)
+        r = 1 / np.log10(y + 2)
         w = ks * s + ka * a + kr * r
 
         unique_author_ids, idx = np.unique(author_ids, return_inverse=True)
