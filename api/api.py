@@ -1,22 +1,23 @@
-import os
 import logging
-import requests
+import os
 import random
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException
-from dotenv import load_dotenv
-from langchain.embeddings import OpenAIEmbeddings
-from pymilvus import connections, Collection
+
+import requests
 from core import Engine, get_author_by_id
-from fastapi.middleware.cors import CORSMiddleware
 from data_model import (
-    APIAuthor,
     APIArticle,
-    GetAuthorInput,
+    APIAuthor,
     GetAuthorByIdInput,
-    SearchAuthorsInputs,
+    GetAuthorInput,
     SearchArticlesInputs,
+    SearchAuthorsInputs,
 )
+from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from langchain.embeddings import OpenAIEmbeddings
+from pymilvus import Collection, connections
 
 load_dotenv()
 
@@ -141,7 +142,7 @@ def get_author(query: GetAuthorInput) -> dict[str, APIAuthor | list[dict]]:
 
 
 @app.post("/get_author_by_id/")
-def get_author(query: GetAuthorByIdInput) -> dict[str, APIAuthor | list[dict]]:
+def get_author2(query: GetAuthorByIdInput) -> dict[str, APIAuthor | list[dict]]:
     """Search author by name."""
 
     try:
