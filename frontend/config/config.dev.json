@@ -2,5 +2,5 @@
 	"server": "https://dev.discover.datascience.wisc.edu:8765",
 	"map_url": "https://datascience.sharedigm.com/cmap/?category=people&query=",
 	"search_url": "https://www.wisc.edu/search/?q=",
-	"profile_url": "https://wisc.discovery.academicanalytics.com/search/stack?searchType=Name&query="
+	"profile_url": "https://wisc.discovery.academicanalytics.com/search?searchType=Name&query="
 }
