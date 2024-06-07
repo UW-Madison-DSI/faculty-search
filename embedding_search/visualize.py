@@ -97,6 +97,7 @@ class QueryPlotter:
                 size=alt.Size("size", legend=None),
                 opacity=alt.condition(selector, alt.value(0.8), alt.value(0.2)),
                 tooltip=["label", "parent_orcid", "cited_by"],
+                href='url:N',
             )
             .add_params(selector)
             .properties(width=800, height=600)
