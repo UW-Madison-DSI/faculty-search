@@ -231,6 +231,23 @@ class PlotDataMaker:
         output["parent_id"] = [0] + parent_ids
         output["label"] = [None] + label  # Inject proper label later
         output["type"] = ["query"] + types
+
+        # Add url
+        def _to_url(id: str, label: str, row_type: str) -> str:
+            """Convert id to url."""
+            if row_type == "query":
+                return None
+            elif row_type == "author":
+                return f"https://discover.datascience.wisc.edu/?kind=name&target=authors&query={label.replace(' ', '%20')}"
+            elif row_type == "article":
+                return f"https://doi.org/{id}"
+
+        output["url"] = [
+            _to_url(id, label, row_type)
+            for id, label, row_type in zip(
+                output["id"], output["label"], output["type"]
+            )
+        ]
         return output
 
 
@@ -274,6 +291,7 @@ def plot_2d_projection(data: dict, width: int = 800, height: int = 600) -> str:
             size=alt.Size("size", legend=None),
             opacity=alt.condition(author_selector, alt.value(1.0), alt.value(0.3)),
             tooltip=["label:N", "id:N", "parent_id"],
+            href="url:N",
         )
         .add_params(author_selector)
         .properties(width=width, height=height)
@@ -285,7 +303,12 @@ def plot_2d_projection(data: dict, width: int = 800, height: int = 600) -> str:
     other = base.transform_filter(alt.datum.type != "query")
     chart = other + query
 
-    return apply_font_sizes(chart).to_json()
+    chart = apply_font_sizes(chart)
+
+    # Modify click behavior to open in new tab
+    chart["usermeta"] = {"embedOptions": {"loader": {"target": "_blank"}}}
+
+    return chart.to_json()
 
 
 class Engine:
@@ -428,7 +451,7 @@ class Engine:
             else:
                 y.append(1900)
         y = np.array(y)
-        
+
         s = (1 - d) ** pow
         a = np.log10(c + 1)
         r = 1 / np.log10(y + 2)
