@@ -1,3 +1,4 @@
+source ../../.env
 
 # if no config file exists, then create from template
 if [ ! -f config.py ]; then
