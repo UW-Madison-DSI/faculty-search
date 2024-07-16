@@ -7,7 +7,7 @@ services:
       - ETCD_QUOTA_BACKEND_BYTES=4294967296
       - ETCD_SNAPSHOT_COUNT=50000
     volumes:
-      - /volumes/etcd:/etcd
+      - etcd:/etcd
     command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
 
   minio:
@@ -16,7 +16,7 @@ services:
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: minioadmin
     volumes:
-      - /volumes/minio:/minio_data
+      - minio:/minio_data
     command: minio server /minio_data
     healthcheck:
       test:
@@ -30,6 +30,7 @@ services:
       timeout: 20s
       retries: 3
 
+      
   milvus:
     image: milvusdb/milvus:2.3-latest
     command: [ "milvus", "run", "standalone" ]
@@ -37,7 +38,7 @@ services:
       ETCD_ENDPOINTS: etcd:2379
       MINIO_ADDRESS: minio:9000
     volumes:
-      - /volumes/milvus:/var/lib/milvus
+      - milvus:/var/lib/milvus
     ports:
       - "19530:19530"
       - "9091:9091"
@@ -51,7 +52,7 @@ services:
       dockerfile: Dockerfile
     environment:
       OPENAI_API_KEY: '${OPENAI_API_KEY}'
-      AUTHOR_DIR: ./data/raw/campus_users
+      AUTHOR_DIR: ${AUTHOR_DIR}
       MILVUS_ALIAS: default
       MILVUS_HOST: ${MILVUS_HOST}
       MILVUS_PORT: ${MILVUS_PORT}
@@ -70,6 +71,7 @@ services:
         "8765"
       ]
 
+
   # flask:
   #   build:
   #     context: ./frontend
@@ -81,12 +83,24 @@ services:
   #     UPLOAD_FOLDER: '/tmp'
 
 
-  # nginx:
-  #   container_name: nginx
-  #   image: nginx:latest
-  #   volumes:
-  #     - ./nginx.conf:/etc/nginx/nginx.conf
-  #     # - ./cert.pem:/etc/nginx/ssl/cert.pem
-  #     # - ./privkey.pem:/etc/nginx/ssl/privkey.pem
-  #   ports:
-  #     - "80:80"
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /home/dsi-rabbit-web@ad.wisc.edu/.ssl:/etc/nginx/ssl
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - outside
+      - default
+
+volumes:
+  etcd:
+  minio:
+  milvus:
+
+networks:
+  outside:
+    external: true

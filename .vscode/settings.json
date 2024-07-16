@@ -29,7 +29,8 @@
         "SERP",
         "serpapi",
         "sklearn",
-        "tsne"
+        "tsne",
+        "vcrge"
     ],
     "python.analysis.typeCheckingMode": "off"
 }
