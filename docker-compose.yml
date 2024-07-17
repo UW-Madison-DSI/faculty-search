@@ -72,15 +72,17 @@ services:
       ]
 
 
-  # flask:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "${PORT}:${PORT}"
-  #   environment:
-  #     DEBUG: 1
-  #     UPLOAD_FOLDER: '/tmp'
+  flask:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      DEBUG: ${DEBUG}
+      UPLOAD_FOLDER: ${UPLOAD_FOLDER}
+      PORT: ${PORT}
+      HOST: ${HOST}
 
 
   nginx:
