@@ -94,7 +94,7 @@ services:
     environment:
       DEBUG: 1
       UPLOAD_FOLDER: '/tmp'
-      MAIL_SERVER: '${MAIL_SERVER}'
+      AMIL_SERVER: '${MAIL_SERVER}'
       MAIL_USERNAME: '${MAIL_USERNAME}'
       MAIL_PASSWORD: '${MAIL_PASSWORD}'
       MAIL_PORT: '${MAIL_PORT}'
@@ -104,6 +104,7 @@ services:
     volumes:
       - ./cert.pem:/etc/ssl/cert.pem
       - ./privkey.pem:/etc/ssl/privkey.pem
+      - ./frontend:/app
 
   nginx:
     container_name: nginx

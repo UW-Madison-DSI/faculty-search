@@ -15,6 +15,4 @@ RUN crontab /etc/cron.d/clean_tmp
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-COPY . .
-
 ENTRYPOINT ["/entrypoint.sh"]
