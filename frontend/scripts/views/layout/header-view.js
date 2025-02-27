@@ -35,7 +35,7 @@ export default BaseView.extend({
 			<% let key = keys[i]; %>
 			<% let item = defaults.navbar.navs[key]; %>
 			<li<% if (nav == key) {%> class="active" <% } %>>
-				<a href="#<%= key %>">
+				<a href="<%= item.href %>">
 					<i class="<%= item.icon %>"></i>
 					<span class="hidden-xs"><%= item.text %></span>
 				</a>
@@ -76,7 +76,7 @@ export default BaseView.extend({
 	// querying methods
 	//
 
-	isCollapsed: function() {
+	isCollapsed: function () {
 		return this.$el.find('.mobile-navbar').hasClass('collapsed');
 	},
 
@@ -84,10 +84,10 @@ export default BaseView.extend({
 	// rendering methods
 	//
 
-	templateContext: function() {
+	templateContext: function () {
 		return {
 			nav: this.options.nav,
-			user: application.session? application.session.user : undefined
+			user: application.session ? application.session.user : undefined
 		};
 	},
 
@@ -95,15 +95,15 @@ export default BaseView.extend({
 	// collapsing methods
 	//
 
-	collapse: function() {
+	collapse: function () {
 		this.$el.find('.mobile-navbar').addClass('collapsed');
 	},
 
-	expand: function() {
+	expand: function () {
 		this.$el.find('.mobile-navbar').removeClass('collapsed');
 	},
 
-	toggle: function() {
+	toggle: function () {
 		if (this.isCollapsed()) {
 			this.expand();
 		} else {
@@ -115,15 +115,15 @@ export default BaseView.extend({
 	// event handling methods
 	//
 
-	onClickNavbarToggle: function() {
+	onClickNavbarToggle: function () {
 		this.toggle();
 	},
 
-	onClickNavbarLink: function() {
+	onClickNavbarLink: function () {
 		this.collapse();
 	},
 
-	onClickBrand: function() {
+	onClickBrand: function () {
 
 		// go to welcome view
 		//

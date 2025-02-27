@@ -2,18 +2,15 @@
 	"application": {
 		"name": "UW Faculty Search",
 		"year": "2023",
-
 		"author": {
 			"name": "Data Science Institute",
 			"url": "http://datascience.wisc.edu"
 		},
-
 		"organization": {
 			"name": "University of Wisconsin-Madison",
 			"url": "http://wisc.edu"
 		}
 	},
-
 	"navbar": {
 		"icon": "images/logos/uw-crest.png",
 		"title": "UW Faculty Search <i>(Beta)</i>",
@@ -31,11 +28,10 @@
 			"contact": {
 				"text": "Contact",
 				"icon": "fa fa-envelope",
-				"href": "#contact"
+				"href": "mailto:jason.lo@wisc.edu"
 			}
 		}
 	},
-
 	"messages": {
 		"main": {
 			"icon": "",
@@ -64,11 +60,9 @@
 		},
 		"notes": "This repository indexes papers written by faculty, sourced from <a href=\"https://academicanalytics.com/\" target=\"_blank\">Academic Analytics</a>.  Note that the collection may not be comprehensive."
 	},
-
 	"footer": {
 		"image": "images/logos/logo.svg"
 	},
-
 	"contact": {
 		"subjects": [
 			"Question",
