@@ -62,13 +62,8 @@ services:
       MILVUS_HOST: milvus-standalone
       MILVUS_PORT: 19530
       DEBUG: 1
-    ports:
-      - "8765:8765"
     depends_on:
       - "milvus"
-    volumes:
-      - ./cert.pem:/app/cert.pem
-      - ./privkey.pem:/app/privkey.pem
     command:
       [
         "uvicorn",
@@ -77,11 +72,16 @@ services:
         "0.0.0.0",
         "--port",
         "8765",
-        "--ssl-keyfile",
-        "privkey.pem",
-        "--ssl-certfile",
-        "cert.pem"
+        "--proxy-headers",
+        "--forwarded-allow-ips",
+        "*"
       ]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fastapi.rule=Host(`discover.datascience.wisc.edu`)"
+      - "traefik.http.routers.fastapi.entrypoints=api"
+      - "traefik.http.routers.fastapi.tls.certresolver=letsencrypt"
+      - "traefik.http.services.fastapi.loadbalancer.server.port=8765"
 
   flask:
     container_name: flask
@@ -89,8 +89,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    ports:
-      - "443:443"
     environment:
       DEBUG: 1
       UPLOAD_FOLDER: '/tmp'
@@ -102,16 +100,23 @@ services:
       MAIL_RECIPIENT: '${MAIL_RECIPIENT}'
       MAIL_ANOTHER_RECIPIENT: '${MAIL_ANOTHER_RECIPIENT}'
     volumes:
-      - ./cert.pem:/etc/ssl/cert.pem
-      - ./privkey.pem:/etc/ssl/privkey.pem
       - ./frontend:/app
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flask.rule=Host(`discover.datascience.wisc.edu`)"
+      - "traefik.http.routers.flask.entrypoints=websecure"
+      - "traefik.http.routers.flask.tls.certresolver=letsencrypt"
+      - "traefik.http.services.flask.loadbalancer.server.port=8080"
 
-  nginx:
-    container_name: nginx
-    image: nginx:latest
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./cert.pem:/etc/nginx/ssl/cert.pem
-      - ./privkey.pem:/etc/nginx/ssl/privkey.pem
+  traefik:
+    container_name: traefik
+    image: traefik:v3.1
+    restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
+      - "8765:8765"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - /volumes/traefik:/letsencrypt

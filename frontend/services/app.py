@@ -13,7 +13,7 @@
 ################################################################################
 
 import os
-from flask import Flask, request, redirect
+from flask import Flask, request
 
 # from flask_mail import Mail, Message
 from services.controllers.contact_controller import ContactController
@@ -37,12 +37,6 @@ app = Flask(__name__, static_folder="../", static_url_path="/")
 
 app.config["APPLICATION_ROOT"] = "/"
 app.config["PREFERRED_URL_SCHEME"] = "https"
-
-
-@app.before_request
-def redirect_https():
-    if not request.is_secure:
-        return redirect(request.url.replace("http://", "https://"))
 
 
 # try to get app config from config.py
@@ -249,9 +243,7 @@ def main():
         debug=DEBUG,
         host=HOST,
         port=PORT,
-        ssl_context=("/etc/ssl/cert.pem", "/etc/ssl/privkey.pem"),
     )
-    # app.run(debug=DEBUG, host=HOST, port=PORT)
 
 
 if __name__ == "__main__":
